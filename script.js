@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'local rules -> global behavior',
         'the map is not the territory',
         'substrate-agnostic computation',
-        'reticulum mesh connection active',
+        'analyzing systemic boundaries',
         'thermodynamic veto evaluation'
     ];
 
