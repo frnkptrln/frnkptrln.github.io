@@ -2,12 +2,16 @@
    frnkptrln — Minimalist Brutalist Terminal Aesthetic
    =================================================== */
 
-   :root {
+:root {
     --bg: #0a0a0a;
     --fg: #e0e0e0;
     --fg-dim: #666;
     --accent: #00ff41;
+    --accent-secondary: #7dd3fc;
+    --accent-tertiary: #f7c46c;
     --accent-dim: rgba(0, 255, 65, 0.15);
+    --accent-secondary-dim: rgba(125, 211, 252, 0.18);
+    --accent-tertiary-dim: rgba(247, 196, 108, 0.18);
     --border: #222;
     --font-body: 'Space Grotesk', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
@@ -62,12 +66,14 @@ nav {
 .nav-name {
     font-weight: 700;
     color: var(--accent);
-    letter-spacing: -0.5px;
+    letter-spacing: 0;
 }
 
 .nav-links {
     display: flex;
     gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .nav-links a {
@@ -86,9 +92,9 @@ nav {
 }
 
 .hero h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: 2.35rem;
     font-weight: 400;
-    letter-spacing: -1.5px;
+    letter-spacing: 0;
     line-height: 1.1;
     margin-bottom: 0.75rem;
 }
@@ -96,6 +102,13 @@ nav {
 .hero-sub {
     color: var(--fg-dim);
     font-size: 1.1rem;
+    margin-bottom: 0.35rem;
+}
+
+.hero-note {
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
     margin-bottom: 2rem;
 }
 
@@ -137,6 +150,99 @@ h2 {
     margin-bottom: 2rem;
 }
 
+/* Current surface */
+.signals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.signal {
+    border-left: 1px solid var(--border);
+    padding-left: 0.85rem;
+    min-width: 0;
+}
+
+.signal span {
+    display: block;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: 1.5rem;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+}
+
+.signal small {
+    display: block;
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.35;
+}
+
+.surface-list {
+    list-style: none;
+    color: var(--fg-dim);
+    font-size: 0.95rem;
+}
+
+.surface-list li {
+    margin-bottom: 0.75rem;
+}
+
+.surface-list strong {
+    color: var(--fg);
+    font-weight: 400;
+}
+
+.timestamp {
+    margin-top: 1.5rem;
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+
+/* Recent fragments */
+.fragments {
+    list-style: none;
+}
+
+.fragments li {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.fragments time {
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding-top: 0.1rem;
+}
+
+.fragments a {
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.fragments a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.fragments span {
+    display: block;
+    color: var(--fg-dim);
+    font-size: 0.9rem;
+    margin-top: 0.35rem;
+}
+
 /* Projects */
 .project {
     margin-bottom: 2.5rem;
@@ -146,6 +252,7 @@ h2 {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex-wrap: wrap;
     margin-bottom: 0.5rem;
 }
 
@@ -173,6 +280,16 @@ h2 {
     border-radius: 2px;
 }
 
+.tag.secondary {
+    color: var(--accent-secondary);
+    border-color: var(--accent-secondary-dim);
+}
+
+.tag.tertiary {
+    color: var(--accent-tertiary);
+    border-color: var(--accent-tertiary-dim);
+}
+
 .project p {
     color: var(--fg-dim);
     font-size: 0.95rem;
@@ -192,6 +309,7 @@ h2 {
     margin-top: 0.75rem;
     display: flex;
     gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .project-links a {
@@ -272,12 +390,36 @@ footer p {
         gap: 1rem;
     }
 
+    .nav-links {
+        justify-content: flex-start;
+        gap: 0.85rem;
+    }
+
     .hero {
         padding: 3rem 0 2rem;
+    }
+
+    .hero h1 {
+        font-size: 2.15rem;
+    }
+
+    .signals {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fragments li {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
     }
 
     .project-links {
         flex-direction: column;
         gap: 0.5rem;
+    }
+}
+
+@media (min-width: 720px) {
+    .hero h1 {
+        font-size: 3.35rem;
     }
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>frnkptrln</title>
-    <meta name="description" content="Systems, emergence, and computation.">
+    <meta name="description" content="Repository index for systems, intelligence, security, sound, play, strange tools, and unfinished fragments.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -16,7 +16,10 @@
         <nav>
             <span class="nav-name">frnkptrln</span>
             <div class="nav-links">
+                <a href="#surface">surface</a>
+                <a href="#fragments">fragments</a>
                 <a href="#work">work</a>
+                <a href="#reading">reading</a>
                 <a href="https://github.com/frnkptrln" target="_blank" rel="noopener">github</a>
                 <a href="https://www.linkedin.com/in/frnkptrln" target="_blank" rel="noopener">linkedin</a>
             </div>
@@ -27,7 +30,8 @@
 
         <section class="hero">
             <h1>Frank Peterlein</h1>
-            <p class="hero-sub">Berlin — Systems, Emergence, Computation</p>
+            <p class="hero-sub">systems · intelligence · security · sound</p>
+            <p class="hero-note">play · strange tools · unfinished fragments</p>
             <div class="cursor-line">
                 <span class="prompt">~$</span>
                 <span id="typed-text"></span><span class="caret">_</span>
@@ -36,10 +40,71 @@
 
         <div class="divider"></div>
 
-        <section id="work">
-            <h2>Projects</h2>
+        <section id="surface" aria-labelledby="surface-heading">
+            <h2 id="surface-heading">Surface</h2>
+            <div class="signals" aria-label="Current public GitHub summary">
+                <div class="signal">
+                    <span>7</span>
+                    <small>indexed projects</small>
+                </div>
+                <div class="signal">
+                    <span>35</span>
+                    <small>simulations</small>
+                </div>
+                <div class="signal">
+                    <span>9</span>
+                    <small>esolangs</small>
+                </div>
+                <div class="signal">
+                    <span>7</span>
+                    <small>sound sketches</small>
+                </div>
+                <div class="signal">
+                    <span>1</span>
+                    <small>crawler toolkit</small>
+                </div>
+            </div>
+            <ul class="surface-list">
+                <li><strong>Systems and intelligence:</strong> emergence, SII, identity persistence, substrate vetoes, and multi-agent orchestration.</li>
+                <li><strong>Security:</strong> defensive OSINT tooling for authorized analysis of dynamic leak-site surfaces.</li>
+                <li><strong>Sound and play:</strong> SuperCollider systems, esolang interpreters, Flipper Zero apps, and small browser experiments.</li>
+            </ul>
+            <p class="timestamp">Updated from the public GitHub profile on 2026-04-27.</p>
+        </section>
 
+        <div class="divider"></div>
 
+        <section id="fragments" aria-labelledby="fragments-heading">
+            <h2 id="fragments-heading">Recent Fragments</h2>
+            <ul class="fragments">
+                <li>
+                    <time datetime="2026-04-27">2026-04-27</time>
+                    <div>
+                        <a href="https://github.com/frnkptrln/the-crawling-void" target="_blank" rel="noopener">the-crawling-void</a>
+                        <span>New defensive darknet/OSINT repo with the first crawler for authorized analysis of dynamic leak-site surfaces.</span>
+                    </div>
+                </li>
+                <li>
+                    <time datetime="2026-04-20">2026-04-20</time>
+                    <div>
+                        <a href="https://github.com/frnkptrln/the-weaving-sound/tree/main/sketch" target="_blank" rel="noopener">the-weaving-sound sketches</a>
+                        <span>New SuperCollider sketches and generative sound studies added around the main infinite conductor.</span>
+                    </div>
+                </li>
+                <li>
+                    <time datetime="2026-04-27">2026-04-27</time>
+                    <div>
+                        <a href="https://github.com/frnkptrln/the-weaving-void/tree/main/Marginalia" target="_blank" rel="noopener">Marginalia</a>
+                        <span>New esoteric language about annotated memory, revision, compression, and accountable output.</span>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="work" aria-labelledby="work-heading">
+            <h2 id="work-heading">Projects</h2>
 
             <article class="project">
                 <div class="project-header">
@@ -47,13 +112,51 @@
                         systems-and-intelligence
                     </a>
                     <span class="tag">Python</span>
+                    <span class="tag secondary">Theory</span>
+                    <span class="tag secondary">Simulation</span>
                 </div>
                 <p>
-                    Simulations of emergent behavior and self-organization. Cellular automata, multi-agent systems, and continuous cellular frameworks analyzing local rules and global structures.
+                    Central research repository combining 35 simulation models, theory essays, paper drafts, agentic tests, SII analysis, and browser tools. The current arc connects local blindness, identity persistence, TEO dynamics, and substrate-aware alignment.
                 </p>
                 <div class="project-links">
-                    <a href="https://frnkptrln.github.io/systems-and-intelligence/" target="_blank" rel="noopener">→ Interactive Book</a>
-                    <a href="https://frnkptrln.github.io/systems-and-intelligence/interactive/web-explorer/" target="_blank" rel="noopener">→ Web Explorer</a>
+                    <a href="https://frnkptrln.github.io/systems-and-intelligence/" target="_blank" rel="noopener">-> Interactive Book</a>
+                    <a href="https://frnkptrln.github.io/systems-and-intelligence/interactive/web-explorer/" target="_blank" rel="noopener">-> Web Explorer</a>
+                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/emergence-manifesto-v1.2.md" target="_blank" rel="noopener">-> Manifesto</a>
+                </div>
+            </article>
+
+            <article class="project">
+                <div class="project-header">
+                    <a href="https://github.com/frnkptrln/the-crawling-void" target="_blank" rel="noopener">
+                        the-crawling-void
+                    </a>
+                    <span class="tag">Python</span>
+                    <span class="tag secondary">Security</span>
+                    <span class="tag secondary">OSINT</span>
+                </div>
+                <p>
+                    Defensive Threat Intelligence and OSINT toolkit for authorized analysis of modern leak-site surfaces. The first crawler handles Tor-routed SPA <code>?path=</code> listings, JWT authentication, local indicator scanning, and reviewable follow-up commands without automatic downloads.
+                </p>
+                <div class="project-links">
+                    <a href="https://github.com/frnkptrln/the-crawling-void/tree/main/crawlers" target="_blank" rel="noopener">-> Crawlers</a>
+                    <a href="https://github.com/frnkptrln/the-crawling-void#legal-disclaimer" target="_blank" rel="noopener">-> Scope</a>
+                </div>
+            </article>
+
+            <article class="project">
+                <div class="project-header">
+                    <a href="https://github.com/frnkptrln/the-weaving-sound" target="_blank" rel="noopener">
+                        the-weaving-sound
+                    </a>
+                    <span class="tag">SuperCollider</span>
+                    <span class="tag tertiary">Audio</span>
+                </div>
+                <p>
+                    Generative sound synthesis and algorithmic composition. The main work is an infinite SuperCollider installation driven by a five-phase conductor, with standalone sketches ranging from dub techno to unstable generative studies.
+                </p>
+                <div class="project-links">
+                    <a href="https://github.com/frnkptrln/the-weaving-sound/tree/main/the-weaving-sound" target="_blank" rel="noopener">-> Main Work</a>
+                    <a href="https://github.com/frnkptrln/the-weaving-sound/tree/main/sketch" target="_blank" rel="noopener">-> Sketches</a>
                 </div>
             </article>
 
@@ -63,21 +166,10 @@
                         the-weaving-void
                     </a>
                     <span class="tag">Python</span>
+                    <span class="tag secondary">Esolang</span>
                 </div>
                 <p>
-                    Archive of esoteric programming languages. Distaff, Vortex, MandelMemory, Entanglement — Turing-complete systems exploring unconventional computational paradigms.
-                </p>
-            </article>
-
-            <article class="project">
-                <div class="project-header">
-                    <a href="https://github.com/frnkptrln/the-weaving-sound" target="_blank" rel="noopener">
-                        the-weaving-sound
-                    </a>
-                    <span class="tag">SuperCollider</span>
-                </div>
-                <p>
-                    Generative sound synthesis and algorithmic composition. An infinite, non-repeating state machine orchestrating granular clouds, Lorenz attractors, and autonomous rhythmic structures.
+                    Archive of esoteric programming languages with Python interpreters and documentation. Distaff, Vortex, MandelMemory, SFract, Entanglement, Gastronomy, Clockwork, Bloom, and Marginalia explore computation as constraint, ritual, sound, cooking, growth, annotated memory, and verification.
                 </p>
             </article>
 
@@ -88,9 +180,10 @@
                     </a>
                     <span class="tag">C</span>
                     <span class="tag">Flipper Zero</span>
+                    <span class="tag tertiary">Prototype</span>
                 </div>
                 <p>
-                    Passive Bluetooth Low Energy (BLE) density scanner. Estimates local device density via radio traffic without collecting MAC addresses or tracking data.
+                    Flipper Zero BLE density gauge concept with an analog System Mass Index interface. Currently a technical UI prototype because external `.fap` apps cannot access the low-level passive BLE radio commands required for real scanning.
                 </p>
             </article>
 
@@ -103,7 +196,7 @@
                     <span class="tag">Flipper Zero</span>
                 </div>
                 <p>
-                    Portrait-mode pinball game utilizing the Flipper Zero monochrome display.
+                    Portrait-mode pinball game for the Flipper Zero monochrome display with flippers, bumpers, launcher charging, scoring, and sound effects.
                 </p>
             </article>
 
@@ -115,45 +208,51 @@
                     <span class="tag">HTML</span>
                 </div>
                 <p>
-                    Terminal-based incremental game mimicking the Arch Linux package manager.
+                    Dependency-free browser clicker styled like an Arch terminal. Build packages, buy automation upgrades, and optimize package throughput.
                 </p>
             </article>
         </section>
 
         <div class="divider"></div>
 
-        <section>
-            <h2>Texts</h2>
+        <section id="reading" aria-labelledby="reading-heading">
+            <h2 id="reading-heading">Reading Path</h2>
             <ul class="writings">
+                <li>
+                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/emergence-manifesto-v1.2.md" target="_blank" rel="noopener">
+                        Emergence Manifesto v1.2
+                    </a>
+                    <span class="writing-desc">— core claims with explicit epistemic status tags</span>
+                </li>
+                <li>
+                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/teo-framework/README.md" target="_blank" rel="noopener">
+                        TEO Framework
+                    </a>
+                    <span class="writing-desc">— coupled constraints, identity persistence, attractor geometry</span>
+                </li>
+                <li>
+                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/simulation-models/ai-alignment-veto/README.md" target="_blank" rel="noopener">
+                        AI Alignment Veto
+                    </a>
+                    <span class="writing-desc">— runnable substrate-stress toy model</span>
+                </li>
+                <li>
+                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/papers/quantifying-emergent-utility-in-llms.md" target="_blank" rel="noopener">
+                        Quantifying Emergent Utility & Stability
+                    </a>
+                    <span class="writing-desc">— draft whitepaper on multi-agent LLM ecosystems</span>
+                </li>
+                <li>
+                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/simulation-theory-map.md" target="_blank" rel="noopener">
+                        Simulation -> Theory Map
+                    </a>
+                    <span class="writing-desc">— which model supports which theoretical claim</span>
+                </li>
                 <li>
                     <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/machines-of-loving-grace.md" target="_blank" rel="noopener">
                         Machines of Loving Grace
                     </a>
-                    <span class="writing-desc">— Love as an orchestration strategy</span>
-                </li>
-                <li>
-                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/fractal-architecture-of-emergence.md" target="_blank" rel="noopener">
-                        The Fractal Architecture of Emergence
-                    </a>
-                    <span class="writing-desc">— Local blindness and critical thresholds</span>
-                </li>
-                <li>
-                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/the-non-individual-intelligence.md" target="_blank" rel="noopener">
-                        The Non-Individual Intelligence
-                    </a>
-                    <span class="writing-desc">— Social computation and substrate agnosticism</span>
-                </li>
-                <li>
-                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/human-organism-silicon-age/core-theses.md" target="_blank" rel="noopener">
-                        The Human Organism in the Silicon Age
-                    </a>
-                    <span class="writing-desc">— Alignment and Gödel's incompleteness</span>
-                </li>
-                <li>
-                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/local-causality-invisible-consequences.md" target="_blank" rel="noopener">
-                        Local Causality and Invisible Consequences
-                    </a>
-                    <span class="writing-desc">— Shared architecture of computational models</span>
+                    <span class="writing-desc">— orchestration, love-as-constraint, and the paperclip shape of civilization</span>
                 </li>
             </ul>
         </section>
@@ -163,7 +262,7 @@
         <section>
             <h2>Note</h2>
             <p class="muted">
-                This repository index is a partial surface representation. Much of the underlying work, experiments, and structures exist beyond this space — operating offline, conceptually, or within undocumented contexts.
+                This page is a curated public index, not a complete inventory. Much of the underlying work, experiments, and structures still exists beyond this surface: offline, conceptually, or inside undocumented contexts.
             </p>
         </section>
 

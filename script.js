@@ -5,11 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Subtle typing — dry, factual, system-focused
     const phrases = [
+        'systems · intelligence · security · sound',
+        'play · strange tools · unfinished fragments',
         'local rules -> global behavior',
-        'the map is not the territory',
-        'substrate-agnostic computation',
-        'analyzing systemic boundaries',
-        'thermodynamic veto evaluation'
+        'SII = P * R * A * IP',
+        'authorized crawling only',
+        '35 simulations running'
     ];
 
     const el = document.getElementById('typed-text');
