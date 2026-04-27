@@ -96,19 +96,21 @@ nav {
     font-weight: 400;
     letter-spacing: 0;
     line-height: 1.1;
+    margin-bottom: 0.55rem;
+}
+
+.hero-meta {
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
     margin-bottom: 0.75rem;
 }
 
 .hero-sub {
     color: var(--fg-dim);
-    font-size: 1.1rem;
-    margin-bottom: 0.35rem;
-}
-
-.hero-note {
-    color: var(--fg-dim);
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 72ch;
     margin-bottom: 2rem;
 }
 

@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Subtle typing — dry, factual, system-focused
     const phrases = [
-        'systems · intelligence · security · sound',
-        'play · strange tools · unfinished fragments',
+        'systems / intelligence / security / sound',
+        'play / strange tools / unfinished fragments',
         'local rules -> global behavior',
         'SII = P * R * A * IP',
         'authorized crawling only',
