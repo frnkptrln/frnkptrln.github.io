@@ -1,0 +1,21 @@
+# Local Codex/session artifacts
+.codex
+.codex/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Temporary logs and caches
+*.log
+.cache/
+tmp/
+temp/
