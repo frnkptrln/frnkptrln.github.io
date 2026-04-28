@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const phrases = [
         'local rules -> global behavior',
         'systems / intelligence',
-        'security / sound',
-        'play / unfinished fragments',
+        'security / sound / play',
+        'unfinished fragments',
         '¯\_(ツ)_/¯'
     ];
 
