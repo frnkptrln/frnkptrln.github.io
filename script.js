@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'systems / intelligence',
         'security / sound / play',
         'unfinished fragments',
-        '¯\_(ツ)_/¯'
+        '¯\\_(ツ)_/¯'
     ];
 
     const el = document.getElementById('typed-text');
