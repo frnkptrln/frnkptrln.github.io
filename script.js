@@ -5,12 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Subtle typing — dry, factual, system-focused
     const phrases = [
-        'systems / intelligence / security / sound',
-        'play / strange tools / unfinished fragments',
         'local rules -> global behavior',
-        'SII = P * R * A * IP',
-        'authorized crawling only',
-        '35 simulations running'
+        'systems / intelligence',
+        'security / sound',
+        'play / unfinished fragments',
+        '¯\_(ツ)_/¯'
     ];
 
     const el = document.getElementById('typed-text');
