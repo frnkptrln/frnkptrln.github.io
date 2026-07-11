@@ -110,6 +110,14 @@ nav {
     margin-bottom: 2rem;
 }
 
+.hero-intro {
+    color: var(--fg);
+    font-size: 1rem;
+    line-height: 1.65;
+    max-width: 68ch;
+    margin-bottom: 2rem;
+}
+
 .cursor-line {
     font-family: var(--font-mono);
     font-size: 0.9rem;
@@ -153,6 +161,67 @@ h2 {
     color: var(--fg-dim);
     font-family: var(--font-mono);
     font-size: 0.75rem;
+}
+
+/* Selected projects */
+.project-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.project {
+    border-left: 1px solid var(--border);
+    padding: 0.2rem 0 0.35rem 1rem;
+}
+
+.project-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.45rem;
+}
+
+.project-heading > a {
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.project-heading > a:hover,
+.project-entry:hover {
+    color: var(--accent);
+}
+
+.project p {
+    color: var(--fg-dim);
+    font-size: 0.92rem;
+    max-width: 68ch;
+}
+
+.project-status {
+    border: 1px solid var(--border);
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    padding: 0.12rem 0.4rem;
+    text-transform: uppercase;
+}
+
+.project-status.active { color: var(--accent); }
+.project-status.alpha { color: var(--accent-secondary); }
+.project-status.bounded { color: #f5c26b; }
+
+.project-entry {
+    color: var(--accent-secondary);
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    margin-top: 0.55rem;
+    text-decoration: none;
 }
 
 /* Recent fragments */

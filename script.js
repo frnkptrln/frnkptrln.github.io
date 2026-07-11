@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Subtle typing — dry, factual, system-focused
     const phrases = [
+        'trace -> generator',
         'local rules -> global behavior',
-        'systems / intelligence',
-        'security / sound / play',
-        'unfinished fragments',
+        'constraints -> viable systems',
+        'security / sound / strange tools',
         '¯\\_(ツ)_/¯'
     ];
 
