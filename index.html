@@ -4,21 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>frnkptrln</title>
-    <meta name="description" content="Repository index for systems, intelligence, security, sound, play, strange tools, and unfinished fragments.">
+    <meta name="description" content="Frank Peterlein — selected work on systems, intelligence, security, infrastructure, sound, and strange tools.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <header>
         <nav>
             <span class="nav-name">frnkptrln</span>
             <div class="nav-links">
-                <a href="#fragments">fragments</a>
-                <a href="#streams">streams</a>
-                <a href="#interactive">interactive</a>
+                <a href="#work">work</a>
                 <a href="#reading">reading</a>
                 <a href="https://github.com/frnkptrln" target="_blank" rel="noopener">github</a>
                 <a href="https://www.linkedin.com/in/frnkptrln" target="_blank" rel="noopener">linkedin</a>
@@ -27,11 +24,15 @@
     </header>
 
     <main>
-
         <section class="hero">
-            <h1>frnkptrln</h1>
-            <p class="hero-meta">Frank Peterlein · Berlin</p>
-            <p class="hero-sub">systems · intelligence · security · sound · play · strange tools · unfinished fragments</p>
+            <h1>Frank Peterlein</h1>
+            <p class="hero-meta">Berlin · IT and AI practitioner</p>
+            <p class="hero-sub">systems · intelligence · security · infrastructure · sound · strange tools</p>
+            <p class="hero-intro">
+                I use code, simulations, notes, and small executable artifacts to study how
+                systems generate behavior, preserve viability, expose hidden structure, and fail.
+                This page is a selected path through that work, not a complete inventory.
+            </p>
             <div class="cursor-line">
                 <span class="prompt">~$</span>
                 <span id="typed-text"></span><span class="caret">_</span>
@@ -40,123 +41,91 @@
 
         <div class="divider"></div>
 
-        <p class="timestamp">Updated from the GitHub profile and repository READMEs on 2026-07-08.</p>
+        <p class="timestamp">Curated on 2026-07-11. Repository status is stated explicitly.</p>
 
         <div class="divider"></div>
 
-        <section id="fragments" aria-labelledby="fragments-heading">
-            <h2 id="fragments-heading">Recent Fragments</h2>
-            <ul class="fragments">
-                <li>
-                    <time datetime="2026-07-08">2026-07-08</time>
-                    <div>
+        <section id="work" aria-labelledby="work-heading">
+            <h2 id="work-heading">Selected Work</h2>
+            <div class="project-list">
+                <article class="project">
+                    <div class="project-heading">
                         <a href="https://github.com/frnkptrln/systems-and-intelligence" target="_blank" rel="noopener">systems-and-intelligence</a>
-                        <span>Expanded the living research notebook with provenance-depth architecture, city-scale corridor pre-registration, new fiction entries, and a generator-coherence consciousness framing note.</span>
+                        <span class="project-status active">active flagship</span>
                     </div>
-                </li>
-                <li>
-                    <time datetime="2026-06-10">2026-06-10</time>
-                    <div>
+                    <p>A research notebook connecting emergence, inverse reconstruction, optimization, and viability constraints through theory, simulations, and falsifiable experiments.</p>
+                    <a class="project-entry" href="https://frnkptrln.github.io/systems-and-intelligence/" target="_blank" rel="noopener">interactive book →</a>
+                </article>
+
+                <article class="project">
+                    <div class="project-heading">
                         <a href="https://github.com/frnkptrln/the-weaving-void" target="_blank" rel="noopener">the-weaving-void</a>
-                        <span>Added loop-driven programs for all nine esoteric languages and new visualizers for Distaff and MandelMemory.</span>
+                        <span class="project-status active">active laboratory</span>
                     </div>
-                </li>
-            </ul>
-        </section>
-
-        <div class="divider"></div>
-
-        <section id="streams" aria-labelledby="streams-heading">
-            <h2 id="streams-heading">Streams</h2>
-            <div class="stream-grid">
-                <article class="stream-block">
-                    <h3>Logs</h3>
-                    <ul class="stream-list">
-                        <li><a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/logs/018_the-city-panel-protocol.md" target="_blank" rel="noopener">018 — The City Panel Protocol</a><span>— latest log: a pre-registered field test for the Viable Corridor at city scale.</span></li>
-                        <li><a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/logs/017_provenance-depth-and-the-verification-economy.md" target="_blank" rel="noopener">017 — Provenance Depth and the Verification Economy</a><span>— certificate architecture for claims when generation is cheap and verification is bounded.</span></li>
-                        <li><a href="https://github.com/frnkptrln/systems-and-intelligence/tree/main/logs" target="_blank" rel="noopener">Complete Log Stream</a><span>— all field notes and fragments.</span></li>
-                    </ul>
+                    <p>An executable study of dual-reading artifacts: visible surfaces that deterministically carry programs, with public readers, runtimes, traces, and mutation tests.</p>
+                    <a class="project-entry" href="https://github.com/frnkptrln/the-weaving-void/blob/main/core/the-weave.md" target="_blank" rel="noopener">the weave →</a>
                 </article>
-                <article class="stream-block">
-                    <h3>Theory</h3>
-                    <ul class="stream-list">
-                        <li><a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/core/the-generator-question.md" target="_blank" rel="noopener">The Generator Question</a><span>— forward generation, inverse reconstruction, and the three walls.</span></li>
-                        <li><a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/optimization/optimization-and-its-blindness.md" target="_blank" rel="noopener">Optimization and Its Blindness</a><span>— the hinge from emergence to viable constraint architecture.</span></li>
-                    </ul>
+
+                <article class="project">
+                    <div class="project-heading">
+                        <a href="https://github.com/frnkptrln/the-weaving-sound" target="_blank" rel="noopener">the-weaving-sound</a>
+                        <span class="project-status active">active anthology</span>
+                    </div>
+                    <p>Generative sound pieces in SuperCollider: multiple conductors and synthesis engines sharing one small language of macros, routing, and lifecycle.</p>
                 </article>
-                <article class="stream-block">
-                    <h3>Fiction</h3>
-                    <ul class="stream-list">
-                        <li><a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/fiction/16_the_second_receiver.md" target="_blank" rel="noopener">16 — The Second Receiver</a><span>— latest fiction entry: consciousness, isolation, and a second receiver at Farside Station.</span></li>
-                        <li><a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/fiction/15_the_exchange_rate.md" target="_blank" rel="noopener">15 — The Exchange Rate</a><span>— a certificate audit story about provenance depth and claims drifting away from matter.</span></li>
-                        <li><a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/fiction/13_trace-to-generator.md" target="_blank" rel="noopener">13 — Trace to Generator</a><span>— a companion fiction for the inverse problem.</span></li>
-                        <li><a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/fiction/12_the_chord_state.md" target="_blank" rel="noopener">12 — The Chord State</a><span>— identity as a simultaneously sustained relation.</span></li>
-                    </ul>
+
+                <article class="project">
+                    <div class="project-heading">
+                        <a href="https://github.com/frnkptrln/the-crawling-void" target="_blank" rel="noopener">the-crawling-void</a>
+                        <span class="project-status alpha">defensive alpha</span>
+                    </div>
+                    <p>A bounded CTI/OSINT toolkit for difficult web surfaces, with explicit authorization, scope, redaction, transfer, and fixture-tested parser boundaries.</p>
+                </article>
+
+                <article class="project">
+                    <div class="project-heading">
+                        <a href="https://github.com/frnkptrln/berlin-transit-friction" target="_blank" rel="noopener">berlin-transit-friction</a>
+                        <span class="project-status bounded">bounded reboot</span>
+                    </div>
+                    <p>The invalid general “friction” prototype is paused. The surviving question is narrower: how elevator outages change accessible public-transport topology over time.</p>
                 </article>
             </div>
         </section>
 
         <div class="divider"></div>
 
-        <section id="interactive" aria-labelledby="interactive-heading">
-            <h2 id="interactive-heading">Interactive</h2>
-            <p class="muted">Live interfaces and explorable systems:</p>
-            <ul class="stream-list">
-                <li><a href="https://frnkptrln.github.io/systems-and-intelligence/" target="_blank" rel="noopener">systems-and-intelligence — interactive book</a><span>— curated reader-first path through theory, logs, and fiction.</span></li>
-                <li><a href="https://frnkptrln.github.io/systems-and-intelligence/interactive/web-explorer/" target="_blank" rel="noopener">Web Emergence Explorer</a><span>— cellular automata sandbox with live entropy and mutual-information charts.</span></li>
-            </ul>
-        </section>
-
-
-        <div class="divider"></div>
-
         <section id="reading" aria-labelledby="reading-heading">
-            <h2 id="reading-heading">Reading Path</h2>
+            <h2 id="reading-heading">A Short Reading Path</h2>
             <ul class="writings">
                 <li>
                     <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/core/the-generator-question.md" target="_blank" rel="noopener">The Generator Question</a>
-                    <span class="writing-desc">— the organizing question and the asymmetry between generation and reconstruction</span>
-                </li>
-                <li>
-                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/core/emergence-manifesto-v1.3.md" target="_blank" rel="noopener">Emergence Manifesto v1.3</a>
-                    <span class="writing-desc">— the core emergence claim set</span>
+                    <span class="writing-desc">— generation is often cheap; reconstructing a generator from its trace is not</span>
                 </li>
                 <li>
                     <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/optimization/optimization-and-its-blindness.md" target="_blank" rel="noopener">Optimization and Its Blindness</a>
-                    <span class="writing-desc">— why unconstrained optimization of an emergent system is non-viable</span>
-                </li>
-                <li>
-                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/teo-framework/README.md" target="_blank" rel="noopener">TEO Framework</a>
-                    <span class="writing-desc">— coupled constraints, identity persistence, and attractor geometry</span>
-                </li>
-                <li>
-                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/theory/identity/machine-consciousness-as-generator-coherence.md" target="_blank" rel="noopener">Machine Consciousness as Generator Coherence</a>
-                    <span class="writing-desc">— a cautious framing note on consciousness as coherence work in the generator, not evidence from traces</span>
+                    <span class="writing-desc">— capability without scalable constraint architecture is not viability</span>
                 </li>
                 <li>
                     <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/papers/viable-corridor.md" target="_blank" rel="noopener">The Viable Corridor</a>
-                    <span class="writing-desc">— formal synthesis of constraint architecture and capability loading</span>
+                    <span class="writing-desc">— the formal synthesis and its explicit limits</span>
                 </li>
                 <li>
-                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/docs/book/09_from_rule_to_mind.md" target="_blank" rel="noopener">From Rule to Mind</a>
-                    <span class="writing-desc">— compact course spine connecting the whole system</span>
-                </li>
-                <li>
-                    <a href="https://github.com/frnkptrln/systems-and-intelligence/blob/main/simulation-models/alignment-and-veto/ai-alignment-veto/README.md" target="_blank" rel="noopener">AI Alignment Veto</a>
-                    <span class="writing-desc">— runnable proof artifact for substrate-stress constraints</span>
+                    <a href="https://github.com/frnkptrln/the-weaving-void/blob/main/weaves/subtext/README.md" target="_blank" rel="noopener">Subtext</a>
+                    <span class="writing-desc">— one visible prose surface, one deterministic executable thread</span>
                 </li>
             </ul>
         </section>
 
         <div class="divider"></div>
 
-        <section>
-            <h2>Note</h2>
+        <section aria-labelledby="boundary-heading">
+            <h2 id="boundary-heading">Boundary</h2>
             <p class="muted">
-                This page is a curated public index, not a complete inventory. Much of the underlying work, experiments, and structures still exists beyond this surface: offline, conceptually, or inside undocumented contexts.
+                These repositories are public working spaces, not a claim that every experiment is
+                complete. Active, alpha, bounded, paused, and archived mean different things here—and
+                the distinction is part of the work.
             </p>
         </section>
-
     </main>
 
     <footer>
