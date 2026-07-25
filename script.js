@@ -1,45 +1,60 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
+    const year = document.getElementById("year");
+    const typedText = document.getElementById("typed-text");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Year
-    document.getElementById('year').textContent = new Date().getFullYear();
+    if (year) {
+        year.textContent = new Date().getFullYear();
+    }
 
-    // Subtle typing — dry, factual, system-focused
+    if (!typedText || reducedMotion) {
+        return;
+    }
+
     const phrases = [
-        'trace -> candidate model',
-        'local rules -> global behavior',
-        'capability + constraints -> viability test',
-        'security / sound / strange tools',
-        '¯\\_(ツ)_/¯'
+        "question -> note",
+        "question -> system",
+        "question -> room",
+        "question -> game?",
+        "¯\\_(ツ)_/¯"
     ];
 
-    const el = document.getElementById('typed-text');
     let phraseIndex = 0;
-    let charIndex = 0;
+    let characterIndex = 0;
     let deleting = false;
 
     function type() {
-        const current = phrases[phraseIndex];
+        const phrase = phrases[phraseIndex];
 
         if (!deleting) {
-            el.textContent = current.slice(0, charIndex + 1);
-            charIndex++;
-            if (charIndex === current.length) {
-                setTimeout(() => { deleting = true; type(); }, 3000);
+            characterIndex += 1;
+            typedText.textContent = phrase.slice(0, characterIndex);
+
+            if (characterIndex === phrase.length) {
+                window.setTimeout(() => {
+                    deleting = true;
+                    type();
+                }, 2600);
                 return;
             }
-            setTimeout(type, 50 + Math.random() * 40);
-        } else {
-            el.textContent = current.slice(0, charIndex - 1);
-            charIndex--;
-            if (charIndex === 0) {
-                deleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length;
-                setTimeout(type, 500);
-                return;
-            }
-            setTimeout(type, 25);
+
+            window.setTimeout(type, 48 + Math.random() * 35);
+            return;
         }
+
+        characterIndex -= 1;
+        typedText.textContent = phrase.slice(0, characterIndex);
+
+        if (characterIndex === 0) {
+            deleting = false;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            window.setTimeout(type, 450);
+            return;
+        }
+
+        window.setTimeout(type, 24);
     }
 
-    setTimeout(type, 1000);
+    typedText.textContent = "";
+    window.setTimeout(type, 700);
 });
