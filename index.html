@@ -3,152 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>frnkptrln</title>
-    <meta name="description" content="Frank Peterlein — selected work on systems, intelligence, security, infrastructure, sound, and strange tools.">
+    <title>frnkptrln — a homepage for thoughts</title>
+    <meta
+        name="description"
+        content="A foyer for thoughts taking form as notes, systems, rooms, experiments, and perhaps games."
+    >
+    <meta name="theme-color" content="#0b0c0b">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&family=Space+Grotesk:wght@300;400;500&display=swap"
+        rel="stylesheet"
+    >
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <span class="nav-name">frnkptrln</span>
+    <a class="skip-link" href="#foyer">Skip to the doors</a>
+
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+            <a class="site-mark" href="#top" aria-label="Back to the beginning">
+                frnkptrln<span aria-hidden="true">_</span>
+            </a>
             <div class="nav-links">
-                <a href="/a-house-in-conversation/">house</a>
-                <a href="#work">work</a>
-                <a href="#reading">reading</a>
-                <a href="https://github.com/frnkptrln" target="_blank" rel="noopener">github</a>
-                <a href="https://www.linkedin.com/in/frnkptrln" target="_blank" rel="noopener">linkedin</a>
+                <a href="#thinking">thinking</a>
+                <a href="#rooms">rooms</a>
+                <a href="#experiments">experiments</a>
+                <a href="#games">games?</a>
             </div>
         </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <h1>Frank Peterlein</h1>
-            <p class="hero-meta">Berlin</p>
-            <p class="hero-sub">systems · intelligence · security · infrastructure · sound · strange tools</p>
+    <main id="top">
+        <section class="hero" aria-labelledby="hero-title">
+            <p class="eyebrow">a homepage for thoughts · berlin</p>
+            <h1 id="hero-title">
+                <span>Some thoughts become notes.</span>
+                <span>Some become systems.</span>
+                <span>Some become rooms.</span>
+                <span>Some may become games.</span>
+            </h1>
             <p class="hero-intro">
-                I use code, simulations, notes, and small executable artifacts to study how
-                processes produce behavior, how traces constrain candidate models, how systems
-                preserve viability, and where those accounts fail. This page is a selected path
-                through that work, not a complete inventory.
+                This is their foyer—a place for unfinished questions and the forms they take.
             </p>
-            <div class="cursor-line">
-                <span class="prompt">~$</span>
-                <span id="typed-text"></span><span class="caret">_</span>
+
+            <div class="hero-bottom">
+                <p class="terminal-line" aria-hidden="true">
+                    <span class="prompt">~$</span>
+                    <span id="typed-text">question -&gt; ?</span><span class="caret">_</span>
+                </p>
+                <a class="door-link" href="#foyer">choose a door <span aria-hidden="true">↓</span></a>
             </div>
         </section>
 
-        <div class="divider"></div>
+        <section class="foyer" id="foyer" aria-labelledby="foyer-title">
+            <div class="section-intro">
+                <p class="section-number">00 / foyer</p>
+                <div>
+                    <h2 id="foyer-title">Four ways in.</h2>
+                    <p>Not a complete inventory. Not a prescribed path.</p>
+                </div>
+            </div>
 
-        <p class="timestamp">Curated on 2026-07-20. Repository status is stated explicitly.</p>
-
-        <div class="divider"></div>
-
-        <section id="work" aria-labelledby="work-heading">
-            <h2 id="work-heading">Selected Work</h2>
-            <div class="project-list">
-                <article class="project">
-                    <div class="project-heading">
-                        <a href="https://frnkptrln.github.io/systems-and-intelligence/" target="_blank" rel="noopener">systems-and-intelligence</a>
-                        <span class="project-status active">active flagship</span>
+            <div class="threshold-grid">
+                <article class="threshold threshold-thinking" id="thinking">
+                    <div class="threshold-topline">
+                        <span>01 / thinking</span>
+                        <span class="door-state">open</span>
                     </div>
-                    <p>A research notebook on process models, model identification, emergence, and viability constraints, combining bounded claims, executable probes, and a deliberately open thinking space.</p>
-                    <a class="project-entry" href="https://github.com/frnkptrln/systems-and-intelligence" target="_blank" rel="noopener">source repository →</a>
+                    <div class="threshold-body">
+                        <h3>
+                            <a href="https://frnkptrln.github.io/systems-and-intelligence/">
+                                Thinking
+                            </a>
+                        </h3>
+                        <p>
+                            Notes, models, and executable probes around intelligence, identity,
+                            learning, emergence, and the limits of what can be inferred.
+                        </p>
+                    </div>
+                    <nav class="threshold-paths" aria-label="Paths into Thinking">
+                        <a href="https://frnkptrln.github.io/systems-and-intelligence/">
+                            enter the notebook <span aria-hidden="true">↗</span>
+                        </a>
+                        <a href="https://frnkptrln.github.io/systems-and-intelligence/thinking-space/">
+                            unfinished questions
+                        </a>
+                        <a href="https://frnkptrln.github.io/systems-and-intelligence/theory/core/mathematical-axioms/">
+                            foundations
+                        </a>
+                    </nav>
                 </article>
 
-                <article class="project">
-                    <div class="project-heading">
-                        <a href="https://github.com/frnkptrln/a-house-in-conversation" target="_blank" rel="noopener">a-house-in-conversation</a>
-                        <span class="project-status active">live work</span>
+                <article class="threshold threshold-rooms" id="rooms">
+                    <div class="threshold-topline">
+                        <span>02 / rooms</span>
+                        <span class="door-state">open</span>
                     </div>
-                    <p>A shared audiovisual house made in conversation: four responsive rooms for language, colour, growth, and listening, each with its own temporal and musical logic.</p>
-                    <a class="project-entry" href="/a-house-in-conversation/" target="_blank" rel="noopener">enter the house →</a>
+                    <div class="threshold-body">
+                        <h3>
+                            <a href="/a-house-in-conversation/">
+                                Rooms
+                            </a>
+                        </h3>
+                        <p>
+                            A house made in conversation. Language, colour, growth, listening—and
+                            doors that may only become visible later.
+                        </p>
+                    </div>
+                    <nav class="threshold-paths" aria-label="Paths into Rooms">
+                        <a href="/a-house-in-conversation/">
+                            enter the house <span aria-hidden="true">→</span>
+                        </a>
+                        <a href="https://github.com/frnkptrln/a-house-in-conversation">
+                            see how it was built <span aria-hidden="true">↗</span>
+                        </a>
+                    </nav>
                 </article>
 
-                <article class="project">
-                    <div class="project-heading">
-                        <a href="https://github.com/frnkptrln/the-weaving-void" target="_blank" rel="noopener">the-weaving-void</a>
-                        <span class="project-status active">active laboratory</span>
+                <article class="threshold threshold-experiments" id="experiments">
+                    <div class="threshold-topline">
+                        <span>03 / experiments</span>
+                        <span class="door-state">unstable</span>
                     </div>
-                    <p>An executable study of dual-reading artifacts: visible surfaces that deterministically carry programs, with public readers, runtimes, traces, and mutation tests.</p>
-                    <a class="project-entry" href="https://github.com/frnkptrln/the-weaving-void/blob/main/core/the-weave.md" target="_blank" rel="noopener">the weave →</a>
+                    <div class="threshold-body">
+                        <h3>
+                            <a href="https://github.com/frnkptrln?tab=repositories">
+                                Experiments
+                            </a>
+                        </h3>
+                        <p>
+                            Sound, hidden programs, defensive tools, and other questions that
+                            became runnable before they became settled.
+                        </p>
+                    </div>
+                    <nav class="threshold-paths experiment-list" aria-label="Selected experiments">
+                        <a href="https://github.com/frnkptrln/the-weaving-void">
+                            <span>the-weaving-void</span>
+                            <small>text carrying code</small>
+                        </a>
+                        <a href="https://github.com/frnkptrln/the-weaving-sound">
+                            <span>the-weaving-sound</span>
+                            <small>generative sound</small>
+                        </a>
+                        <a href="https://github.com/frnkptrln/the-crawling-void">
+                            <span>the-crawling-void</span>
+                            <small>bounded exploration</small>
+                        </a>
+                    </nav>
                 </article>
 
-                <article class="project">
-                    <div class="project-heading">
-                        <a href="https://github.com/frnkptrln/the-weaving-sound" target="_blank" rel="noopener">the-weaving-sound</a>
-                        <span class="project-status active">active anthology</span>
+                <article class="threshold threshold-games threshold-closed" id="games">
+                    <div class="threshold-topline">
+                        <span>04 / games</span>
+                        <span class="door-state">not yet</span>
                     </div>
-                    <p>Generative sound pieces in SuperCollider: multiple conductors and synthesis engines sharing one small language of macros, routing, and lifecycle.</p>
-                </article>
-
-                <article class="project">
-                    <div class="project-heading">
-                        <a href="https://github.com/frnkptrln/the-crawling-void" target="_blank" rel="noopener">the-crawling-void</a>
-                        <span class="project-status alpha">defensive alpha</span>
+                    <div class="threshold-body">
+                        <h3>Games</h3>
+                        <p>
+                            Some thoughts need rules, worlds, inventory, failure, and time.
+                            This door is still finding its shape.
+                        </p>
                     </div>
-                    <p>A bounded CTI/OSINT toolkit for difficult web surfaces, with explicit authorization, scope, redaction, transfer, and fixture-tested parser boundaries.</p>
-                </article>
-
-                <article class="project">
-                    <div class="project-heading">
-                        <a href="https://github.com/frnkptrln/berlin-transit-friction" target="_blank" rel="noopener">berlin-transit-friction</a>
-                        <span class="project-status bounded">bounded reboot</span>
-                    </div>
-                    <p>The invalid general “friction” prototype is paused. The surviving question is narrower: how elevator outages change accessible public-transport topology over time.</p>
+                    <p class="closed-note">There is no handle on this side.</p>
                 </article>
             </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <section id="reading" aria-labelledby="reading-heading">
-            <h2 id="reading-heading">A Short Reading Path</h2>
-            <ul class="writings">
-                <li>
-                    <a href="https://frnkptrln.github.io/systems-and-intelligence/theory/core/mathematical-axioms/" target="_blank" rel="noopener">Foundations Reconstruction</a>
-                    <span class="writing-desc">— minimal process assumptions, derived structure, counterexamples, and explicit limits</span>
-                </li>
-                <li>
-                    <a href="https://frnkptrln.github.io/systems-and-intelligence/theory/core/from-trace-to-world-binding/" target="_blank" rel="noopener">From Trace to World-Binding</a>
-                    <span class="writing-desc">— how evidence, intervention, and revision constrain candidate process models</span>
-                </li>
-                <li>
-                    <a href="https://frnkptrln.github.io/systems-and-intelligence/thinking-space/" target="_blank" rel="noopener">Thinking Space</a>
-                    <span class="writing-desc">— questions, contradictions, and unfinished seeds before synthesis</span>
-                </li>
-                <li>
-                    <a href="https://frnkptrln.github.io/systems-and-intelligence/theory/optimization/optimization-and-its-blindness/" target="_blank" rel="noopener">Optimization and Its Blindness</a>
-                    <span class="writing-desc">— the hinge from model identification into the repository's conditional viability arc</span>
-                </li>
-                <li>
-                    <a href="https://frnkptrln.github.io/systems-and-intelligence/papers/viable-corridor/" target="_blank" rel="noopener">The Viable Corridor</a>
-                    <span class="writing-desc">— one conditional formal model and its explicit limits</span>
-                </li>
-                <li>
-                    <a href="https://github.com/frnkptrln/the-weaving-void/blob/main/weaves/subtext/README.md" target="_blank" rel="noopener">Subtext</a>
-                    <span class="writing-desc">— one visible prose surface, one deterministic executable thread</span>
-                </li>
-            </ul>
-        </section>
-
-        <div class="divider"></div>
-
-        <section aria-labelledby="boundary-heading">
-            <h2 id="boundary-heading">Boundary</h2>
-            <p class="muted">
-                These repositories are public working spaces, not a claim that every experiment is
-                complete. Active, alpha, bounded, paused, and archived mean different things here—and
-                the distinction is part of the work.
-            </p>
         </section>
     </main>
 
-    <footer>
-        <p>Berlin, <span id="year"></span></p>
+    <footer class="site-footer">
+        <div class="signature">
+            <span>Frank Peterlein · Berlin</span>
+            <span aria-hidden="true">¯\_(ツ)_/¯</span>
+        </div>
+        <nav class="elsewhere" aria-label="Elsewhere">
+            <a href="https://github.com/frnkptrln" rel="me">GitHub</a>
+            <a href="https://www.linkedin.com/in/frnkptrln" rel="me">LinkedIn</a>
+            <span id="year"></span>
+        </nav>
     </footer>
 
     <script src="script.js"></script>
