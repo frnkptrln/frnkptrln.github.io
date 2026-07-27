@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "question -> note",
         "question -> system",
         "question -> room",
-        "question -> game?",
+        "question -> sound",
         "¯\\_(ツ)_/¯"
     ];
 
