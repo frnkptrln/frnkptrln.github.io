@@ -24,8 +24,10 @@ The homepage hosts browser-native sound works directly:
   event train crossing from pulse and rhythm into pitch
 - [Two trains](https://frnkptrln.github.io/sound/two-trains/) — two nearly
   identical clocks turning drift into beating and interval
+- [Coupled](https://frnkptrln.github.io/sound/coupled/) — two clocks that
+  influence one another until drift can become synchrony
 
-Both pieces are self-contained Web Audio studies collected through the
+All three pieces are self-contained Web Audio studies collected through the
 [/sound/](https://frnkptrln.github.io/sound/) entrance. Generative SuperCollider
 work remains in [the-weaving-sound](https://github.com/frnkptrln/the-weaving-sound).
 
