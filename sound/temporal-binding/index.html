@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>temporal binding — one train, two readings</title>
+<meta name="description" content="An interactive Web Audio study of the threshold where separate events become rhythm, flutter, and pitch.">
+<meta name="theme-color" content="#0b0a0e">
+<style>
+  :root{
+    --void:#0b0a0e;
+    --ash:#16141b;
+    --gold:#f2b04b;
+    --gold-deep:#8a5f1c;
+    --bone:#ded6c6;
+    --slate:#6a6472;
+    --seam:#8fb9cc;
+    --mono: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--void);
+    color:var(--bone);
+    font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  #stage{
+    height:100dvh;
+    display:grid;
+    grid-template-rows:auto 1fr auto auto;
+    gap:clamp(10px,2.2vh,22px);
+    padding:clamp(14px,2.4vh,26px) clamp(14px,3vw,40px);
+  }
+
+  /* ---- head row ---- */
+  #head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-size:11px; letter-spacing:.18em; text-transform:lowercase;
+    color:var(--slate);
+    border-bottom:1px solid #221f28; padding-bottom:8px;
+  }
+  #head .id{letter-spacing:.34em}
+  #readout{display:flex; gap:clamp(12px,3vw,30px); color:var(--bone)}
+  #readout b{font-weight:400; color:var(--gold)}
+  #readout span.lbl{color:var(--slate); letter-spacing:.18em}
+  #note{color:var(--slate)}
+  #note.lit{color:var(--gold)}
+
+  /* ---- field ---- */
+  #field{position:relative; min-height:120px}
+  canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+
+  /* ---- plate ---- */
+  #plate{
+    text-align:center;
+    font-family:var(--serif);
+    font-size:clamp(15px,2.5vw,22px);
+    letter-spacing:.04em;
+    color:var(--bone);
+    opacity:.82;
+    min-height:1.6em;
+    transition:opacity .5s ease, color .5s ease;
+  }
+  #plate.seam{color:var(--seam); opacity:1}
+  #plate.fading{opacity:0}
+
+  /* ---- controls ---- */
+  #controls{display:grid; gap:clamp(8px,1.6vh,16px); padding-bottom:4px}
+  .row{display:grid; grid-template-columns:4.2em 1fr 4.6em; align-items:center; gap:14px}
+  .row label{font-size:10px; letter-spacing:.24em; color:var(--slate)}
+  .row output{font-size:11px; letter-spacing:.08em; color:var(--slate); text-align:right}
+  input[type=range]{
+    -webkit-appearance:none; appearance:none; width:100%; background:transparent; margin:0; height:20px;
+  }
+  input[type=range]:focus{outline:none}
+  input[type=range]:focus-visible{outline:1px solid var(--seam); outline-offset:6px}
+  input[type=range]::-webkit-slider-runnable-track{height:1px; background:#2c2833}
+  input[type=range]::-moz-range-track{height:1px; background:#2c2833}
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:9px; height:9px; border-radius:50%;
+    background:var(--gold); margin-top:-4px; border:none; cursor:ew-resize;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:9px; height:9px; border-radius:50%; background:var(--gold); border:none; cursor:ew-resize;
+  }
+  #foot{display:flex; justify-content:space-between; align-items:center; gap:16px}
+  button{
+    font-family:var(--mono); font-size:10px; letter-spacing:.24em; text-transform:lowercase;
+    background:transparent; color:var(--slate); border:1px solid #2c2833;
+    padding:7px 16px; cursor:pointer; transition:color .25s, border-color .25s;
+  }
+  button:hover{color:var(--bone); border-color:#4a4352}
+  button:focus-visible{outline:1px solid var(--seam); outline-offset:3px}
+  button.on{color:var(--gold); border-color:var(--gold-deep)}
+  #hint{font-size:10px; letter-spacing:.16em; color:#453f4e}
+
+  /* ---- veil ---- */
+  #veil{
+    position:fixed; inset:0; background:var(--void);
+    display:grid; place-content:center; gap:18px; text-align:center;
+    width:100%; height:100%; padding:0; border:0; color:inherit; font:inherit;
+    cursor:pointer; z-index:9; transition:opacity .8s ease;
+  }
+  #veil .veil-title{
+    display:block;
+    font-family:var(--serif); font-weight:400; font-size:clamp(20px,3.4vw,30px);
+    margin:0; letter-spacing:.03em; color:var(--bone);
+  }
+  #veil .veil-prompt{display:block; margin:0; font-size:11px; letter-spacing:.22em; color:var(--slate)}
+  #veil.gone{opacity:0; pointer-events:none}
+  .return{
+    position:fixed; z-index:10; top:clamp(14px,2.4vh,26px); left:clamp(14px,3vw,40px);
+    color:var(--slate); font-size:10px; letter-spacing:.18em; text-decoration:none;
+    transition:color .25s, opacity .5s ease;
+  }
+  .return:hover,.return:focus-visible{color:var(--bone)}
+  .return.gone{opacity:0; pointer-events:none}
+  #head .id{color:inherit; text-decoration:none; transition:color .25s}
+  #head .id:hover,#head .id:focus-visible{color:var(--bone)}
+  @media (max-width:520px){ .row{grid-template-columns:3.6em 1fr 4.2em; gap:10px} }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <div id="head">
+    <a class="id" href="../" aria-label="Back to Sound">temporal binding</a>
+    <span id="readout">
+      <span><span class="lbl">ioi</span> <b id="rIoi">—</b></span>
+      <span><span class="lbl">rate</span> <b id="rHz">—</b></span>
+      <span id="note">—</span>
+    </span>
+  </div>
+
+  <div id="field"><canvas id="cv"></canvas></div>
+
+  <div id="plate">&nbsp;</div>
+
+  <div id="controls">
+    <div class="row">
+      <label for="sRate">rate</label>
+      <input id="sRate" type="range" min="0" max="1" step="0.0005" value="0.62">
+      <output id="oRate">250 ms</output>
+    </div>
+    <div class="row">
+      <label for="sJit">drift</label>
+      <input id="sJit" type="range" min="0" max="1" step="0.005" value="0">
+      <output id="oJit">0 %</output>
+    </div>
+    <div class="row">
+      <label for="sLvl">level</label>
+      <input id="sLvl" type="range" min="0" max="1" step="0.005" value="0.55">
+      <output id="oLvl">55 %</output>
+    </div>
+    <div id="foot">
+      <button id="bSweep" type="button">sweep</button>
+      <span id="hint">space — hold / release</span>
+      <button id="bRun" class="on" type="button">running</button>
+    </div>
+  </div>
+</div>
+
+<a class="return" href="../">← sound</a>
+<button id="veil" type="button" aria-label="Start temporal binding">
+  <span class="veil-title">the same events, twice</span>
+  <span class="veil-prompt">click to open the ear</span>
+</button>
+
+<script>
+(() => {
+  "use strict";
+
+  const IOI_MIN = 0.0025, IOI_MAX = 2.0;
+  const RATIO = IOI_MAX / IOI_MIN;
+  const GRAIN = 0.0025;                // seconds — never changes
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const state = { pos: 0.62, jitter: 0, level: 0.55, running: true, sweeping: false, sweepDir: -1 };
+  const ioiFromPos = p => IOI_MIN * Math.pow(RATIO, p);
+  const posFromIoi = i => Math.log(i / IOI_MIN) / Math.log(RATIO);
+
+  /* ---------------- audio ---------------- */
+  let ctx = null, master = null, grain = null, nextTime = 0, schedTimer = null;
+  const queue = [];   // scheduled event times, ascending
+
+  function buildGrain() {
+    const n = Math.max(4, Math.round(ctx.sampleRate * GRAIN));
+    const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    let seed = 20260803;
+    const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+    for (let i = 0; i < n; i++) {
+      d[i] = (rnd() * 2 - 1) * 0.5 * (1 - Math.cos(2 * Math.PI * i / (n - 1)));
+    }
+    return buf;                        // one fixed grain, reused for every event
+  }
+
+  function initAudio() {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    grain = buildGrain();
+    const hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 55;
+    const lp = ctx.createBiquadFilter(); lp.type = "lowpass";  lp.frequency.value = 7200;
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -14; comp.ratio.value = 8; comp.attack.value = 0.002; comp.release.value = 0.2;
+    master = ctx.createGain(); master.gain.value = 0;
+    master.connect(hp); hp.connect(lp); lp.connect(comp); comp.connect(ctx.destination);
+    nextTime = ctx.currentTime + 0.08;
+    schedTimer = setInterval(schedule, 25);
+  }
+
+  function schedule() {
+    if (!ctx) return;
+    const horizon = ctx.currentTime + 0.12;
+    if (nextTime < ctx.currentTime) nextTime = ctx.currentTime + 0.005;
+    let guard = 0;
+    while (nextTime < horizon && guard++ < 400) {
+      if (state.running) {
+        const src = ctx.createBufferSource();
+        src.buffer = grain;
+        src.connect(master);
+        src.start(nextTime);
+        queue.push(nextTime);
+      }
+      const ioi = ioiFromPos(state.pos);
+      const j = state.jitter * ioi * 0.9;
+      nextTime += Math.max(0.0015, ioi + (Math.random() * 2 - 1) * j);
+    }
+    // density compensation: identical grains pile up as they get closer
+    const ioi = ioiFromPos(state.pos);
+    const comp = Math.min(1, Math.sqrt(ioi / 0.06));
+    const g = state.running ? state.level * 0.5 * comp : 0;
+    master.gain.setTargetAtTime(g, ctx.currentTime, 0.04);
+  }
+
+  /* ---------------- visual ---------------- */
+  const cv = document.getElementById("cv");
+  const g2 = cv.getContext("2d", { alpha: false });
+  let W = 0, H = 0, dpr = 1, shiftAcc = 0;
+  const SPEED = 150;                   // device px per second of trace
+
+  function resize() {
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    const r = cv.getBoundingClientRect();
+    W = Math.max(2, Math.round(r.width * dpr));
+    H = Math.max(2, Math.round(r.height * dpr));
+    cv.width = W; cv.height = H;
+    g2.fillStyle = "#0b0a0e"; g2.fillRect(0, 0, W, H);
+  }
+  window.addEventListener("resize", resize);
+
+  let glow = 0, lastT = 0, seamNow = false;
+
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const t = now / 1000;
+    const dt = lastT ? Math.min(0.05, t - lastT) : 0.016;
+    lastT = t;
+
+    // --- scroll the trace by whole device pixels ---
+    shiftAcc += SPEED * dpr * dt;
+    const dx = Math.floor(shiftAcc);
+    if (dx > 0) {
+      shiftAcc -= dx;
+      g2.drawImage(cv, -dx, 0);
+      g2.fillStyle = "#0b0a0e";
+      g2.fillRect(W - dx, 0, dx, H);
+    }
+    // slow decay of old marks
+    g2.fillStyle = "rgba(11,10,14,0.035)";
+    g2.fillRect(0, 0, W, H);
+
+    // --- pop every event that has actually sounded ---
+    let fired = 0;
+    const audioNow = ctx ? ctx.currentTime : 0;
+    while (queue.length && queue[0] <= audioNow) {
+      const et = queue.shift();
+      fired++;
+      const x = W - (audioNow - et) * SPEED * dpr;
+      const ioi = ioiFromPos(state.pos);
+      seamNow = ioi < 0.045 && ioi > 0.017;
+      g2.strokeStyle = seamNow ? "rgba(143,185,204,0.85)" : "rgba(242,176,75,0.8)";
+      g2.lineWidth = Math.max(1, dpr * 0.8);
+      g2.beginPath();
+      g2.moveTo(x, H * 0.22);
+      g2.lineTo(x, H * 0.78);
+      g2.stroke();
+    }
+
+    // --- full-field bloom: fuses in the eye near the display's own limit ---
+    const cap = reduced ? 0.09 : 0.26;
+    if (fired > 0) glow = Math.min(cap, glow + cap);
+    else glow *= (reduced ? 0.82 : 0.55);
+    if (glow > 0.004) {
+      const rad = g2.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.62);
+      const c = seamNow ? "143,185,204" : "242,176,75";
+      rad.addColorStop(0, `rgba(${c},${glow})`);
+      rad.addColorStop(1, "rgba(11,10,14,0)");
+      g2.fillStyle = rad;
+      g2.fillRect(0, 0, W, H);
+    }
+  }
+
+  /* ---------------- plate ---------------- */
+  const plate = document.getElementById("plate");
+  let plateText = "";
+  function regime(ioiMs, jit) {
+    if (ioiMs >= 500) return "separate events";
+    if (ioiMs >= 200) return "pulse";
+    if (ioiMs >= 90)  return "rhythm";
+    if (ioiMs >= 45)  return "flutter";
+    if (ioiMs >= 17)  return jit > 0.45 ? "the seam, unravelling"
+                                        : "you see rhythm. you hear pitch.";
+    return jit > 0.45 ? "continuous — and no pitch left" : "one tone";
+  }
+  function setPlate(txt, seam) {
+    if (txt === plateText) return;
+    plateText = txt;
+    plate.classList.add("fading");
+    setTimeout(() => {
+      plate.textContent = txt;
+      plate.classList.toggle("seam", seam);
+      plate.classList.remove("fading");
+    }, 260);
+  }
+
+  /* ---------------- readout + controls ---------------- */
+  const NAMES = ["a","a♯","b","c","c♯","d","d♯","e","f","f♯","g","g♯"];
+  const rIoi = document.getElementById("rIoi"), rHz = document.getElementById("rHz");
+  const noteEl = document.getElementById("note");
+  const sRate = document.getElementById("sRate"), oRate = document.getElementById("oRate");
+  const sJit  = document.getElementById("sJit"),  oJit  = document.getElementById("oJit");
+  const sLvl  = document.getElementById("sLvl"),  oLvl  = document.getElementById("oLvl");
+  const bSweep = document.getElementById("bSweep"), bRun = document.getElementById("bRun");
+
+  function refresh() {
+    const ioi = ioiFromPos(state.pos), hz = 1 / ioi, ms = ioi * 1000;
+    rIoi.textContent = ms >= 100 ? ms.toFixed(0) + " ms" : ms.toFixed(2) + " ms";
+    rHz.textContent = hz >= 100 ? hz.toFixed(0) + " hz" : hz.toFixed(1) + " hz";
+    if (hz >= 22) {
+      const semis = Math.round(12 * Math.log2(hz / 55));
+      noteEl.textContent = NAMES[((semis % 12) + 12) % 12] + Math.floor(semis / 12 + 1);
+      noteEl.classList.add("lit");
+    } else {
+      noteEl.textContent = "—";
+      noteEl.classList.remove("lit");
+    }
+    oRate.textContent = ms >= 100 ? ms.toFixed(0) + " ms" : ms.toFixed(1) + " ms";
+    oJit.textContent = Math.round(state.jitter * 100) + " %";
+    oLvl.textContent = Math.round(state.level * 100) + " %";
+    setPlate(regime(ms, state.jitter), ms < 45 && ms >= 17);
+  }
+
+  sRate.addEventListener("input", e => { state.pos = +e.target.value; stopSweep(); refresh(); });
+  sJit .addEventListener("input", e => { state.jitter = +e.target.value; refresh(); });
+  sLvl .addEventListener("input", e => { state.level  = +e.target.value; refresh(); });
+
+  function stopSweep() { state.sweeping = false; bSweep.classList.remove("on"); }
+  bSweep.addEventListener("click", () => {
+    state.sweeping = !state.sweeping;
+    bSweep.classList.toggle("on", state.sweeping);
+  });
+  bRun.addEventListener("click", () => toggleRun());
+  function toggleRun() {
+    state.running = !state.running;
+    bRun.classList.toggle("on", state.running);
+    bRun.textContent = state.running ? "running" : "held";
+  }
+  window.addEventListener("keydown", e => {
+    if (e.code === "Space" && e.target.tagName !== "INPUT") { e.preventDefault(); toggleRun(); }
+  });
+
+  // slow triangular sweep, ~55 s per traverse
+  setInterval(() => {
+    if (!state.sweeping) return;
+    state.pos += state.sweepDir * (1 / 55) * 0.05;
+    if (state.pos <= 0) { state.pos = 0; state.sweepDir = 1; }
+    if (state.pos >= 1) { state.pos = 1; state.sweepDir = -1; }
+    sRate.value = state.pos;
+    refresh();
+  }, 50);
+
+  /* ---------------- start ---------------- */
+  const veil = document.getElementById("veil");
+  const returnLink = document.querySelector(".return");
+  function begin() {
+    if (ctx) return;
+    initAudio();
+    veil.classList.add("gone");
+    returnLink.classList.add("gone");
+    setTimeout(() => veil.remove(), 900);
+    setTimeout(() => returnLink.remove(), 900);
+  }
+  veil.addEventListener("click", begin);
+  resize();
+  refresh();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

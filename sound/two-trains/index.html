@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>two trains — one drift, two names</title>
+<meta name="description" content="An interactive Web Audio study in which two almost-identical clocks turn temporal drift into tremor, beating, and interval.">
+<meta name="theme-color" content="#0b0a0e">
+<style>
+  :root{
+    --void:#0b0a0e;
+    --gold:#f2b04b;
+    --gold-deep:#8a5f1c;
+    --seam:#8fb9cc;
+    --bone:#ded6c6;
+    --slate:#6a6472;
+    --mono: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--void); color:var(--bone);
+    font-family:var(--mono); -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+  #stage{
+    height:100dvh; display:grid; grid-template-rows:auto 1fr auto auto;
+    gap:clamp(10px,2.2vh,22px); padding:clamp(14px,2.4vh,26px) clamp(14px,3vw,40px);
+  }
+  #head{
+    display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+    font-size:11px; letter-spacing:.18em; color:var(--slate);
+    border-bottom:1px solid #221f28; padding-bottom:8px;
+  }
+  #head .id{letter-spacing:.34em; white-space:nowrap}
+  #readout{display:flex; gap:clamp(10px,2.6vw,28px); color:var(--bone); flex-wrap:wrap; justify-content:flex-end}
+  #readout .lbl{color:var(--slate); letter-spacing:.18em}
+  #readout b{font-weight:400; color:var(--gold)}
+  #rDrift b{color:var(--seam)}
+
+  #field{position:relative; min-height:140px}
+  canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+
+  #plate{
+    text-align:center; font-family:var(--serif);
+    font-size:clamp(15px,2.5vw,22px); letter-spacing:.04em;
+    color:var(--bone); opacity:.82; min-height:1.6em;
+    transition:opacity .5s ease, color .5s ease;
+  }
+  #plate.seam{color:var(--seam); opacity:1}
+  #plate.fading{opacity:0}
+
+  #controls{display:grid; gap:clamp(8px,1.6vh,16px); padding-bottom:4px}
+  .row{display:grid; grid-template-columns:4.6em 1fr 5.4em; align-items:center; gap:14px}
+  .row label{font-size:10px; letter-spacing:.24em; color:var(--slate)}
+  .row output{font-size:11px; letter-spacing:.06em; color:var(--slate); text-align:right}
+  input[type=range]{-webkit-appearance:none; appearance:none; width:100%; background:transparent; margin:0; height:20px}
+  input[type=range]:focus{outline:none}
+  input[type=range]:focus-visible{outline:1px solid var(--seam); outline-offset:6px}
+  input[type=range]::-webkit-slider-runnable-track{height:1px; background:#2c2833}
+  input[type=range]::-moz-range-track{height:1px; background:#2c2833}
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:9px; height:9px; border-radius:50%;
+    background:var(--gold); margin-top:-4px; border:none; cursor:ew-resize;
+  }
+  input[type=range]::-moz-range-thumb{width:9px;height:9px;border-radius:50%;background:var(--gold);border:none;cursor:ew-resize}
+  #sDet::-webkit-slider-thumb{background:var(--seam)}
+  #sDet::-moz-range-thumb{background:var(--seam)}
+  #foot{display:flex; justify-content:space-between; align-items:center; gap:16px}
+  button{
+    font-family:var(--mono); font-size:10px; letter-spacing:.24em;
+    background:transparent; color:var(--slate); border:1px solid #2c2833;
+    padding:7px 16px; cursor:pointer; transition:color .25s, border-color .25s;
+  }
+  button:hover{color:var(--bone); border-color:#4a4352}
+  button:focus-visible{outline:1px solid var(--seam); outline-offset:3px}
+  button.on{color:var(--gold); border-color:var(--gold-deep)}
+  #hint{font-size:10px; letter-spacing:.16em; color:#453f4e; text-align:center}
+  #veil{
+    position:fixed; inset:0; background:var(--void); display:grid; place-content:center;
+    width:100%; height:100%; padding:0; border:0; color:inherit; font:inherit;
+    gap:18px; text-align:center; cursor:pointer; z-index:9; transition:opacity .8s ease;
+  }
+  #veil .veil-title{display:block; font-family:var(--serif); font-weight:400; font-size:clamp(20px,3.4vw,30px); margin:0; color:var(--bone)}
+  #veil .veil-prompt{display:block; margin:0; font-size:11px; letter-spacing:.22em; color:var(--slate)}
+  #veil.gone{opacity:0; pointer-events:none}
+  .return{
+    position:fixed; z-index:10; top:clamp(14px,2.4vh,26px); left:clamp(14px,3vw,40px);
+    color:var(--slate); font-size:10px; letter-spacing:.18em; text-decoration:none;
+    transition:color .25s, opacity .5s ease;
+  }
+  .return:hover,.return:focus-visible{color:var(--bone)}
+  .return.gone{opacity:0; pointer-events:none}
+  #head .id{color:inherit; text-decoration:none; transition:color .25s}
+  #head .id:hover,#head .id:focus-visible{color:var(--bone)}
+  @media (max-width:560px){
+    .row{grid-template-columns:3.8em 1fr 5em; gap:10px}
+    #head{font-size:10px}
+    #hint{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <div id="head">
+    <a class="id" href="../" aria-label="Back to Sound">two trains</a>
+    <span id="readout">
+      <span><span class="lbl">ioi</span> <b id="rIoi">—</b></span>
+      <span><span class="lbl">rate</span> <b id="rHz">—</b></span>
+      <span id="rDrift"><span class="lbl">drift</span> <b id="rBeat">—</b></span>
+    </span>
+  </div>
+
+  <div id="field"><canvas id="cv"></canvas></div>
+
+  <div id="plate">&nbsp;</div>
+
+  <div id="controls">
+    <div class="row">
+      <label for="sRate">rate</label>
+      <input id="sRate" type="range" min="0" max="1" step="0.0005" value="0.66">
+      <output id="oRate">400 ms</output>
+    </div>
+    <div class="row">
+      <label for="sDet">detune</label>
+      <input id="sDet" type="range" min="0" max="1" step="0.002" value="0.16">
+      <output id="oDet">1.9 %</output>
+    </div>
+    <div class="row">
+      <label for="sLvl">level</label>
+      <input id="sLvl" type="range" min="0" max="1" step="0.005" value="0.55">
+      <output id="oLvl">55 %</output>
+    </div>
+    <div id="foot">
+      <button id="bSweep" type="button">sweep</button>
+      <span id="hint">space — hold / release</span>
+      <button id="bRun" class="on" type="button">running</button>
+    </div>
+  </div>
+</div>
+
+<a class="return" href="../">← sound</a>
+<button id="veil" type="button" aria-label="Start two trains">
+  <span class="veil-title">two clocks, almost the same</span>
+  <span class="veil-prompt">click to open the ear</span>
+</button>
+
+<script>
+(() => {
+  "use strict";
+
+  const IOI_MIN = 0.003, IOI_MAX = 2.0, RATIO = IOI_MAX / IOI_MIN;
+  const DET_MAX = 0.12;                 // 12 % ≈ a whole tone
+  const GRAIN = 0.0025;                 // one fixed grain, never changes
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const state = { pos:0.66, det:0.16, level:0.55, running:true, sweeping:false, dir:-1 };
+  const ioiFromPos = p => IOI_MIN * Math.pow(RATIO, p);
+  const detune = () => state.det * DET_MAX;
+  const ioiA = () => ioiFromPos(state.pos);
+  const ioiB = () => ioiA() * (1 + detune());
+
+  /* ---------------- audio ---------------- */
+  let ctx=null, master=null, grain=null, schedTimer=null;
+  const A = { next:0, q:[], last:0, chain:null, pan:-0.45 };
+  const B = { next:0, q:[], last:0, chain:null, pan: 0.45 };
+
+  function buildGrain(){
+    const n = Math.max(4, Math.round(ctx.sampleRate * GRAIN));
+    const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    let seed = 20260803;
+    const rnd = () => (seed = (seed*1664525 + 1013904223) >>> 0) / 4294967296;
+    for (let i=0;i<n;i++) d[i] = (rnd()*2-1) * 0.5 * (1 - Math.cos(2*Math.PI*i/(n-1)));
+    return buf;
+  }
+
+  function chainFor(pan){
+    // partial pan: both trains reach both ears, so the beating is acoustic, not binaural
+    const g = ctx.createGain(); g.gain.value = 1;
+    let node = g;
+    if (ctx.createStereoPanner){
+      const p = ctx.createStereoPanner(); p.pan.value = pan;
+      g.connect(p); node = p;
+    }
+    node.connect(master);
+    return g;
+  }
+
+  function initAudio(){
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    grain = buildGrain();
+    const hp = ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=55;
+    const lp = ctx.createBiquadFilter(); lp.type="lowpass";  lp.frequency.value=7200;
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value=-15; comp.ratio.value=8; comp.attack.value=0.002; comp.release.value=0.2;
+    master = ctx.createGain(); master.gain.value = 0;
+    master.connect(hp); hp.connect(lp); lp.connect(comp); comp.connect(ctx.destination);
+    A.chain = chainFor(A.pan);
+    B.chain = chainFor(B.pan);
+    A.next = B.next = A.last = B.last = ctx.currentTime + 0.08;
+    schedTimer = setInterval(schedule, 25);
+  }
+
+  function pump(train, ioi, horizon){
+    let guard = 0;
+    while (train.next < horizon && guard++ < 500){
+      if (state.running){
+        const s = ctx.createBufferSource();
+        s.buffer = grain; s.connect(train.chain); s.start(train.next);
+        train.q.push(train.next);
+      }
+      train.next += ioi;
+    }
+  }
+
+  function schedule(){
+    if (!ctx) return;
+    const now = ctx.currentTime, horizon = now + 0.12;
+    if (A.next < now) A.next = now + 0.005;
+    if (B.next < now) B.next = now + 0.005;
+    pump(A, ioiA(), horizon);
+    pump(B, ioiB(), horizon);
+    const c = Math.min(1, Math.sqrt(ioiA()/0.06));
+    master.gain.setTargetAtTime(state.running ? state.level*0.34*c : 0, now, 0.04);
+  }
+
+  /* ---------------- visual ---------------- */
+  const cv = document.getElementById("cv");
+  const g2 = cv.getContext("2d");
+  let W=0, H=0, dpr=1;
+  function resize(){
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    const r = cv.getBoundingClientRect();
+    W = Math.max(2, Math.round(r.width*dpr));
+    H = Math.max(2, Math.round(r.height*dpr));
+    cv.width = W; cv.height = H;
+  }
+  window.addEventListener("resize", resize);
+
+  const flash = { a:0, b:0 };
+
+  function phaseOf(train, ioi, now){
+    const p = ((now - train.last) / ioi) % 1;
+    return p < 0 ? p + 1 : p;
+  }
+
+  function frame(){
+    requestAnimationFrame(frame);
+    const now = ctx ? ctx.currentTime : 0;
+    const ia = ioiA(), ib = ioiB();
+
+    for (const [t,k] of [[A,"a"],[B,"b"]]){
+      let fired = false;
+      while (t.q.length && t.q[0] <= now){ t.last = t.q.shift(); fired = true; }
+      flash[k] = fired ? 1 : flash[k]*0.72;
+    }
+
+    const pa = phaseOf(A, ia, now), pb = phaseOf(B, ib, now);
+    let d = Math.abs(pa - pb); if (d > 0.5) d = 1 - d;
+    const coinc = 1 - 2*d;                       // 1 when aligned, 0 when opposite
+
+    g2.setTransform(1,0,0,1,0,0);
+    g2.fillStyle = "#0b0a0e"; g2.fillRect(0,0,W,H);
+
+    const cx = W/2, cy = H/2, R = Math.min(W,H)*0.33;
+    // above fusion the individual markers stop meaning anything — let them go
+    const dotA = Math.max(0, Math.min(1, (ia - 0.008)/0.03));
+
+    // central bloom: pulses at exactly the difference frequency, in both regimes
+    const cap = reduced ? 0.10 : 0.24;
+    const bloom = cap * Math.pow(Math.max(0, coinc), 3);
+    if (bloom > 0.004){
+      const rad = g2.createRadialGradient(cx,cy,0,cx,cy,R*2.1);
+      rad.addColorStop(0, `rgba(242,176,75,${bloom})`);
+      rad.addColorStop(1, "rgba(11,10,14,0)");
+      g2.fillStyle = rad; g2.fillRect(0,0,W,H);
+    }
+
+    // the ring itself thickens as the carrier stops being resolvable
+    g2.strokeStyle = `rgba(222,214,198,${0.10 + 0.30*(1-dotA)})`;
+    g2.lineWidth = dpr * (1 + 2.2*(1-dotA));
+    g2.beginPath(); g2.arc(cx,cy,R,0,Math.PI*2); g2.stroke();
+
+    const ang = p => -Math.PI/2 + p*Math.PI*2;
+    const ptA = [cx + R*Math.cos(ang(pa)), cy + R*Math.sin(ang(pa))];
+    const ptB = [cx + R*Math.cos(ang(pb)), cy + R*Math.sin(ang(pb))];
+
+    if (dotA > 0.01){
+      // the gap between the two markers is the whole quantity
+      g2.strokeStyle = `rgba(143,185,204,${0.22*dotA})`;
+      g2.lineWidth = dpr;
+      g2.beginPath(); g2.moveTo(ptA[0],ptA[1]); g2.lineTo(ptB[0],ptB[1]); g2.stroke();
+
+      const dot = (pt, col, f) => {
+        g2.fillStyle = `rgba(${col},${(0.45 + 0.55*f)*dotA})`;
+        g2.beginPath(); g2.arc(pt[0], pt[1], dpr*(3 + 3.5*f), 0, Math.PI*2); g2.fill();
+      };
+      dot(ptA, "242,176,75", flash.a);
+      dot(ptB, "143,185,204", flash.b);
+    }
+  }
+
+  /* ---------------- plate ---------------- */
+  const plate = document.getElementById("plate");
+  let plateText = "";
+  function regime(ms, det){
+    if (det < 0.0022) return "one train, twice — nothing drifts";
+    if (ms >= 500) return "two clocks";
+    if (ms >= 200) return "they drift apart";
+    if (ms >= 90)  return "in and out of phase";
+    if (ms >= 45)  return "flutter, doubled";
+    if (ms >= 17)  return "the same drift, now a tremor";
+    return det > 0.045 ? "two pitches — the drift became an interval"
+                       : "one tone, breathing";
+  }
+  function setPlate(txt, seam){
+    if (txt === plateText) return;
+    plateText = txt;
+    plate.classList.add("fading");
+    setTimeout(() => {
+      plate.textContent = txt;
+      plate.classList.toggle("seam", seam);
+      plate.classList.remove("fading");
+    }, 260);
+  }
+
+  /* ---------------- readout ---------------- */
+  const rIoi=document.getElementById("rIoi"), rHz=document.getElementById("rHz"),
+        rBeat=document.getElementById("rBeat"),
+        sRate=document.getElementById("sRate"), oRate=document.getElementById("oRate"),
+        sDet=document.getElementById("sDet"),  oDet=document.getElementById("oDet"),
+        sLvl=document.getElementById("sLvl"),  oLvl=document.getElementById("oLvl"),
+        bSweep=document.getElementById("bSweep"), bRun=document.getElementById("bRun");
+
+  function refresh(){
+    const ia = ioiA(), ms = ia*1000, hz = 1/ia, det = detune();
+    rIoi.textContent = ms >= 100 ? ms.toFixed(0)+" ms" : ms.toFixed(2)+" ms";
+    rHz.textContent  = hz >= 100 ? hz.toFixed(0)+" hz" : hz.toFixed(1)+" hz";
+
+    // the two trains realign 1/Δf seconds apart — one number, both regimes
+    const df = hz * det/(1+det);
+    rBeat.textContent = det < 0.0022 ? "—"
+      : (df >= 1 ? df.toFixed(2)+" hz" : (1/df).toFixed(1)+" s");
+
+    oRate.textContent = ms >= 100 ? ms.toFixed(0)+" ms" : ms.toFixed(1)+" ms";
+    const cents = 1200*Math.log2(1+det);
+    oDet.textContent = (det*100).toFixed(1)+" % · "+cents.toFixed(0)+"¢";
+    oLvl.textContent = Math.round(state.level*100)+" %";
+    setPlate(regime(ms, det), ms < 45 && ms >= 17);
+  }
+
+  sRate.addEventListener("input", e => { state.pos=+e.target.value; stopSweep(); refresh(); });
+  sDet .addEventListener("input", e => { state.det=+e.target.value; refresh(); });
+  sLvl .addEventListener("input", e => { state.level=+e.target.value; refresh(); });
+
+  function stopSweep(){ state.sweeping=false; bSweep.classList.remove("on"); }
+  bSweep.addEventListener("click", () => {
+    state.sweeping = !state.sweeping;
+    bSweep.classList.toggle("on", state.sweeping);
+  });
+  function toggleRun(){
+    state.running = !state.running;
+    bRun.classList.toggle("on", state.running);
+    bRun.textContent = state.running ? "running" : "held";
+  }
+  bRun.addEventListener("click", toggleRun);
+  window.addEventListener("keydown", e => {
+    if (e.code === "Space" && e.target.tagName !== "INPUT"){ e.preventDefault(); toggleRun(); }
+  });
+
+  setInterval(() => {                       // ~70 s per traverse — slow enough to be surprised
+    if (!state.sweeping) return;
+    state.pos += state.dir * (1/70) * 0.05;
+    if (state.pos <= 0){ state.pos = 0; state.dir =  1; }
+    if (state.pos >= 1){ state.pos = 1; state.dir = -1; }
+    sRate.value = state.pos;
+    refresh();
+  }, 50);
+
+  const veil = document.getElementById("veil");
+  const returnLink = document.querySelector(".return");
+  function begin(){
+    if (ctx) return;
+    initAudio();
+    veil.classList.add("gone");
+    returnLink.classList.add("gone");
+    setTimeout(() => veil.remove(), 900);
+    setTimeout(() => returnLink.remove(), 900);
+  }
+  veil.addEventListener("click", begin);
+  resize(); refresh(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

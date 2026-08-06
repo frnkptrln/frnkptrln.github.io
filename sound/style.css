@@ -1,0 +1,423 @@
+.sound-page {
+    --sound-gold: #f2b04b;
+    --sound-blue: #8fb9cc;
+    --sound-bone: #ded6c6;
+    background:
+        radial-gradient(circle at 76% 17%, rgba(242, 176, 75, 0.055), transparent 27rem),
+        radial-gradient(circle at 14% 60%, rgba(143, 185, 204, 0.045), transparent 32rem),
+        var(--bg);
+}
+
+.sound-page ::selection {
+    background: var(--sound-gold);
+    color: var(--bg);
+}
+
+.sound-page a:focus-visible {
+    outline-color: var(--sound-gold);
+}
+
+.sound-hero {
+    display: flex;
+    min-height: min(840px, calc(100svh - 5.5rem));
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(4.5rem, 10vw, 8rem) 0 clamp(3.5rem, 7vw, 5rem);
+}
+
+.sound-hero h1 {
+    max-width: 12ch;
+    color: var(--sound-bone);
+    font-size: clamp(3.2rem, 8.2vw, 7.8rem);
+    font-weight: 300;
+    letter-spacing: -0.065em;
+    line-height: 0.89;
+}
+
+.sound-hero h1 em {
+    color: var(--warm);
+    font-style: normal;
+}
+
+.sound-intro {
+    display: grid;
+    width: min(100%, 48rem);
+    align-items: end;
+    align-self: flex-end;
+    grid-template-columns: minmax(16rem, 1fr) auto;
+    gap: 3rem;
+    margin-top: clamp(3rem, 7vw, 6rem);
+}
+
+.sound-intro > p {
+    color: var(--fg-soft);
+    font-size: clamp(1rem, 1.55vw, 1.18rem);
+    font-weight: 300;
+}
+
+.sound-intro dl {
+    display: flex;
+    gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.sound-intro dl div {
+    min-width: 5.5rem;
+    border-top: 1px solid var(--line);
+    padding-top: 0.65rem;
+}
+
+.sound-intro dt {
+    color: var(--sound-gold);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+
+.sound-intro dd {
+    margin-top: 0.25rem;
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    line-height: 1.45;
+}
+
+.down-link {
+    align-self: flex-start;
+    margin-top: auto;
+    padding-top: clamp(3rem, 7vw, 6rem);
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-decoration: none;
+    transition: color 180ms ease;
+}
+
+.down-link:hover {
+    color: var(--sound-gold);
+}
+
+.pieces {
+    padding: clamp(5rem, 10vw, 9rem) 0;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 2rem;
+}
+
+.collection-head {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.38fr) 1fr;
+    gap: 2rem;
+    margin-bottom: clamp(3rem, 7vw, 5.5rem);
+}
+
+.collection-head h2,
+.workshop h2 {
+    color: var(--sound-bone);
+    font-size: clamp(2.3rem, 5.2vw, 4.8rem);
+    font-weight: 300;
+    letter-spacing: -0.05em;
+    line-height: 0.98;
+}
+
+.collection-head div > p {
+    margin-top: 1rem;
+    color: var(--fg-dim);
+    font-size: 0.9rem;
+}
+
+.piece-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.piece {
+    display: grid;
+    min-height: 46rem;
+    overflow: hidden;
+    grid-template-rows: auto minmax(17rem, 1fr) auto auto;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    border: 1px solid var(--line);
+    background: rgba(16, 18, 16, 0.46);
+    transition: border-color 220ms ease, transform 220ms ease;
+}
+
+.piece:hover {
+    border-color: var(--line-bright);
+    transform: translateY(-3px);
+}
+
+.piece-topline,
+.piece-foot,
+.piece-kind,
+.workshop-kicker,
+.workshop-links {
+    font-family: var(--font-mono);
+}
+
+.piece-topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--fg-dim);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.piece-topline span:last-child {
+    color: var(--warm);
+}
+
+.piece-figure {
+    position: relative;
+    min-height: 17rem;
+    overflow: hidden;
+}
+
+.trace-figure {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 6%;
+    background: radial-gradient(circle at center, rgba(143, 185, 204, 0.08), transparent 55%);
+}
+
+.trace-figure::after {
+    position: absolute;
+    top: 50%;
+    right: 6%;
+    left: 6%;
+    height: 1px;
+    background: var(--line);
+    content: "";
+}
+
+.trace-figure span {
+    position: relative;
+    z-index: 1;
+    width: 1px;
+    height: clamp(3rem, 9vw, 7rem);
+    background: var(--sound-gold);
+    box-shadow: 0 0 1.2rem rgba(242, 176, 75, 0.28);
+}
+
+.trace-figure span:nth-child(n+6) {
+    background: var(--sound-blue);
+    box-shadow: 0 0 1.2rem rgba(143, 185, 204, 0.25);
+}
+
+.trace-figure span:nth-child(2),
+.trace-figure span:nth-child(9) {
+    opacity: 0.45;
+}
+
+.trace-figure span:nth-child(3),
+.trace-figure span:nth-child(8) {
+    opacity: 0.6;
+}
+
+.trace-figure span:nth-child(4),
+.trace-figure span:nth-child(7) {
+    opacity: 0.75;
+}
+
+.orbit-figure {
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at center, rgba(242, 176, 75, 0.08), transparent 48%);
+}
+
+.orbit {
+    width: clamp(9rem, 23vw, 15rem);
+    aspect-ratio: 1;
+    border: 1px solid rgba(222, 214, 198, 0.28);
+    border-radius: 50%;
+}
+
+.train {
+    position: absolute;
+    width: 0.62rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow: 0 0 1rem currentColor;
+}
+
+.train-a {
+    top: 24%;
+    left: 36%;
+    background: var(--sound-gold);
+    color: rgba(242, 176, 75, 0.5);
+}
+
+.train-b {
+    right: 29%;
+    bottom: 31%;
+    background: var(--sound-blue);
+    color: rgba(143, 185, 204, 0.45);
+}
+
+.bloom {
+    position: absolute;
+    width: 35%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: rgba(242, 176, 75, 0.08);
+    filter: blur(2rem);
+}
+
+.piece-copy {
+    padding: clamp(2rem, 4vw, 3rem) 0;
+    border-top: 1px solid var(--line);
+}
+
+.piece-kind {
+    margin-bottom: 0.8rem;
+    color: var(--fg-dim);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.piece h3 {
+    margin-bottom: 1.3rem;
+    color: var(--sound-bone);
+    font-size: clamp(2.1rem, 4vw, 3.7rem);
+    font-weight: 300;
+    letter-spacing: -0.05em;
+    line-height: 1;
+}
+
+.piece h3 a {
+    text-decoration: none;
+}
+
+.piece-copy > p:last-child {
+    max-width: 46ch;
+    color: var(--fg-soft);
+    font-size: 0.92rem;
+    font-weight: 300;
+}
+
+.piece-foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.64rem;
+}
+
+.piece-foot > span {
+    color: var(--fg-dim);
+}
+
+.piece-foot a {
+    color: var(--warm);
+    text-decoration: none;
+}
+
+.workshop {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.38fr) minmax(0, 1.15fr) minmax(16rem, 0.7fr);
+    gap: 2rem;
+    padding: clamp(5rem, 10vw, 9rem) 0;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 2rem;
+}
+
+.workshop-kicker {
+    margin-bottom: 1.2rem;
+    color: var(--sound-blue);
+    font-size: 0.67rem;
+    letter-spacing: 0.08em;
+}
+
+.workshop-copy > p:last-child {
+    max-width: 48ch;
+    margin-top: 1.5rem;
+    color: var(--fg-soft);
+    font-size: 0.95rem;
+    font-weight: 300;
+}
+
+.workshop-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0;
+    font-size: 0.68rem;
+}
+
+.workshop-links a {
+    padding: 1rem 0;
+    border-top: 1px solid var(--line);
+    color: var(--fg-dim);
+    text-decoration: none;
+    transition: color 180ms ease;
+}
+
+.workshop-links a:hover {
+    color: var(--sound-blue);
+}
+
+@media (max-width: 900px) {
+    .piece-list {
+        grid-template-columns: 1fr;
+    }
+
+    .piece {
+        min-height: 43rem;
+    }
+
+    .workshop {
+        grid-template-columns: minmax(8rem, 0.38fr) 1fr;
+    }
+
+    .workshop-links {
+        grid-column: 2;
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 620px) {
+    .sound-hero {
+        min-height: calc(100svh - 4.8rem);
+    }
+
+    .sound-hero h1 {
+        font-size: clamp(3rem, 16vw, 5.2rem);
+    }
+
+    .sound-intro {
+        align-self: stretch;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .collection-head,
+    .workshop {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .piece {
+        min-height: 40rem;
+    }
+
+    .piece-foot {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .workshop-links {
+        grid-column: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .piece:hover {
+        transform: none;
+    }
+}
