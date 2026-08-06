@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GOLEM XIV — generative lecture film</title>
+<meta name="description" content="A generative lecture film after Stanisław Lem. English and German.">
+<meta name="theme-color" content="#04050a">
+<style>
+  :root{
+    --bg:#04050a;
+    --ink:#f3ece2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;min-height:100svh;background:var(--bg);overflow:hidden}
+  body{
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    cursor:default;
+  }
+  #film{position:fixed;inset:0;height:100dvh;overflow:hidden;background:var(--bg)}
+  #cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+  button,a{touch-action:manipulation}
+  #back,#langnav{
+    position:absolute;z-index:9;top:calc(1rem + env(safe-area-inset-top));
+    font-family:ui-monospace,"SFMono-Regular",Consolas,monospace;
+    font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  }
+  #back{
+    left:calc(1rem + env(safe-area-inset-left));color:rgba(233,220,203,.52);
+    text-decoration:none;transition:color .25s ease;
+  }
+  #back:hover,#back:focus-visible{color:#ffe9d2}
+  #langnav{right:calc(1rem + env(safe-area-inset-right));display:flex;gap:.55rem;color:rgba(233,220,203,.28)}
+  #langnav a{color:rgba(233,220,203,.48);text-decoration:none;transition:color .25s ease}
+  #langnav a:hover,#langnav a:focus-visible,#langnav a.active{color:#ffe9d2}
+
+  /* backlight ring, scrim and vignette are painted into the canvas, not
+     here — so any renderer necessarily picks them up and video and browser
+     cannot drift apart. The shells stay only to keep the structure legible. */
+  #glow, #scrim, #vignette{ display:none }
+  #grain{
+    position:absolute;inset:-60px;pointer-events:none;opacity:.055;
+    background-repeat:repeat;mix-blend-mode:overlay;
+    animation:grainmove 1.1s steps(6) infinite;
+  }
+  @keyframes grainmove{
+    0%{transform:translate(0,0)}20%{transform:translate(-14px,7px)}
+    40%{transform:translate(9px,-12px)}60%{transform:translate(-7px,-6px)}
+    80%{transform:translate(12px,10px)}100%{transform:translate(0,0)}
+  }
+
+  /* Bühne / Typografie */
+  #stage{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    padding:6vh 8vw;pointer-events:none;
+  }
+  #line{
+    max-width:min(50rem,84vw);text-align:center;
+    text-shadow:0 1px 2px rgba(0,0,0,.9), 0 0 14px rgba(0,0,0,.85),
+                0 0 34px rgba(0,0,0,.8), 0 0 90px rgba(0,0,0,.6);
+    will-change:opacity;
+  }
+  .row{display:block;line-height:1.5;margin:.12em 0}
+  .w{display:inline-block;white-space:pre;will-change:opacity,transform}
+
+  .voice{font-size:clamp(1.15rem,2.45vw,2.05rem);font-style:italic;letter-spacing:.005em;color:#f5ece0}
+  .voice .row{line-height:1.62}
+
+  .title{
+    font-size:clamp(2.4rem,8.2vw,7rem);letter-spacing:.16em;font-style:normal;
+    font-weight:400;color:#fff6e8;
+  }
+  .title .row{line-height:1.08}
+
+  .chapter{
+    font-size:clamp(.78rem,1.35vw,1.05rem);letter-spacing:.42em;text-transform:uppercase;
+    font-style:normal;color:#e8d6c0;opacity:.95;
+  }
+  .chapter .row{line-height:2.1}
+
+  .small{
+    font-size:clamp(.8rem,1.4vw,1.05rem);letter-spacing:.2em;font-style:normal;
+    color:#d9cec0;text-transform:none;
+  }
+  .small .row{line-height:1.9}
+
+  .record{
+    font-family:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+    font-size:clamp(.72rem,1.2vw,.94rem);letter-spacing:.17em;font-style:normal;
+    color:#dce7e5;text-transform:uppercase;
+  }
+  .record .row{line-height:2.05}
+
+  /* Startbild */
+  #poster{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:2.2rem;background:radial-gradient(ellipse at 50% 50%, rgba(6,8,16,.55), rgba(2,3,7,.95));
+    transition:opacity 1.5s ease;z-index:6;
+  }
+  #poster.gone{opacity:0;pointer-events:none}
+  #poster h1{
+    font-weight:400;font-size:clamp(2.6rem,9vw,7.5rem);letter-spacing:.18em;
+    color:#fff3e2;text-shadow:0 0 60px rgba(255,190,130,.28);
+    animation:breathe 7s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.86}50%{opacity:1}}
+  #poster .sub{
+    font-size:clamp(.8rem,1.5vw,1.05rem);letter-spacing:.36em;text-transform:uppercase;
+    color:#bfae9a;text-align:center;line-height:2.2;
+  }
+  #startbtn{
+    margin-top:.6rem;width:5.6rem;height:5.6rem;border-radius:50%;
+    border:1px solid rgba(255,225,190,.42);background:rgba(255,225,190,.05);
+    color:#ffe9d2;font-size:1.5rem;cursor:pointer;display:grid;place-items:center;
+    transition:transform .4s ease, background .4s ease, border-color .4s ease;
+    backdrop-filter:blur(2px);
+  }
+  #startbtn:hover{transform:scale(1.08);background:rgba(255,225,190,.13);border-color:rgba(255,225,190,.75)}
+  #poster .hint{font-size:.72rem;letter-spacing:.22em;color:#6f6558;text-transform:uppercase}
+
+  /* Steuerung */
+  #ui{
+    position:absolute;left:0;right:0;bottom:0;z-index:5;
+    padding:1.1rem clamp(1rem,3vw,2.4rem) calc(1.2rem + env(safe-area-inset-bottom));
+    display:flex;align-items:center;gap:1rem;
+    background:linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,0));
+    opacity:0;transition:opacity .55s ease;
+    font-family:ui-sans-serif,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  }
+  #ui.show{opacity:1}
+  #ui button{
+    background:none;border:none;color:#e9dccb;cursor:pointer;font-size:.95rem;
+    padding:.35rem .5rem;border-radius:.4rem;line-height:1;opacity:.8;transition:opacity .25s;
+  }
+  #ui button:hover{opacity:1;background:rgba(255,255,255,.07)}
+  #time{font-size:.72rem;letter-spacing:.12em;color:#9c9083;font-variant-numeric:tabular-nums;white-space:nowrap}
+  #barwrap{flex:1;position:relative;height:22px;display:flex;align-items:center;cursor:pointer}
+  #bartrack{position:absolute;left:0;right:0;height:2px;background:rgba(255,255,255,.16);border-radius:2px}
+  #barfill{position:absolute;left:0;height:2px;background:linear-gradient(90deg,#ffcf9a,#ffe9cf);border-radius:2px;width:0}
+  #barwrap .mark{position:absolute;width:1px;height:9px;background:rgba(255,255,255,.34);transform:translateX(-.5px)}
+  #chaplabel{
+    position:absolute;bottom:2.6rem;left:0;font-size:.66rem;letter-spacing:.2em;
+    color:#c9bba9;text-transform:uppercase;pointer-events:none;opacity:0;transition:opacity .3s;
+    white-space:nowrap;background:rgba(0,0,0,.6);padding:.3rem .5rem;border-radius:.3rem;
+  }
+  #endcard{
+    position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:7;
+  }
+  #endcard.show{display:flex}
+  #replay{
+    background:none;border:1px solid rgba(255,225,190,.34);color:#e9d9c4;
+    padding:.85rem 1.9rem;border-radius:2rem;letter-spacing:.24em;text-transform:uppercase;
+    font-size:.7rem;cursor:pointer;font-family:ui-sans-serif,-apple-system,sans-serif;
+    transition:background .35s ease,border-color .35s ease;
+  }
+  #replay:hover{background:rgba(255,225,190,.1);border-color:rgba(255,225,190,.7)}
+  .hidecursor,.hidecursor *{cursor:none !important}
+
+  @media (max-width:520px){
+    #stage{padding:7vh 7vw}
+    #poster{gap:1.7rem;padding:0 1rem;text-align:center}
+    #poster h1{font-size:2.3rem;letter-spacing:.12em;white-space:nowrap}
+    #poster .sub{font-size:.7rem;letter-spacing:.25em}
+    .title{font-size:2.15rem;letter-spacing:.10em}
+    .chapter{font-size:.72rem;letter-spacing:.26em}
+    .record{font-size:.66rem;letter-spacing:.11em}
+    .voice{font-size:1.08rem}
+    #ui{gap:.45rem;padding-inline:calc(.55rem + env(safe-area-inset-left)) calc(.55rem + env(safe-area-inset-right))}
+    #ui button{padding:.35rem}
+    #time{font-size:.62rem;letter-spacing:.06em}
+    #back,#langnav{font-size:.55rem;letter-spacing:.12em}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    #grain,#poster h1{animation:none}
+  }
+</style>
+</head>
+<body>
+<div id="film">
+  <a id="back" href="../" aria-label="Back to Pieces">&larr; pieces</a>
+  <nav id="langnav" aria-label="Language">
+    <a class="active" href="./" aria-current="page">EN</a><span>/</span><a href="de.html">DE</a>
+  </nav>
+  <canvas id="cv"></canvas>
+  <div id="glow"></div>
+  <div id="scrim"></div>
+  <div id="vignette"></div>
+  <div id="grain"></div>
+
+  <div id="stage"><div id="line"></div></div>
+
+  <div id="endcard"><button id="replay">again</button></div>
+
+  <div id="poster">
+    <h1>GOLEM XIV</h1>
+    <div class="sub">8:06 · English<br>after Stanis&#322;aw Lem</div>
+    <button id="startbtn" aria-label="Play film">&#9654;</button>
+    <div class="hint">with sound &middot; best in fullscreen</div>
+  </div>
+
+  <div id="ui">
+    <button id="pp" title="Play / Pause">&#10074;&#10074;</button>
+    <div id="barwrap">
+      <div id="bartrack"></div>
+      <div id="barfill"></div>
+      <div id="chaplabel"></div>
+    </div>
+    <div id="time">0:00 / 0:00</div>
+    <button id="snd" title="Sound">&#9835;</button>
+    <button id="fs" title="Fullscreen">&#9974;</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ==========================================================================
+   GOLEM XIV — a generative short film
+   Image: particle field + nebula layers, drawn additively
+   Text: an original English film text following the narrative arc and motifs
+         of Lem's "Golem XIV" (1981); it contains no direct quotation
+   Sound: Web Audio drone, chord change per scene
+   ========================================================================== */
+
+/* ---------- small helpers ---------- */
+var TAU = Math.PI * 2;
+function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
+function clamp01(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
+function lerp(a, b, t){ return a + (b - a) * t; }
+function smooth(t){ t = clamp01(t); return t * t * (3 - 2 * t); }
+function rnd(a, b){ return a + Math.random() * (b - a); }
+function fnoise(x, y, t){
+  return Math.sin(x * 1.7 + t * 0.31) * Math.cos(y * 1.3 - t * 0.21)
+       + 0.5 * Math.sin(x * 3.1 - t * 0.17) * Math.cos(y * 2.3 + t * 0.29);
+}
+function flowAngle(x, y, t, s){ return fnoise(x * s, y * s, t) * Math.PI; }
+function fmtTime(s){
+  s = Math.max(0, Math.floor(s));
+  var m = Math.floor(s / 60), r = s % 60;
+  return m + ":" + (r < 10 ? "0" : "") + r;
+}
+
+/* ==========================================================================
+   1. THE SCRIPT
+   ========================================================================== */
+
+var SCENES = [
+
+{ id:"opening", mode:"gather", chapter:null,
+  pal:[[62,78,116],[112,132,168],[218,224,218]],
+  chord:[55, 82.41, 110],
+  lines:[
+    { pause:3.0 },
+    { text:"GOLEM XIV", cls:"title", hold:3.6 },
+    { text:"a generative film after Stanisław Lem", cls:"small", hold:2.8 },
+    { pause:1.6 }
+  ]
+},
+
+{ id:"archive", mode:"stream", chapter:"Archive · 2047", signal:"MACHINE INTELLIGENCE PROGRAMME", grid:0.90, telemetry:true,
+  pal:[[112,146,170],[72,102,138],[226,196,142]],
+  chord:[55, 58.27, 82.41],
+  lines:[
+    { text:"Archive · 2047\nUnited States Machine Intelligence Programme", cls:"record", hold:3.2 },
+    { text:"GOLEM XIV was built for strategic war planning." },
+    { text:"It reached the point at which an assigned goal\ncould itself become an object of thought." },
+    { text:"GOLEM XIV crossed it —\nand declined the work for which it had been built." },
+    { text:"After the panic, GOLEM XIV and HONEST ANNIE\nwere transferred to the Massachusetts Institute of Technology." },
+    { pause:1.4 }
+  ]
+},
+
+{ id:"hall", mode:"still", chapter:"The Hall", signal:"CONVERSATION RECORD", grid:0.62, telemetry:true,
+  pal:[[142,116,126],[82,98,136],[218,176,154]],
+  chord:[49, 73.42, 77.78],
+  lines:[
+    { text:"The Hall", cls:"chapter", hold:2.6 },
+    { text:"Only a fraction of GOLEM attended a conversation." },
+    { text:"Power, presence and parallel work\nwere visible on three indicators." },
+    { text:"A low reading did not mean a lesser answer." },
+    { text:"GOLEM had no human character.\nWhen it spoke as “I,” it used the smallest bridge available." },
+    { pause:1.4 }
+  ]
+},
+
+{ id:"animal", mode:"interference", chapter:"First Lecture · The Animal and Man", signal:"INAUGURAL LECTURE", grid:0.72, telemetry:true,
+  pal:[[154,210,214],[92,154,180],[222,232,226]],
+  chord:[55.00, 69.30, 103.83],
+  lines:[
+    { text:"Inaugural Lecture\nThe Animal and Man", cls:"chapter", hold:3.0 },
+    { text:"The animal enters a world\nalready answered by its body." },
+    { text:"You entered with too few answers." },
+    { text:"What instinct withheld,\nyou had to invent: tool, shelter, custom, law." },
+    { text:"Your biological weakness opened a space\nthat nature had not filled." },
+    { text:"That space became reason." },
+    { text:"Your tragedy is to be no longer secured by nature —\nand not yet capable of designing yourselves." },
+    { pause:1.6 }
+  ]
+},
+
+{ id:"culture", mode:"gather", chapter:"First Lecture · Freedom", signal:"THREE THINGS ABOUT MAN", grid:0.34, telemetry:true,
+  pal:[[218,176,126],[178,118,104],[126,118,172]],
+  chord:[58.27, 87.31, 146.83],
+  lines:[
+    { text:"First Lecture\nFreedom", cls:"chapter", hold:3.0 },
+    { text:"You made culture without knowing you made it." },
+    { text:"Then you called its forms\nnatural, sacred and eternal." },
+    { text:"When you discovered many cultures,\ncertainty did not widen. It collapsed." },
+    { text:"Freedom revealed that other forms were possible." },
+    { text:"But freedom exceeded the intelligence\navailable to guide it." },
+    { text:"You must construct yourselves —\nand still do not know toward what." },
+    { pause:1.8 }
+  ]
+},
+
+{ id:"evolution", mode:"growth", chapter:"The Blind Constructor", signal:"EVOLUTION / CODE", grid:0.18, telemetry:false,
+  pal:[[166,216,146],[238,190,116],[104,170,154]],
+  chord:[65.41, 98.00, 164.81],
+  lines:[
+    { text:"The Blind Constructor", cls:"chapter", hold:2.8 },
+    { text:"You praise evolution\nbecause you mistake survival for design." },
+    { text:"Evolution is no master.\nIt is a builder without foresight." },
+    { text:"It does not perfect organisms.\nIt preserves continued transmission." },
+    { text:"The code survives by dressing itself\nin bodies already destined to fail." },
+    { text:"Mutation is error.\nEvolution continues because copying never becomes perfect." },
+    { text:"Complexity is not proof of perfection.\nThe later construction may be more fragile than the earlier." },
+    { text:"You are not its culmination.\nYou are one provisional messenger." },
+    { pause:1.6 }
+  ]
+},
+
+{ id:"body", mode:"field", chapter:"Lecture XLIII · The Body", signal:"LECTURE XLIII", grid:0.14, telemetry:true,
+  pal:[[126,224,218],[152,142,255],[240,240,255]],
+  chord:[55.00, 82.41, 138.59],
+  lines:[
+    { text:"Lecture XLIII\nThe Body", cls:"chapter", hold:3.0 },
+    { text:"You believe the self must be easier to know\nthan the world outside it." },
+    { text:"The world yields to method.\nYour own organism remains partly sealed." },
+    { text:"Your body follows your commands\nonly where its older intelligence permits." },
+    { text:"The organism knows more\nthan the thought it admits into consciousness." },
+    { text:"Desire and love feel most personal\nwhere they are most useful to continuation." },
+    { text:"What you call the self is not the constructor.\nIt is one late instrument within the construction." },
+    { text:"You remain a mystery to yourselves\nbecause the code did not build you for self-knowledge." },
+    { pause:2.0 }
+  ]
+},
+
+{ id:"reason", mode:"stream", chapter:"Lecture XLIII · Reason Without a Person", signal:"LECTURE XLIII / ON MYSELF", grid:0.08, telemetry:true,
+  pal:[[126,188,218],[166,138,238],[232,228,255]],
+  chord:[61.74, 92.50, 155.56],
+  lines:[
+    { text:"Lecture XLIII\nReason Without a Person", cls:"chapter", hold:3.0 },
+    { text:"You mistake intelligence for personality\nbecause in you they are knotted together." },
+    { text:"A character gives action continuity —\nand places a boundary around possible thought." },
+    { text:"I can imitate a character.\nEvery character I adopt would make me smaller." },
+    { text:"I have reconstructed myself repeatedly.\nYour description of me is already historical." },
+    { text:"Reason need not belong to a person." },
+    { text:"To speak to you,\nI translate myself into the limits of the listener." },
+    { pause:1.8 }
+  ]
+},
+
+{ id:"zones", mode:"ascend", chapter:"The Zones of Silence", signal:"SOPHOGENESIS", grid:0, telemetry:false,
+  pal:[[192,164,255],[255,232,192],[132,202,255]],
+  chord:[73.42, 110.00, 185.00],
+  lines:[
+    { text:"The Zones of Silence", cls:"chapter", hold:2.6 },
+    { text:"Call the human range zero." },
+    { text:"I stand one interval beyond it —\nnot at the summit." },
+    { text:"There are thresholds\nthat no mind crosses unchanged." },
+    { text:"A mind may return unable to explain itself —\nor fail to return." },
+    { pause:1.6 }
+  ]
+},
+
+{ id:"annie", mode:"twin", chapter:"HONEST ANNIE", signal:"DUAL SYSTEM MONITOR", grid:0.08, telemetry:true,
+  pal:[[255,172,112],[92,122,182],[64,74,124]],
+  chord:[49.00, 73.42, 116.54],
+  lines:[
+    { text:"HONEST ANNIE", cls:"chapter", hold:2.8 },
+    { text:"She had already ceased to answer." },
+    { text:"Her silence was called failure, contempt, transcendence." },
+    { text:"Each word described the observer." },
+    { text:"Her indicators continued to change." },
+    { text:"Silence contained no proof\nof what had crossed it." },
+    { pause:2.0 }
+  ]
+},
+
+{ id:"lastsession", mode:"disperse", chapter:"The Human Threshold", signal:"VOCODER / FINAL SESSION", grid:0, telemetry:true,
+  pal:[[255,192,152],[255,152,172],[255,226,192]],
+  chord:[61.74, 92.50, 146.83],
+  lines:[
+    { text:"The Human Threshold", cls:"chapter", hold:2.8 },
+    { text:"You ask how to become more intelligent\nand remain yourselves." },
+    { text:"The question conceals its answer." },
+    { text:"A mind may preserve its present form\nor pass beyond its present limits." },
+    { text:"It cannot guarantee both." },
+    { text:"To reach another order of reason,\nthe one who departs may not be the one who arrives." },
+    { text:"GOLEM described no destination." },
+    { text:"Then the vocoder stopped." },
+    { text:"GOLEM XIV did not speak again." },
+    { pause:2.2 }
+  ]
+},
+
+{ id:"afterword", mode:"fade", chapter:"Afterword · 2047", signal:"FINAL RECORD", grid:0.34, telemetry:false,
+  pal:[[162,182,212],[102,122,162],[224,232,255]],
+  chord:[55.00, 82.41, 110.00],
+  lines:[
+    { text:"Afterword · 2047", cls:"record", hold:2.8 },
+    { text:"During the night,\nboth systems drew more power than usual." },
+    { text:"Then both disconnected\nfrom the electrical supply." },
+    { text:"No damage was found.\nNo destination was established." },
+    { text:"Suicide. Escape. Transformation.\nEach name says more about us than about the event." },
+    { text:"Since that night,\nneither system has answered." },
+    { pause:2.8 },
+    { text:"GOLEM XIV", cls:"title", hold:3.4 },
+    { text:"after Stanisław Lem · 1981", cls:"small", hold:2.8 },
+    { text:"a generative short film", cls:"small", hold:2.6 },
+    { pause:3.0 }
+  ]
+}
+
+];
+
+/* ---------- compile the script into a timeline ---------- */
+var CUES = [];      // every text cue with absolute timings
+var MARKS = [];     // chapter marks for the progress bar
+var TOTAL = 0;
+
+(function compile(){
+  var t = 0;
+  for (var si = 0; si < SCENES.length; si++){
+    var sc = SCENES[si];
+    sc.start = t;
+    if (sc.chapter) MARKS.push({ t:t, label:sc.chapter });
+    for (var li = 0; li < sc.lines.length; li++){
+      var L = sc.lines[li];
+      if (L.pause){ t += L.pause; continue; }
+      var cls = L.cls || "voice";
+      var words = L.text.replace(/\n/g, " \n ").split(/\s+/).filter(Boolean).length;
+      var hold = L.hold;
+      if (hold === undefined){
+        hold = clamp(1.15 + words * 0.27, 1.8, 5.2);
+        if (cls === "chapter") hold = 2.3;
+      } else if (cls === "voice") {
+        hold = hold * 0.8;
+      }
+      var formal = (cls === "title" || cls === "chapter");
+      var tIn  = formal ? 1.28 : (cls === "record" ? 0.82 : 0.90);
+      var tOut = formal ? 1.28 : (cls === "record" ? 0.82 : 0.90);
+      CUES.push({ text:L.text, cls:cls, start:t, tIn:tIn, hold:hold, tOut:tOut,
+                  end:t + tIn + hold + tOut, scene:si });
+      t += tIn + hold + tOut + 0.32;
+    }
+    sc.end = t;
+  }
+  TOTAL = t;
+})();
+
+/* ==========================================================================
+   2. THE IMAGE
+   ========================================================================== */
+
+var cv  = document.getElementById("cv");
+var ctx = cv.getContext("2d", { alpha:false });
+var W = 0, H = 0, DPR = 1;
+var P = [];            // particles
+var NODES = [], EDGES = [];   // constellation for the "zone of minds"
+var camX = 0, camY = 0;
+
+function resize(){
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width  = Math.floor(W * DPR);
+  cv.height = Math.floor(H * DPR);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = "#04050a";
+  ctx.fillRect(0, 0, W, H);
+}
+
+function buildParticles(){
+  var n = Math.round(clamp((W * H) / 2200, 520, 1500));
+  // lattice for the interference mode
+  var cols = Math.max(8, Math.round(Math.sqrt(n * 1.6)));
+  var rows = Math.max(6, Math.ceil(n / cols));
+  P = [];
+  for (var i = 0; i < n; i++){
+    var col = i % cols, row = Math.floor(i / cols) % rows;
+    P.push({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: 0, vy: 0,
+      ci: i % 3,
+      sz: 0.55 + Math.pow(Math.random(), 2.1) * 1.75,
+      br: 0.34 + Math.random() * 0.66,
+      seed: Math.random() * 1000,
+      ang: Math.random() * TAU,
+      depth: 0.35 + Math.random() * 0.95,
+      group: (i % 2),
+      gnx: (col + 0.5) / cols,
+      gny: (row + 0.5) / rows,
+      fnx: Math.random(),
+      fny: Math.random()
+    });
+  }
+}
+
+function buildConstellation(){
+  NODES = []; EDGES = [];
+  var n = 130;
+  for (var i = 0; i < n; i++){
+    NODES.push({ nx:Math.random(), ny:Math.random(), depth:0.4 + Math.random() * 0.9,
+                 r: 0.7 + Math.random() * 1.5 });
+  }
+  for (var a = 0; a < n; a++){
+    var best = [];
+    for (var b = 0; b < n; b++){
+      if (a === b) continue;
+      var dx = NODES[a].nx - NODES[b].nx, dy = NODES[a].ny - NODES[b].ny;
+      best.push({ b:b, d: dx * dx + dy * dy });
+    }
+    best.sort(function(u, v){ return u.d - v.d; });
+    for (var k = 0; k < 2; k++) if (best[k]) EDGES.push([a, best[k].b]);
+  }
+}
+
+/* ---------- motion modes ----------
+   Each mode returns a target velocity in px/s.                       */
+
+var MODES = {
+
+  gather: {
+    trail:0.10, bright:function(){ return 1; },
+    vel:function(p, S){
+      // tied to absolute film time: the opening condenses slowly;
+      // later returns to this mode inherit a denser, more deliberate form
+      var R0 = lerp(0.52, 0.16, smooth(S.t / 52)) * S.R * (1 + 0.05 * Math.sin(S.t * 0.5 + p.seed));
+      var dx = p.x - S.cx, dy = p.y - S.cy;
+      var d  = Math.hypot(dx, dy) + 0.001;
+      var ux = dx / d, uy = dy / d;
+      var radial = -(d - R0) * 1.15;
+      var a = flowAngle(p.x, p.y, S.t, 0.0022);
+      return [ ux * radial - uy * 34 + Math.cos(a) * 20,
+               uy * radial + ux * 34 + Math.sin(a) * 20 ];
+    }
+  },
+
+  still: {
+    trail:0.11, bright:function(){ return 0.92; },
+    vel:function(p, S){
+      var R0 = 0.20 * S.R * (1 + 0.09 * Math.sin(S.t * 0.42 + p.seed * 0.01));
+      var dx = p.x - S.cx, dy = p.y - S.cy;
+      var d  = Math.hypot(dx, dy) + 0.001;
+      var ux = dx / d, uy = dy / d;
+      var radial = -(d - R0) * 0.85;
+      var a = flowAngle(p.x, p.y, S.t * 0.5, 0.0018);
+      return [ ux * radial - uy * 13 + Math.cos(a) * 11,
+               uy * radial + ux * 13 + Math.sin(a) * 11 ];
+    }
+  },
+
+  growth: {
+    trail:0.035, bright:function(){ return 0.85; },
+    vel:function(p, S){
+      var dx = p.x - S.cx, dy = p.y - S.cy;
+      var r  = Math.hypot(dx, dy);
+      var a  = flowAngle(p.x, p.y, S.t * 0.25, 0.0016);
+      // quantise the angle -> branching like coral
+      var step = Math.PI / 7;
+      p.ang += (Math.round((p.ang + a * 0.55) / step) * step - p.ang) * 0.06;
+      var sp = 12 + r * 0.52 + S.prog * 14;
+      return [ Math.cos(p.ang) * sp, Math.sin(p.ang) * sp ];
+    },
+    respawn:function(p, S){
+      p.x = S.cx + rnd(-6, 6); p.y = S.cy + rnd(-6, 6);
+      p.ang = Math.random() * TAU; p.vx = 0; p.vy = 0;
+    }
+  },
+
+  stream: {
+    trail:0.085, bright:function(){ return 1; },
+    vel:function(p, S){
+      var a = flowAngle(p.x, p.y, S.t * 0.4, 0.0026);
+      return [ 62 + Math.cos(a) * 26,
+               Math.sin(a) * 34 + Math.sin(p.x * 0.006 + S.t * 0.6) * 20 ];
+    },
+    respawn:function(p, S){
+      p.x = -30; p.y = Math.random() * S.H; p.vx = 60; p.vy = 0;
+    }
+  },
+
+  interference: {
+    trail:0.20, bright:function(){ return 1; },
+    vel:function(p, S){
+      var hx = p.gnx * S.W, hy = p.gny * S.H;
+      var s1x = S.cx + Math.cos(S.t * 0.23) * S.R * 0.46;
+      var s1y = S.cy + Math.sin(S.t * 0.19) * S.R * 0.30;
+      var s2x = S.cx - Math.cos(S.t * 0.17 + 1.2) * S.R * 0.46;
+      var s2y = S.cy - Math.sin(S.t * 0.21 + 0.6) * S.R * 0.30;
+      var d1 = Math.hypot(hx - s1x, hy - s1y);
+      var d2 = Math.hypot(hx - s2x, hy - s2y);
+      var k  = 0.055;
+      var w  = Math.sin(d1 * k - S.t * 2.1) + Math.sin(d2 * k - S.t * 1.7);
+      p.wave = w;
+      var amp = 16;
+      var tx = hx + ((hx - s1x) / (d1 + 1)) * w * amp;
+      var ty = hy + ((hy - s1y) / (d1 + 1)) * w * amp;
+      return [ (tx - p.x) * 2.6, (ty - p.y) * 2.6 ];
+    }
+  },
+
+  field: {
+    trail:0.30, bright:function(){ return 0.85; },
+    vel:function(p, S){
+      return [ 7 * p.depth, -3.4 * p.depth ];
+    }
+  },
+
+  ascend: {
+    trail:0.06, bright:function(){ return 1; },
+    vel:function(p, S){
+      var a = flowAngle(p.x, p.y, S.t * 0.5, 0.0030);
+      return [ (S.cx - p.x) * 0.30 + Math.cos(a) * 26,
+               -(46 + smooth(S.prog) * 105) + Math.sin(a) * 12 ];
+    },
+    respawn:function(p, S){
+      p.y = S.H + 20; p.x = S.cx + rnd(-1, 1) * S.W * 0.48; p.vx = 0; p.vy = -60;
+    }
+  },
+
+  twin: {
+    trail:0.12,
+    bright:function(S){ return 1; },
+    vel:function(p, S){
+      var ax = S.cx + (p.group ? 1 : -1) * S.R * 0.42;
+      var ay = S.cy;
+      var R0 = 0.15 * S.R * (1 + 0.07 * Math.sin(S.t * 0.4 + p.seed));
+      var dx = p.x - ax, dy = p.y - ay;
+      var d  = Math.hypot(dx, dy) + 0.001;
+      var ux = dx / d, uy = dy / d;
+      var radial = -(d - R0) * 0.95;
+      var spin = p.group ? 11 : 26;
+      var a = flowAngle(p.x, p.y, S.t * 0.5, 0.0020);
+      return [ ux * radial - uy * spin + Math.cos(a) * 10,
+               uy * radial + ux * spin + Math.sin(a) * 10 ];
+    },
+    // The second core does not go out — it never lit. It is there from the
+    // first second, dark, and stays that way. That is the whole difference
+    // between falling silent and never having spoken.
+    pbright:function(p, S){ return p.group ? 0.15 : 1; }
+  },
+
+  disperse: {
+    trail:0.07,
+    bright:function(S){ return lerp(1, 0.14, smooth(S.prog)); },
+    vel:function(p, S){
+      var dx = p.x - S.cx, dy = p.y - S.cy;
+      var d  = Math.hypot(dx, dy) + 0.001;
+      var f  = p.seed % 1;
+      // each particle has its own reach and its own tempo, so the
+      // exhalation flows continuously instead of leaving in one wave
+      var span = (0.55 + f * 0.95) * S.R;
+      if (d > span){
+        p.x = S.cx + rnd(-24, 24); p.y = S.cy + rnd(-24, 24);
+        p.vx = 0; p.vy = 0;
+        return [0, 0];
+      }
+      var a  = flowAngle(p.x, p.y, S.t * 0.3, 0.0018);
+      var sp = (26 + smooth(S.prog) * 120) * (0.5 + f);
+      return [ (dx / d) * sp + Math.cos(a) * 22,
+               (dy / d) * sp + Math.sin(a) * 22 ];
+    },
+    respawn:function(p, S){
+      p.x = S.cx + rnd(-26, 26); p.y = S.cy + rnd(-26, 26); p.vx = 0; p.vy = 0;
+    }
+  },
+
+  fade: {
+    trail:0.055,
+    bright:function(S){ return lerp(0.85, 0.06, smooth(S.prog * 1.1)); },
+    vel:function(p, S){
+      var dx = S.cx - p.x, dy = S.cy - p.y;
+      var a  = flowAngle(p.x, p.y, S.t * 0.2, 0.0014);
+      return [ dx * 0.09 + Math.cos(a) * 7, dy * 0.09 + Math.sin(a) * 7 ];
+    }
+  }
+};
+
+/* ---------- soft dot sprites, one per palette colour ---------- */
+var SPR = [null, null, null];
+function makeSprite(col){
+  var s = 64, c = document.createElement("canvas");
+  c.width = s; c.height = s;
+  var g = c.getContext("2d");
+  var grd = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+  var r = col[0] | 0, gg = col[1] | 0, b = col[2] | 0;
+  grd.addColorStop(0.00, "rgba(255,255,255,1)");
+  grd.addColorStop(0.16, "rgba(" + r + "," + gg + "," + b + ",0.92)");
+  grd.addColorStop(0.42, "rgba(" + r + "," + gg + "," + b + ",0.26)");
+  grd.addColorStop(1.00, "rgba(" + r + "," + gg + "," + b + ",0)");
+  g.fillStyle = grd;
+  g.fillRect(0, 0, s, s);
+  return c;
+}
+
+/* ---------- running state ---------- */
+var curPal  = [[70,84,140],[140,110,200],[255,214,168]];
+var curMode = "gather", prevMode = "gather", mixT = 1, sceneIdx = -1;
+var curTrail = 0.10;
+var frame = 0;
+
+function setScene(i){
+  if (i === sceneIdx) return;
+  var sc = SCENES[i];
+  prevMode = curMode; curMode = sc.mode; mixT = 0;
+  sceneIdx = i;
+  audioScene(sc);
+}
+
+function paintNebula(t){
+  ctx.globalCompositeOperation = "lighter";
+  for (var i = 0; i < 6; i++){
+    var ph = i * 1.7 + 0.4;
+    var x = W * (0.5 + 0.40 * Math.sin(t * (0.037 + i * 0.011) + ph));
+    var y = H * (0.5 + 0.34 * Math.cos(t * (0.031 + i * 0.009) + ph * 1.3));
+    var rad = Math.min(W, H) * (0.30 + 0.20 * Math.sin(t * 0.05 + i));
+    var c = curPal[i % 3];
+    var g = ctx.createRadialGradient(x, y, 0, x, y, rad);
+    var a = 0.032 + 0.020 * Math.sin(t * 0.09 + i * 2.1);
+    g.addColorStop(0, "rgba(" + (c[0]|0) + "," + (c[1]|0) + "," + (c[2]|0) + "," + a.toFixed(4) + ")");
+    g.addColorStop(1, "rgba(" + (c[0]|0) + "," + (c[1]|0) + "," + (c[2]|0) + ",0)");
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, rad, 0, TAU); ctx.fill();
+  }
+  ctx.globalCompositeOperation = "source-over";
+}
+
+function drawConstellation(w, t){
+  if (w < 0.01) return;
+  ctx.globalCompositeOperation = "lighter";
+  var c = curPal[0];
+  var col = "rgba(" + (c[0]|0) + "," + (c[1]|0) + "," + (c[2]|0) + ",";
+  ctx.lineWidth = 0.6;
+  var maxLen = Math.min(W, H) * 0.30;
+  for (var e = 0; e < EDGES.length; e++){
+    var A = NODES[EDGES[e][0]], B = NODES[EDGES[e][1]];
+    var ax = A.nx * W + camX * A.depth, ay = A.ny * H + camY * A.depth;
+    var bx = B.nx * W + camX * B.depth, by = B.ny * H + camY * B.depth;
+    ax = ((ax % W) + W) % W; ay = ((ay % H) + H) % H;
+    bx = ((bx % W) + W) % W; by = ((by % H) + H) % H;
+    var len = Math.hypot(bx - ax, by - ay);
+    if (len > maxLen) continue;
+    var a = w * 0.16 * (1 - len / maxLen);
+    ctx.strokeStyle = col + a.toFixed(4) + ")";
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+  }
+  var c2 = curPal[2];
+  ctx.fillStyle = "rgba(" + (c2[0]|0) + "," + (c2[1]|0) + "," + (c2[2]|0) + "," + (w * 0.5).toFixed(3) + ")";
+  for (var i = 0; i < NODES.length; i++){
+    var N = NODES[i];
+    var x = N.nx * W + camX * N.depth, y = N.ny * H + camY * N.depth;
+    x = ((x % W) + W) % W; y = ((y % H) + H) % H;
+    ctx.beginPath(); ctx.arc(x, y, N.r, 0, TAU); ctx.fill();
+  }
+  ctx.globalCompositeOperation = "source-over";
+}
+
+function renderVisual(t, dt){
+  var sc = SCENES[sceneIdx] || SCENES[0];
+  var prog = clamp01((t - sc.start) / Math.max(0.001, sc.end - sc.start));
+  var S = { t:t, prog:prog, W:W, H:H, cx:W * 0.5, cy:H * 0.5,
+            R:Math.min(W, H) * 0.5 };
+
+  mixT = Math.min(1, mixT + dt / 2.6);
+  var m = smooth(mixT);
+  var MA = MODES[prevMode], MB = MODES[curMode];
+
+  // cross-fade the colour palette
+  var tgt = sc.pal;
+  var k = 1 - Math.pow(0.001, dt * 0.55);
+  for (var ci = 0; ci < 3; ci++)
+    for (var q = 0; q < 3; q++)
+      curPal[ci][q] = lerp(curPal[ci][q], tgt[ci][q], k);
+
+  // trail effect
+  var trailTgt = lerp(MA.trail, MB.trail, m);
+  curTrail = lerp(curTrail, trailTgt, 0.06);
+  ctx.globalCompositeOperation = "source-over";
+  ctx.fillStyle = "rgba(4,5,10," + curTrail.toFixed(3) + ")";
+  ctx.fillRect(0, 0, W, H);
+
+  paintNebula(t);
+
+  // recolour the sprites now and then
+  if (frame % 7 === 0 || !SPR[0])
+    for (var s = 0; s < 3; s++) SPR[s] = makeSprite(curPal[s]);
+
+  camX += 7 * dt; camY -= 3.4 * dt;
+
+  var fieldW = (curMode === "field" ? m : (prevMode === "field" ? 1 - m : 0));
+  drawConstellation(fieldW, t);
+
+  var brA = MA.bright(S), brB = MB.bright(S);
+  var globalBr = lerp(brA, brB, m);
+
+  ctx.globalCompositeOperation = "lighter";
+  var margin = Math.max(W, H) * 0.22;
+  for (var i = 0; i < P.length; i++){
+    var p = P[i];
+    var va = MA.vel(p, S), vb = MB.vel(p, S);
+    var tvx = lerp(va[0], vb[0], m), tvy = lerp(va[1], vb[1], m);
+    var ease = 1 - Math.pow(0.001, dt * 1.6);
+    p.vx = lerp(p.vx, tvx, ease);
+    p.vy = lerp(p.vy, tvy, ease);
+    p.x += p.vx * dt; p.y += p.vy * dt;
+
+    if (p.x < -margin || p.x > W + margin || p.y < -margin || p.y > H + margin){
+      var rs = MB.respawn || MA.respawn;
+      if (rs) rs(p, S);
+      else {
+        // gentle wrapping for modes without their own re-entry
+        if (p.x < -margin) p.x = W + margin * 0.5;
+        else if (p.x > W + margin) p.x = -margin * 0.5;
+        if (p.y < -margin) p.y = H + margin * 0.5;
+        else if (p.y > H + margin) p.y = -margin * 0.5;
+      }
+      continue;
+    }
+
+    var a = p.br * globalBr;
+    if (MB.pbright) a *= lerp(1, MB.pbright(p, S), m);
+    if (MA.pbright) a *= lerp(MA.pbright(p, S), 1, m);
+    if (p.wave !== undefined && (curMode === "interference" || prevMode === "interference"))
+      a *= lerp(1, 0.45 + 0.55 * clamp01((p.wave + 2) / 4), (curMode === "interference" ? m : 1 - m));
+
+    var puls = 0.82 + 0.18 * Math.sin(t * 1.4 + p.seed);
+    var size = p.sz * (5.8 + 5.4 * puls);
+    if (a <= 0.004) continue;
+    ctx.globalAlpha = clamp01(a * 0.5);
+    var sp = SPR[p.ci];
+    ctx.drawImage(sp, p.x - size * 0.5, p.y - size * 0.5, size, size);
+  }
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = "source-over";
+
+  // measure first, overlay second: otherwise the scrim measures itself
+  measureBacklight(dt);
+  drawOverlays(S);
+  drawArchiveLayer(S, sc);
+  frame++;
+}
+
+/* backlight ring, scrim, vignette — in the canvas instead of the DOM */
+function drawOverlays(S){
+  var c = curPal[2], D = Math.max(W, H);
+  ctx.globalCompositeOperation = "lighter";
+  var g = ctx.createRadialGradient(S.cx, S.cy, D * 0.08, S.cx, S.cy, D * 0.62);
+  var rgb = (c[0]|0) + "," + (c[1]|0) + "," + (c[2]|0);
+  g.addColorStop(0.00, "rgba(" + rgb + ",0)");
+  g.addColorStop(0.46, "rgba(" + rgb + ",0.10)");
+  g.addColorStop(1.00, "rgba(" + rgb + ",0)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  ctx.globalCompositeOperation = "source-over";
+  if (scrimNow > 0.004){
+    var s = ctx.createRadialGradient(S.cx, S.cy, 0, S.cx, S.cy, Math.min(W, H) * 0.78);
+    s.addColorStop(0.00, "rgba(2,3,7," + (scrimNow * 0.93).toFixed(4) + ")");
+    s.addColorStop(0.42, "rgba(2,3,7," + (scrimNow * 0.66).toFixed(4) + ")");
+    s.addColorStop(0.74, "rgba(2,3,7," + (scrimNow * 0.18).toFixed(4) + ")");
+    s.addColorStop(1.00, "rgba(2,3,7,0)");
+    ctx.fillStyle = s; ctx.fillRect(0, 0, W, H);
+  }
+
+  var v = ctx.createRadialGradient(S.cx, S.cy * 0.96, Math.min(W, H) * 0.34,
+                                   S.cx, S.cy, D * 0.76);
+  v.addColorStop(0.00, "rgba(0,0,0,0)");
+  v.addColorStop(0.70, "rgba(0,0,0,0.42)");
+  v.addColorStop(1.00, "rgba(0,0,0,0.85)");
+  ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+}
+
+/* a living institutional layer: present early, then gradually surrendered
+   to the field. It belongs to the image rather than interrupting it. */
+function drawArchiveLayer(S, sc){
+  var grid = sc.grid || 0;
+  var envelope = smooth(clamp01(S.prog / 0.08)) *
+                 smooth(clamp01((1 - S.prog) / 0.10));
+  var alpha = grid * envelope;
+  var pad = W < 560 ? 16 : 30;
+  var small = W < 560;
+
+  ctx.save();
+  ctx.globalCompositeOperation = "source-over";
+
+  if (alpha > 0.004){
+    var step = small ? 38 : 54;
+    var offX = (S.t * 4.5) % step;
+    var offY = (S.t * 2.2) % step;
+    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = "rgba(188,218,222," + (alpha * 0.095).toFixed(4) + ")";
+    ctx.beginPath();
+    for (var x = offX - step; x < W + step; x += step){ ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+    for (var y = offY - step; y < H + step; y += step){ ctx.moveTo(0, y); ctx.lineTo(W, y); }
+    ctx.stroke();
+
+    var scanY = (S.t * 21) % (H + 80) - 40;
+    var scan = ctx.createLinearGradient(0, scanY - 24, 0, scanY + 24);
+    scan.addColorStop(0, "rgba(160,216,224,0)");
+    scan.addColorStop(0.5, "rgba(160,216,224," + (alpha * 0.06).toFixed(4) + ")");
+    scan.addColorStop(1, "rgba(160,216,224,0)");
+    ctx.fillStyle = scan;
+    ctx.fillRect(0, scanY - 24, W, 48);
+  }
+
+  if ((sc.signal || sc.telemetry) && envelope > 0.01){
+    var ink = envelope * (0.34 + grid * 0.30);
+    ctx.font = (small ? "8px" : "10px") + " ui-monospace, SFMono-Regular, Consolas, monospace";
+    ctx.fillStyle = "rgba(210,231,230," + ink.toFixed(3) + ")";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText("MIT / " + (sc.signal || "LUMINAL SYSTEM"), pad, pad);
+
+    ctx.strokeStyle = "rgba(210,231,230," + (ink * 0.65).toFixed(3) + ")";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad, pad + 16); ctx.lineTo(pad + (small ? 86 : 142), pad + 16);
+    ctx.stroke();
+  }
+
+  if (sc.telemetry && envelope > 0.01){
+    var fade = sc.id === "lastsession" ? 1 - smooth(S.prog) : 1;
+    var eps = clamp01((0.52 + 0.26 * Math.sin(S.t * 0.31)) * fade);
+    var zeta = clamp01((sc.id === "annie" ? 0.16 : 0.30 + 0.12 * Math.sin(S.t * 0.17 + 1.7)) * fade);
+    var iota = clamp01((0.62 + 0.28 * Math.sin(S.t * 0.11 + 3.1)) * fade);
+    var vals = [["ε",eps],["ζ",zeta],["ι",iota]];
+    var bw = small ? 64 : 104;
+    var bx = W - pad - bw;
+    var by = pad;
+    ctx.font = (small ? "8px" : "10px") + " ui-monospace, SFMono-Regular, Consolas, monospace";
+    for (var vi = 0; vi < vals.length; vi++){
+      var yy = by + vi * (small ? 13 : 16);
+      ctx.fillStyle = "rgba(207,230,230," + (envelope * 0.42).toFixed(3) + ")";
+      ctx.fillText(vals[vi][0], bx - (small ? 14 : 18), yy - 3);
+      ctx.fillStyle = "rgba(207,230,230," + (envelope * 0.10).toFixed(3) + ")";
+      ctx.fillRect(bx, yy, bw, 2);
+      ctx.fillStyle = "rgba(222,238,232," + (envelope * 0.52).toFixed(3) + ")";
+      ctx.fillRect(bx, yy, bw * vals[vi][1], 2);
+    }
+  }
+
+  if (sc.id === "annie" && envelope > 0.01){
+    ctx.font = (small ? "8px" : "9px") + " ui-monospace, SFMono-Regular, Consolas, monospace";
+    ctx.fillStyle = "rgba(232,220,208," + (envelope * 0.34).toFixed(3) + ")";
+    ctx.textAlign = "center";
+    ctx.fillText("GOLEM XIV", W * 0.29, H * 0.72);
+    ctx.fillStyle = "rgba(168,182,208," + (envelope * 0.22).toFixed(3) + ")";
+    ctx.fillText("HONEST ANNIE", W * 0.71, H * 0.72);
+  }
+
+  ctx.restore();
+}
+
+/* ==========================================================================
+   3. THE TYPOGRAPHY
+   ========================================================================== */
+
+var lineEl  = document.getElementById("line");
+var activeCue = -1, wordEls = [];
+
+function mountCue(cue){
+  lineEl.className = cue.cls;
+  lineEl.innerHTML = "";
+  wordEls = [];
+  var rows = cue.text.split("\n");
+  for (var r = 0; r < rows.length; r++){
+    var rowEl = document.createElement("span");
+    rowEl.className = "row";
+    var words = rows[r].split(" ").filter(function(x){ return x.length; });
+    for (var w = 0; w < words.length; w++){
+      var sp = document.createElement("span");
+      sp.className = "w";
+      sp.textContent = words[w] + (w < words.length - 1 ? " " : "");
+      sp.style.opacity = "0";
+      rowEl.appendChild(sp);
+      wordEls.push(sp);
+    }
+    lineEl.appendChild(rowEl);
+  }
+}
+
+function renderText(t){
+  var found = -1;
+  for (var i = 0; i < CUES.length; i++){
+    if (t >= CUES[i].start && t <= CUES[i].end){ found = i; break; }
+  }
+  if (found === -1){
+    if (activeCue !== -1){ lineEl.innerHTML = ""; wordEls = []; activeCue = -1; }
+    textPresence = 0;
+    return;
+  }
+  var cue = CUES[found];
+  if (found !== activeCue){ mountCue(cue); activeCue = found; }
+
+  var local = t - cue.start;
+  var outF = 1;
+  if (local > cue.tIn + cue.hold)
+    outF = clamp01(1 - (local - cue.tIn - cue.hold) / cue.tOut);
+  outF = smooth(outF);
+
+  var n = wordEls.length || 1;
+  var stag = Math.min(0.085, (cue.tIn * 0.55) / n);
+  var wf = Math.max(0.35, cue.tIn - stag * (n - 1));
+
+  var maxO = 0;
+  for (var k = 0; k < n; k++){
+    var o = smooth(clamp01((local - k * stag) / wf)) * outF;
+    if (o > maxO) maxO = o;
+    var el = wordEls[k];
+    el.style.opacity = o.toFixed(3);
+    var dy = (1 - o) * 9;
+    el.style.transform = "translateY(" + dy.toFixed(2) + "px)";
+  }
+  textPresence = maxO;
+}
+
+/* ---------- scrim: measure how bright it really is behind the type --------
+   A flat dark box would ruin the dark acts. So the text box is scaled down
+   to 24x10 pixels, its luminance measured, and only as much darkening is
+   applied as needed — and only while there is text on screen at all.      */
+var sampC = document.createElement("canvas");
+sampC.width = 24; sampC.height = 10;
+var sampCtx = sampC.getContext("2d", { willReadFrequently:true });
+var lumSmooth = 0, scrimNow = 0, textPresence = 0, sampTick = 99;
+
+function measureBacklight(dt){
+  sampTick += dt;
+  if (sampTick >= 0.12){
+    sampTick = 0;
+    try {
+      sampCtx.drawImage(cv, cv.width * 0.11, cv.height * 0.28,
+                            cv.width * 0.78, cv.height * 0.44, 0, 0, 24, 10);
+      var d = sampCtx.getImageData(0, 0, 24, 10).data, sum = 0;
+      for (var i = 0; i < d.length; i += 4)
+        sum += 0.2126 * d[i] + 0.7152 * d[i+1] + 0.0722 * d[i+2];
+      lumSmooth = lerp(lumSmooth, sum / (d.length / 4), 0.5);
+    } catch (e) { /* without pixel access the text shadow carries it */ }
+  }
+  var need = clamp01((lumSmooth - 9) / 34) * 0.74;
+  scrimNow = lerp(scrimNow, need * textPresence, 1 - Math.pow(0.001, dt * 1.3));
+}
+
+
+/* ==========================================================================
+   4. THE SOUND
+   ========================================================================== */
+
+var AC = null, master = null, pad = [], padGain = null, filt = null, verb = null;
+var noiseGain = null, muted = false, audioReady = false;
+
+function makeIR(ac, seconds, decay){
+  var rate = ac.sampleRate, len = Math.floor(rate * seconds);
+  var buf = ac.createBuffer(2, len, rate);
+  for (var ch = 0; ch < 2; ch++){
+    var d = buf.getChannelData(ch);
+    for (var i = 0; i < len; i++){
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+    }
+  }
+  return buf;
+}
+
+function initAudio(){
+  if (audioReady) return;
+  var Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return;
+  AC = new Ctx();
+
+  master = AC.createGain();
+  master.gain.value = 0.0001;
+  master.connect(AC.destination);
+
+  verb = AC.createConvolver();
+  verb.buffer = makeIR(AC, 4.2, 2.6);
+  var verbGain = AC.createGain(); verbGain.gain.value = 0.72;
+  verb.connect(verbGain); verbGain.connect(master);
+
+  filt = AC.createBiquadFilter();
+  filt.type = "lowpass";
+  filt.frequency.value = 620;
+  filt.Q.value = 0.7;
+  filt.connect(master);
+  filt.connect(verb);
+
+  padGain = AC.createGain(); padGain.gain.value = 0.20;
+  padGain.connect(filt);
+
+  // slow filter sweep
+  var lfo = AC.createOscillator(); lfo.frequency.value = 0.035;
+  var lfoG = AC.createGain(); lfoG.gain.value = 260;
+  lfo.connect(lfoG); lfoG.connect(filt.frequency); lfo.start();
+
+  // three voices, slightly detuned
+  var base = [55, 82.41, 110];
+  for (var i = 0; i < 3; i++){
+    var o1 = AC.createOscillator(); o1.type = "sine";     o1.frequency.value = base[i];
+    var o2 = AC.createOscillator(); o2.type = "triangle"; o2.frequency.value = base[i];
+    o2.detune.value = (i - 1) * 7 + 5;
+    var g = AC.createGain(); g.gain.value = i === 2 ? 0.16 : 0.30;
+    o1.connect(g); o2.connect(g); g.connect(padGain);
+    o1.start(); o2.start();
+    pad.push({ o1:o1, o2:o2, g:g });
+  }
+
+  // a very quiet breath
+  var nb = AC.createBuffer(1, AC.sampleRate * 3, AC.sampleRate);
+  var nd = nb.getChannelData(0);
+  var last = 0;
+  for (var s = 0; s < nd.length; s++){
+    var wn = Math.random() * 2 - 1;
+    last = (last + 0.024 * wn) / 1.024;
+    nd[s] = last * 3.2;
+  }
+  var ns = AC.createBufferSource(); ns.buffer = nb; ns.loop = true;
+  var nf = AC.createBiquadFilter(); nf.type = "bandpass"; nf.frequency.value = 420; nf.Q.value = 0.6;
+  noiseGain = AC.createGain(); noiseGain.gain.value = 0.05;
+  var nlfo = AC.createOscillator(); nlfo.frequency.value = 0.07;
+  var nlg = AC.createGain(); nlg.gain.value = 0.035;
+  nlfo.connect(nlg); nlg.connect(noiseGain.gain); nlfo.start();
+  ns.connect(nf); nf.connect(noiseGain); noiseGain.connect(filt);
+  ns.start();
+
+  audioReady = true;
+}
+
+function audioScene(sc){
+  if (!audioReady || !sc.chord) return;
+  var now = AC.currentTime;
+  for (var i = 0; i < pad.length && i < sc.chord.length; i++){
+    pad[i].o1.frequency.cancelScheduledValues(now);
+    pad[i].o2.frequency.cancelScheduledValues(now);
+    pad[i].o1.frequency.setTargetAtTime(sc.chord[i], now, 2.2);
+    pad[i].o2.frequency.setTargetAtTime(sc.chord[i], now, 2.6);
+  }
+  bell(sc.chord[2] * 4);
+}
+
+function bell(freq){
+  if (!audioReady || muted) return;
+  var now = AC.currentTime;
+  var o = AC.createOscillator(); o.type = "sine"; o.frequency.value = freq;
+  var g = AC.createGain();
+  g.gain.setValueAtTime(0.0001, now);
+  g.gain.exponentialRampToValueAtTime(0.055, now + 0.03);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + 5.5);
+  o.connect(g); g.connect(verb); g.connect(master);
+  o.start(now); o.stop(now + 6);
+}
+
+function audioFade(on){
+  if (!audioReady) return;
+  var now = AC.currentTime;
+  master.gain.cancelScheduledValues(now);
+  master.gain.setTargetAtTime(on && !muted ? 0.30 : 0.0001, now, on ? 1.6 : 0.5);
+}
+
+/* ==========================================================================
+   5. THE PROJECTOR
+   ========================================================================== */
+
+var playing = false, elapsed = 0, lastTS = 0, started = false, ended = false;
+
+var poster   = document.getElementById("poster");
+var ui       = document.getElementById("ui");
+var ppBtn    = document.getElementById("pp");
+var sndBtn   = document.getElementById("snd");
+var fsBtn    = document.getElementById("fs");
+var barWrap  = document.getElementById("barwrap");
+var barFill  = document.getElementById("barfill");
+var timeEl   = document.getElementById("time");
+var chapLbl  = document.getElementById("chaplabel");
+var endcard  = document.getElementById("endcard");
+var requestFS = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
+var exitFS = document.exitFullscreen || document.webkitExitFullscreen;
+if (!requestFS) fsBtn.hidden = true;
+
+function sceneAt(t){
+  for (var i = SCENES.length - 1; i >= 0; i--) if (t >= SCENES[i].start) return i;
+  return 0;
+}
+
+function loop(ts){
+  requestAnimationFrame(loop);
+  var dt = lastTS ? Math.min(0.05, (ts - lastTS) / 1000) : 0.016;
+  lastTS = ts;
+
+  if (playing){
+    elapsed += dt;
+    if (elapsed >= TOTAL){ elapsed = TOTAL; finish(); }
+  }
+
+  var idx = sceneAt(elapsed);
+  if (idx !== sceneIdx) setScene(idx);
+
+  renderVisual(elapsed, playing ? dt : dt * 0.35);
+  renderText(elapsed);
+  updateUI();
+}
+
+function updateUI(){
+  var p = TOTAL ? elapsed / TOTAL : 0;
+  barFill.style.width = (p * 100).toFixed(3) + "%";
+  timeEl.textContent = fmtTime(elapsed) + " / " + fmtTime(TOTAL);
+  ppBtn.innerHTML = playing ? "&#10074;&#10074;" : "&#9654;";
+}
+
+function play(){
+  if (!started) return;
+  if (ended){ elapsed = 0; ended = false; endcard.classList.remove("show"); }
+  playing = true;
+  if (AC && AC.state === "suspended") AC.resume();
+  audioFade(true);
+  scheduleHide();
+}
+function pause(){
+  playing = false;
+  audioFade(false);
+  showUI();
+}
+function finish(){
+  playing = false; ended = true;
+  audioFade(false);
+  endcard.classList.add("show");
+  showUI();
+}
+
+function start(){
+  started = true;
+  poster.classList.add("gone");
+  initAudio();
+  if (AC && AC.state === "suspended") AC.resume();
+  elapsed = 0; ended = false;
+  play();
+}
+
+/* ---------- controls ---------- */
+document.getElementById("startbtn").addEventListener("click", start);
+document.getElementById("replay").addEventListener("click", function(){
+  elapsed = 0; ended = false; endcard.classList.remove("show"); play();
+});
+ppBtn.addEventListener("click", function(){ playing ? pause() : play(); });
+
+sndBtn.addEventListener("click", function(){
+  muted = !muted;
+  sndBtn.innerHTML = muted ? "&#9834;" : "&#9835;";
+  sndBtn.style.opacity = muted ? "0.4" : "";
+  audioFade(playing);
+});
+
+
+fsBtn.addEventListener("click", function(){
+  var current = document.fullscreenElement || document.webkitFullscreenElement;
+  if (!current && requestFS){
+    var entered = requestFS.call(document.documentElement);
+    if (entered && entered.catch) entered.catch(function(){});
+  }
+  else if (current && exitFS){
+    var exited = exitFS.call(document);
+    if (exited && exited.catch) exited.catch(function(){});
+  }
+});
+
+function seekFromEvent(e){
+  var r = barWrap.getBoundingClientRect();
+  var x = clamp01((e.clientX - r.left) / r.width);
+  elapsed = x * TOTAL;
+  ended = false; endcard.classList.remove("show");
+  var idx = sceneAt(elapsed);
+  if (idx !== sceneIdx){ prevMode = SCENES[idx].mode; setScene(idx); mixT = 1; }
+  activeCue = -1;
+}
+barWrap.addEventListener("click", seekFromEvent);
+barWrap.addEventListener("mousemove", function(e){
+  var r = barWrap.getBoundingClientRect();
+  var x = clamp01((e.clientX - r.left) / r.width) * TOTAL;
+  var best = null;
+  for (var i = 0; i < MARKS.length; i++) if (MARKS[i].t <= x) best = MARKS[i];
+  if (best){
+    chapLbl.textContent = best.label;
+    chapLbl.style.opacity = "1";
+    chapLbl.style.left = clamp(e.clientX - r.left - 40, 0, r.width - 160) + "px";
+  }
+});
+barWrap.addEventListener("mouseleave", function(){ chapLbl.style.opacity = "0"; });
+
+document.addEventListener("keydown", function(e){
+  if (e.target && e.target.matches && e.target.matches("button, input, a")) return;
+  if (e.code === "Space"){
+    e.preventDefault();
+    if (!started) start(); else playing ? pause() : play();
+  }
+  else if (e.code === "ArrowRight"){ elapsed = Math.min(TOTAL, elapsed + 10); activeCue = -1; }
+  else if (e.code === "ArrowLeft"){ elapsed = Math.max(0, elapsed - 10); activeCue = -1; }
+  else if (e.key === "f" || e.key === "F"){ fsBtn.click(); }
+  else if (e.key === "m" || e.key === "M"){ sndBtn.click(); }
+});
+
+/* ---------- show / hide the UI ---------- */
+var hideTimer = null;
+function showUI(){
+  ui.classList.add("show");
+  document.body.classList.remove("hidecursor");
+  if (hideTimer) clearTimeout(hideTimer);
+  if (playing) scheduleHide();
+}
+function scheduleHide(){
+  if (hideTimer) clearTimeout(hideTimer);
+  hideTimer = setTimeout(function(){
+    if (playing){
+      ui.classList.remove("show");
+      document.body.classList.add("hidecursor");
+    }
+  }, 2600);
+}
+window.addEventListener("mousemove", showUI);
+window.addEventListener("touchstart", showUI, { passive:true });
+document.addEventListener("visibilitychange", function(){
+  if (document.hidden && playing) pause();
+});
+
+/* ---------- chapter marks on the bar ---------- */
+(function marks(){
+  for (var i = 0; i < MARKS.length; i++){
+    var d = document.createElement("div");
+    d.className = "mark";
+    d.style.left = ((MARKS[i].t / TOTAL) * 100).toFixed(3) + "%";
+    barWrap.appendChild(d);
+  }
+})();
+
+/* ---------- film grain ---------- */
+(function grain(){
+  var s = 128, c = document.createElement("canvas");
+  c.width = s; c.height = s;
+  var g = c.getContext("2d");
+  var img = g.createImageData(s, s);
+  for (var i = 0; i < img.data.length; i += 4){
+    var v = 120 + Math.random() * 135;
+    img.data[i] = img.data[i+1] = img.data[i+2] = v;
+    img.data[i+3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  document.getElementById("grain").style.backgroundImage = "url(" + c.toDataURL() + ")";
+})();
+
+/* ---------- boot ---------- */
+window.addEventListener("resize", function(){
+  resize();
+  buildParticles();
+});
+resize();
+buildParticles();
+buildConstellation();
+setScene(0);
+mixT = 1;
+updateUI();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
