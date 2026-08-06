@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>coupled — two clocks that hear each other</title>
+<meta name="description" content="An interactive Web Audio study of two clocks that influence one another until drift can become synchrony.">
+<meta name="theme-color" content="#0b0a0e">
+<style>
+  :root{
+    --void:#0b0a0e;
+    --gold:#f2b04b;
+    --gold-deep:#8a5f1c;
+    --seam:#8fb9cc;
+    --bone:#ded6c6;
+    --slate:#6a6472;
+    --mono: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; background:var(--void); color:var(--bone);
+       font-family:var(--mono); -webkit-font-smoothing:antialiased; overflow:hidden}
+  #stage{height:100dvh; display:grid; grid-template-rows:auto 1fr auto auto;
+         gap:clamp(8px,1.8vh,20px); padding:clamp(14px,2.4vh,26px) clamp(14px,3vw,40px)}
+  #head{display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+        font-size:11px; letter-spacing:.18em; color:var(--slate);
+        border-bottom:1px solid #221f28; padding-bottom:8px}
+  #head .id{letter-spacing:.34em; white-space:nowrap}
+  #readout{display:flex; gap:clamp(10px,2.6vw,28px); color:var(--bone); flex-wrap:wrap; justify-content:flex-end}
+  #readout .lbl{color:var(--slate); letter-spacing:.18em}
+  #readout b{font-weight:400; color:var(--gold)}
+  #rLockWrap b{color:var(--seam)}
+
+  #field{position:relative; min-height:170px}
+  canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+
+  #plate{text-align:center; font-family:var(--serif);
+         font-size:clamp(15px,2.5vw,22px); letter-spacing:.04em;
+         color:var(--bone); opacity:.82; min-height:1.6em;
+         transition:opacity .5s ease, color .5s ease}
+  #plate.seam{color:var(--seam); opacity:1}
+  #plate.fading{opacity:0}
+
+  #controls{display:grid; gap:clamp(6px,1.3vh,13px); padding-bottom:4px}
+  .row{display:grid; grid-template-columns:4.8em 1fr 5em; align-items:center; gap:14px}
+  .row label{font-size:10px; letter-spacing:.24em; color:var(--slate)}
+  .row output{font-size:11px; letter-spacing:.06em; color:var(--slate); text-align:right}
+  input[type=range]{-webkit-appearance:none; appearance:none; width:100%; background:transparent; margin:0; height:18px}
+  input[type=range]:focus{outline:none}
+  input[type=range]:focus-visible{outline:1px solid var(--seam); outline-offset:6px}
+  input[type=range]::-webkit-slider-runnable-track{height:1px; background:#2c2833}
+  input[type=range]::-moz-range-track{height:1px; background:#2c2833}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:9px; height:9px; border-radius:50%;
+    background:var(--gold); margin-top:-4px; border:none; cursor:ew-resize}
+  input[type=range]::-moz-range-thumb{width:9px;height:9px;border-radius:50%;background:var(--gold);border:none;cursor:ew-resize}
+  #sDet::-webkit-slider-thumb,#sK::-webkit-slider-thumb{background:var(--seam)}
+  #sDet::-moz-range-thumb,#sK::-moz-range-thumb{background:var(--seam)}
+  #foot{display:flex; justify-content:space-between; align-items:center; gap:14px}
+  button{font-family:var(--mono); font-size:10px; letter-spacing:.24em;
+         background:transparent; color:var(--slate); border:1px solid #2c2833;
+         padding:7px 16px; cursor:pointer; transition:color .25s, border-color .25s}
+  button:hover{color:var(--bone); border-color:#4a4352}
+  button:focus-visible{outline:1px solid var(--seam); outline-offset:3px}
+  button.on{color:var(--gold); border-color:var(--gold-deep)}
+  #bKick{color:var(--seam); border-color:#2f4650}
+  #bKick:hover{border-color:var(--seam)}
+  #hint{font-size:10px; letter-spacing:.16em; color:#453f4e; text-align:center}
+  #veil{position:fixed; inset:0; background:var(--void); display:grid; place-content:center;
+        width:100%; height:100%; padding:0; border:0; color:inherit; font:inherit;
+        gap:18px; text-align:center; cursor:pointer; z-index:9; transition:opacity .8s ease}
+  #veil .veil-title{display:block; font-family:var(--serif); font-weight:400; font-size:clamp(20px,3.4vw,30px); margin:0; color:var(--bone)}
+  #veil .veil-prompt{display:block; margin:0; font-size:11px; letter-spacing:.22em; color:var(--slate)}
+  #veil.gone{opacity:0; pointer-events:none}
+  .return{
+    position:fixed; z-index:10; top:clamp(14px,2.4vh,26px); left:clamp(14px,3vw,40px);
+    color:var(--slate); font-size:10px; letter-spacing:.18em; text-decoration:none;
+    transition:color .25s, opacity .5s ease;
+  }
+  .return:hover,.return:focus-visible{color:var(--bone)}
+  .return.gone{opacity:0; pointer-events:none}
+  #head .id{color:inherit; text-decoration:none; transition:color .25s}
+  #head .id:hover,#head .id:focus-visible{color:var(--bone)}
+  @media (max-width:560px){
+    .row{grid-template-columns:4em 1fr 4.4em; gap:10px}
+    #head{font-size:10px}
+    #hint{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <div id="head">
+    <a class="id" href="../" aria-label="Back to Sound">coupled</a>
+    <span id="readout">
+      <span><span class="lbl">ioi</span> <b id="rIoi">—</b></span>
+      <span><span class="lbl">rate</span> <b id="rHz">—</b></span>
+      <span id="rLockWrap"><span class="lbl">lock</span> <b id="rLock">0.00</b></span>
+    </span>
+  </div>
+
+  <div id="field"><canvas id="cv"></canvas></div>
+
+  <div id="plate">&nbsp;</div>
+
+  <div id="controls">
+    <div class="row">
+      <label for="sRate">rate</label>
+      <input id="sRate" type="range" min="0" max="1" step="0.0005" value="0.66">
+      <output id="oRate">400 ms</output>
+    </div>
+    <div class="row">
+      <label for="sDet">detune</label>
+      <input id="sDet" type="range" min="0" max="1" step="0.002" value="0.27">
+      <output id="oDet">4.0 %</output>
+    </div>
+    <div class="row">
+      <label for="sK">coupling</label>
+      <input id="sK" type="range" min="0" max="1" step="0.002" value="0">
+      <output id="oK">0.00</output>
+    </div>
+    <div class="row">
+      <label for="sLvl">level</label>
+      <input id="sLvl" type="range" min="0" max="1" step="0.005" value="0.55">
+      <output id="oLvl">55 %</output>
+    </div>
+    <div id="foot">
+      <button id="bKick" type="button">kick</button>
+      <span id="hint">k — shove one clock</span>
+      <button id="bRun" class="on" type="button">running</button>
+    </div>
+  </div>
+</div>
+
+<a class="return" href="../">← sound</a>
+<button id="veil" type="button" aria-label="Start coupled">
+  <span class="veil-title">two clocks that hear each other</span>
+  <span class="veil-prompt">click to open the ear</span>
+</button>
+
+<script>
+(() => {
+  "use strict";
+
+  const IOI_MIN = 0.004, IOI_MAX = 2.0, RATIO = IOI_MAX / IOI_MIN;
+  const DET_MAX = 0.15, K_MAX = 0.5;
+  const GRAIN = 0.0025;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const state = { pos:0.66, det:0.27, k:0, level:0.55, running:true };
+  const ioiFromPos = p => IOI_MIN * Math.pow(RATIO, p);
+  const detune = () => state.det * DET_MAX;
+  const coupling = () => state.k * K_MAX;
+  const ioiA = () => ioiFromPos(state.pos);
+  const ioiB = () => ioiA() * (1 + detune());
+
+  /* ---------------- audio + simulation ---------------- */
+  let ctx=null, master=null, grain=null;
+  // sim state: absolute time of each train's next firing, and of its previous one
+  const S = { aNext:0, bNext:0, aPrev:0, bPrev:0 };
+  const qA = [], qB = [];              // {t, next} — visuals read phase from these
+  const kicks = [];                    // times of manual shoves, for the trace
+  let chainA=null, chainB=null;
+
+  function buildGrain(){
+    const n = Math.max(4, Math.round(ctx.sampleRate*GRAIN));
+    const buf = ctx.createBuffer(1,n,ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    let seed = 20260803;
+    const rnd = () => (seed = (seed*1664525+1013904223)>>>0)/4294967296;
+    for(let i=0;i<n;i++) d[i] = (rnd()*2-1)*0.5*(1-Math.cos(2*Math.PI*i/(n-1)));
+    return buf;
+  }
+  function chainFor(pan){
+    const g = ctx.createGain();
+    let node = g;
+    if (ctx.createStereoPanner){ const p=ctx.createStereoPanner(); p.pan.value=pan; g.connect(p); node=p; }
+    node.connect(master);
+    return g;
+  }
+
+  // phase response: a firing pulls the listener toward its own beat
+  function nudge(phi, k){
+    const p = phi < 0.5 ? phi*(1-k) : phi + k*(1-phi);
+    return Math.max(0, Math.min(0.999, p));
+  }
+
+  function initAudio(){
+    ctx = new (window.AudioContext||window.webkitAudioContext)();
+    grain = buildGrain();
+    const hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=55;
+    const lp=ctx.createBiquadFilter(); lp.type="lowpass";  lp.frequency.value=7200;
+    const cmp=ctx.createDynamicsCompressor();
+    cmp.threshold.value=-15; cmp.ratio.value=8; cmp.attack.value=0.002; cmp.release.value=0.2;
+    master=ctx.createGain(); master.gain.value=0;
+    master.connect(hp); hp.connect(lp); lp.connect(cmp); cmp.connect(ctx.destination);
+    chainA = chainFor(-0.45); chainB = chainFor(0.45);
+    const t0 = ctx.currentTime + 0.1;
+    S.aNext = t0; S.bNext = t0 + 0.31*ioiB();
+    S.aPrev = t0 - ioiA(); S.bPrev = S.bNext - ioiB();
+    setInterval(schedule, 20);
+  }
+
+  function emit(chain, t){
+    if (!state.running) return;
+    const s = ctx.createBufferSource();
+    s.buffer = grain; s.connect(chain); s.start(t);
+  }
+
+  function schedule(){
+    if (!ctx) return;
+    const now = ctx.currentTime, horizon = now + 0.09;
+    if (S.aNext < now) S.aNext = now + 0.004;
+    if (S.bNext < now) S.bNext = now + 0.004;
+
+    let guard = 0;
+    while (Math.min(S.aNext, S.bNext) < horizon && guard++ < 600){
+      const ia = ioiA(), ib = ioiB(), k = coupling();
+      if (S.aNext <= S.bNext){
+        const t = S.aNext;
+        emit(chainA, t);
+        S.aPrev = t; S.aNext = t + ia;
+        qA.push({t, next:S.aNext});
+        if (k > 0){                       // A fires — B hears it
+          const phiB = 1 - (S.bNext - t)/ib;
+          S.bNext = t + (1 - nudge(Math.max(0,Math.min(0.999,phiB)), k))*ib;
+        }
+      } else {
+        const t = S.bNext;
+        emit(chainB, t);
+        S.bPrev = t; S.bNext = t + ib;
+        qB.push({t, next:S.bNext});
+        if (k > 0){                       // and B fires — A hears it back
+          const phiA = 1 - (S.aNext - t)/ia;
+          S.aNext = t + (1 - nudge(Math.max(0,Math.min(0.999,phiA)), k))*ia;
+        }
+      }
+    }
+    const c = Math.min(1, Math.sqrt(ioiA()/0.06));
+    master.gain.setTargetAtTime(state.running ? state.level*0.34*c : 0, now, 0.04);
+  }
+
+  /* ---------------- visual ---------------- */
+  const cv = document.getElementById("cv");
+  const g2 = cv.getContext("2d");
+  let W=0,H=0,dpr=1,shiftAcc=0,bandH=0,ringCy=0,R=0;
+  function resize(){
+    dpr = Math.min(2, window.devicePixelRatio||1);
+    const r = cv.getBoundingClientRect();
+    W = Math.max(2, Math.round(r.width*dpr));
+    H = Math.max(2, Math.round(r.height*dpr));
+    cv.width=W; cv.height=H;
+    bandH = Math.min(78*dpr, H*0.30);
+    ringCy = (H - bandH)/2;
+    R = Math.min(W, H-bandH)*0.31;
+    band = null;                          // rebuilt lazily
+  }
+  window.addEventListener("resize", resize);
+
+  let band = null;                        // offscreen strip for the drift trace
+  function ensureBand(){
+    if (band && band.width===W && band.height===Math.round(bandH)) return;
+    band = document.createElement("canvas");
+    band.width = W; band.height = Math.max(2, Math.round(bandH));
+    const b = band.getContext("2d");
+    b.fillStyle = "#0b0a0e"; b.fillRect(0,0,band.width,band.height);
+  }
+
+  const last = { a:{t:0,next:1}, b:{t:0,next:1} };
+  const flash = { a:0, b:0 };
+  let order = {re:0, im:0};               // smoothed order parameter of the phase gap
+  let lockV = 0, lastFrame = 0, kickFlash = 0;
+
+  const phase = (rec, now) => {
+    const span = Math.max(1e-6, rec.next - rec.t);
+    let p = (now - rec.t)/span;
+    return p < 0 ? 0 : (p > 1 ? 1 : p);
+  };
+
+  function frame(now){
+    requestAnimationFrame(frame);
+    const t = now/1000;
+    const dt = lastFrame ? Math.min(0.05, t-lastFrame) : 0.016;
+    lastFrame = t;
+    const aNow = ctx ? ctx.currentTime : 0;
+
+    let firedA=false, firedB=false;
+    while (qA.length && qA[0].t <= aNow){ last.a = qA.shift(); firedA=true; }
+    while (qB.length && qB[0].t <= aNow){ last.b = qB.shift(); firedB=true; }
+    flash.a = firedA ? 1 : flash.a*0.72;
+    flash.b = firedB ? 1 : flash.b*0.72;
+
+    const pa = phase(last.a, aNow), pb = phase(last.b, aNow);
+    let gap = (pa - pb) % 1; if (gap < 0) gap += 1;
+
+    // order parameter: how still the gap has been held over the last few seconds
+    const tau = 1 - Math.exp(-dt/3.0);
+    order.re += (Math.cos(2*Math.PI*gap) - order.re)*tau;
+    order.im += (Math.sin(2*Math.PI*gap) - order.im)*tau;
+    lockV = Math.sqrt(order.re*order.re + order.im*order.im);
+
+    ensureBand();
+    // --- scroll the drift trace ---
+    shiftAcc += 34*dpr*dt;
+    const dx = Math.floor(shiftAcc);
+    const b = band.getContext("2d");
+    if (dx > 0){
+      shiftAcc -= dx;
+      b.drawImage(band, -dx, 0);
+      b.fillStyle = "#0b0a0e"; b.fillRect(band.width-dx, 0, dx, band.height);
+    }
+    while (kicks.length && kicks[0] < aNow - 200) kicks.shift();
+    if (kickFlash > 0.5 && dx > 0){
+      b.strokeStyle = "rgba(143,185,204,0.55)"; b.lineWidth = dpr;
+      b.beginPath(); b.moveTo(band.width-dx+0.5,0); b.lineTo(band.width-dx+0.5,band.height); b.stroke();
+    }
+    kickFlash *= 0.4;
+    const y = gap*(band.height-2)+1;
+    const mix = Math.max(0, Math.min(1, (lockV-0.35)/0.5));
+    b.fillStyle = `rgba(${Math.round(242+(143-242)*mix)},${Math.round(176+(185-176)*mix)},${Math.round(75+(204-75)*mix)},0.85)`;
+    b.fillRect(band.width - Math.max(1,dx) , y, Math.max(1,dx), Math.max(1, dpr));
+
+    // --- compose ---
+    g2.setTransform(1,0,0,1,0,0);
+    g2.fillStyle="#0b0a0e"; g2.fillRect(0,0,W,H);
+
+    const cx = W/2, cy = ringCy;
+    const dotA = Math.max(0, Math.min(1, (ioiA()-0.008)/0.03));
+
+    // bloom when the two are aligned
+    let d = Math.abs(pa-pb); if (d>0.5) d = 1-d;
+    const coinc = 1-2*d;
+    const cap = reduced ? 0.10 : 0.22;
+    const bloom = cap*Math.pow(Math.max(0,coinc),3);
+    if (bloom > 0.004){
+      const rad = g2.createRadialGradient(cx,cy,0,cx,cy,R*2.1);
+      rad.addColorStop(0,`rgba(242,176,75,${bloom})`);
+      rad.addColorStop(1,"rgba(11,10,14,0)");
+      g2.fillStyle=rad; g2.fillRect(0,0,W,H-bandH);
+    }
+    g2.strokeStyle = `rgba(222,214,198,${0.10+0.30*(1-dotA)})`;
+    g2.lineWidth = dpr*(1+2.2*(1-dotA));
+    g2.beginPath(); g2.arc(cx,cy,R,0,Math.PI*2); g2.stroke();
+
+    const ang = p => -Math.PI/2 + p*Math.PI*2;
+    const PA=[cx+R*Math.cos(ang(pa)), cy+R*Math.sin(ang(pa))];
+    const PB=[cx+R*Math.cos(ang(pb)), cy+R*Math.sin(ang(pb))];
+    if (dotA > 0.01){
+      g2.strokeStyle=`rgba(143,185,204,${0.22*dotA})`; g2.lineWidth=dpr;
+      g2.beginPath(); g2.moveTo(PA[0],PA[1]); g2.lineTo(PB[0],PB[1]); g2.stroke();
+      const dot=(p,c,f)=>{ g2.fillStyle=`rgba(${c},${(0.45+0.55*f)*dotA})`;
+        g2.beginPath(); g2.arc(p[0],p[1],dpr*(3+3.5*f),0,Math.PI*2); g2.fill(); };
+      dot(PA,"242,176,75",flash.a);
+      dot(PB,"143,185,204",flash.b);
+    }
+    g2.drawImage(band, 0, H-bandH);
+    g2.strokeStyle="#1c1a22"; g2.lineWidth=dpr;
+    g2.beginPath(); g2.moveTo(0,H-bandH-0.5); g2.lineTo(W,H-bandH-0.5); g2.stroke();
+  }
+
+  /* ---------------- plate + readout ---------------- */
+  const plate=document.getElementById("plate");
+  let plateText="", healUntil=0;
+  function setPlate(txt, seam){
+    if (txt===plateText) return;
+    plateText=txt;
+    plate.classList.add("fading");
+    setTimeout(()=>{ plate.textContent=txt; plate.classList.toggle("seam",seam); plate.classList.remove("fading"); },260);
+  }
+  function regime(){
+    const k = coupling(), det = detune(), nowT = performance.now();
+    if (nowT < healUntil) return k > 0.01 ? ["healing", true] : ["the shove stays", false];
+    if (k < 0.01) return ["two clocks, deaf to each other", false];
+    if (det < 0.003) return ["already the same", false];
+    if (lockV > 0.86) return ["one rhythm, two clocks", true];
+    if (lockV > 0.45) return ["slipping", false];
+    return ["they hear each other — not enough", false];
+  }
+
+  const rIoi=document.getElementById("rIoi"), rHz=document.getElementById("rHz"),
+        rLock=document.getElementById("rLock"),
+        sRate=document.getElementById("sRate"), oRate=document.getElementById("oRate"),
+        sDet=document.getElementById("sDet"), oDet=document.getElementById("oDet"),
+        sK=document.getElementById("sK"), oK=document.getElementById("oK"),
+        sLvl=document.getElementById("sLvl"), oLvl=document.getElementById("oLvl"),
+        bKick=document.getElementById("bKick"), bRun=document.getElementById("bRun");
+
+  function refresh(){
+    const ia=ioiA(), ms=ia*1000, hz=1/ia, det=detune();
+    rIoi.textContent = ms>=100 ? ms.toFixed(0)+" ms" : ms.toFixed(2)+" ms";
+    rHz.textContent  = hz>=100 ? hz.toFixed(0)+" hz" : hz.toFixed(1)+" hz";
+    oRate.textContent = ms>=100 ? ms.toFixed(0)+" ms" : ms.toFixed(1)+" ms";
+    oDet.textContent = (det*100).toFixed(1)+" %";
+    oK.textContent = coupling().toFixed(2);
+    oLvl.textContent = Math.round(state.level*100)+" %";
+  }
+  setInterval(()=>{
+    rLock.textContent = lockV.toFixed(2);
+    const [txt,seam] = regime();
+    setPlate(txt,seam);
+  }, 250);
+
+  sRate.addEventListener("input",e=>{state.pos=+e.target.value; refresh();});
+  sDet .addEventListener("input",e=>{state.det=+e.target.value; refresh();});
+  sK   .addEventListener("input",e=>{state.k=+e.target.value; refresh();});
+  sLvl .addEventListener("input",e=>{state.level=+e.target.value; refresh();});
+
+  function kick(){
+    if (!ctx) return;
+    S.bNext += 0.38*ioiB();
+    kicks.push(ctx.currentTime);
+    kickFlash = 1;
+    healUntil = performance.now() + 3600;
+    order.re = Math.cos(2*Math.PI*0.5); order.im = 0;   // let the trace re-earn the lock
+  }
+  bKick.addEventListener("click", kick);
+  function toggleRun(){
+    state.running=!state.running;
+    bRun.classList.toggle("on",state.running);
+    bRun.textContent = state.running ? "running" : "held";
+  }
+  bRun.addEventListener("click", toggleRun);
+  window.addEventListener("keydown",e=>{
+    if (e.target.matches("input, button, a")) return;
+    if (e.code==="Space"){ e.preventDefault(); toggleRun(); }
+    if (e.key==="k" || e.key==="K"){ e.preventDefault(); kick(); }
+  });
+
+  const veil=document.getElementById("veil");
+  const returnLink=document.querySelector(".return");
+  function begin(){
+    if (ctx) return;
+    initAudio();
+    veil.classList.add("gone");
+    returnLink.classList.add("gone");
+    setTimeout(()=>veil.remove(),900);
+    setTimeout(()=>returnLink.remove(),900);
+  }
+  veil.addEventListener("click",begin);
+
+  resize(); refresh(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
