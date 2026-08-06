@@ -331,7 +331,7 @@ main,
     grid-column: span 5;
 }
 
-.threshold-sound {
+.threshold-pieces {
     --door-accent: var(--warm);
     grid-column: span 5;
 }
@@ -476,7 +476,7 @@ main,
 @media (max-width: 820px) {
     .threshold-thinking,
     .threshold-rooms,
-    .threshold-sound,
+    .threshold-pieces,
     .threshold-experiments {
         grid-column: 1 / -1;
     }
