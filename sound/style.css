@@ -266,6 +266,101 @@
     filter: blur(2rem);
 }
 
+.piece-coupled {
+    min-height: 36rem;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1.08fr) minmax(20rem, 0.92fr);
+    grid-template-rows: auto minmax(25rem, 1fr) auto;
+}
+
+.piece-coupled .piece-topline,
+.piece-coupled .piece-foot {
+    grid-column: 1 / -1;
+}
+
+.piece-coupled .piece-figure {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 25rem;
+}
+
+.piece-coupled .piece-copy {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    grid-column: 2;
+    grid-row: 2;
+    padding-left: clamp(2rem, 5vw, 4.5rem);
+    border-top: 0;
+    border-left: 1px solid var(--line);
+}
+
+.coupled-figure {
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(circle at 46% 46%, rgba(242, 176, 75, 0.08), transparent 32%),
+        radial-gradient(circle at 56% 52%, rgba(143, 185, 204, 0.07), transparent 38%);
+}
+
+.coupled-orbit {
+    position: absolute;
+    width: clamp(10rem, 24vw, 17rem);
+    aspect-ratio: 1;
+    border: 1px solid rgba(222, 214, 198, 0.22);
+    border-radius: 50%;
+}
+
+.coupled-orbit-a {
+    transform: translateX(-11%);
+}
+
+.coupled-orbit-b {
+    border-color: rgba(143, 185, 204, 0.26);
+    transform: translateX(11%);
+}
+
+.coupled-bridge {
+    position: absolute;
+    width: clamp(5rem, 15vw, 10rem);
+    height: 1px;
+    background: linear-gradient(90deg, var(--sound-gold), var(--sound-blue));
+    box-shadow: 0 0 1.5rem rgba(143, 185, 204, 0.28);
+    opacity: 0.6;
+}
+
+.coupled-pulse {
+    position: absolute;
+    width: 0.65rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow: 0 0 1rem currentColor;
+}
+
+.coupled-pulse-a {
+    background: var(--sound-gold);
+    color: rgba(242, 176, 75, 0.5);
+    transform: translate(-5rem, -4.2rem);
+}
+
+.coupled-pulse-b {
+    background: var(--sound-blue);
+    color: rgba(143, 185, 204, 0.5);
+    transform: translate(5rem, 4.2rem);
+}
+
+.coupled-trace {
+    position: absolute;
+    right: 8%;
+    bottom: 12%;
+    left: 8%;
+    height: 2.3rem;
+    border-top: 1px solid var(--line);
+    background:
+        linear-gradient(162deg, transparent 0 12%, rgba(242,176,75,.45) 12.4% 12.8%, transparent 13.2% 29%, rgba(242,176,75,.38) 29.4% 29.8%, transparent 30.2% 48%, rgba(143,185,204,.5) 48.4% 48.8%, transparent 49.2% 68%, rgba(143,185,204,.4) 68.4% 68.8%, transparent 69.2%);
+    opacity: 0.72;
+}
+
 .piece-copy {
     padding: clamp(2rem, 4vw, 3rem) 0;
     border-top: 1px solid var(--line);
@@ -369,6 +464,35 @@
 
     .piece {
         min-height: 43rem;
+    }
+
+    .piece-coupled {
+        min-height: 43rem;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(17rem, 1fr) auto auto;
+    }
+
+    .piece-coupled .piece-topline,
+    .piece-coupled .piece-figure,
+    .piece-coupled .piece-copy,
+    .piece-coupled .piece-foot {
+        grid-column: 1;
+    }
+
+    .piece-coupled .piece-figure {
+        grid-row: 2;
+        min-height: 17rem;
+    }
+
+    .piece-coupled .piece-copy {
+        grid-row: 3;
+        padding-left: 0;
+        border-top: 1px solid var(--line);
+        border-left: 0;
+    }
+
+    .piece-coupled .piece-foot {
+        grid-row: 4;
     }
 
     .workshop {
