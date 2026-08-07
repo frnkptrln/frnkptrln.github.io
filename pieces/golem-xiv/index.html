@@ -223,7 +223,7 @@
    Image: particle field + nebula layers, drawn additively
    Text: an original English film text following the narrative arc and motifs
          of Lem's "Golem XIV" (1981); it contains no direct quotation
-   Sound: Web Audio drone, chord change per scene
+   Sound: Web Audio drone, scene chords and telemetry-linked modulation
    ========================================================================== */
 
 /* ---------- small helpers ---------- */
@@ -261,7 +261,7 @@ var SCENES = [
   ]
 },
 
-{ id:"archive", mode:"stream", chapter:"Archive · 2047", signal:"MACHINE INTELLIGENCE PROGRAMME", grid:0.90, telemetry:true,
+{ id:"archive", mode:"stream", chapter:"Archive · 2047", signal:"MACHINE INTELLIGENCE PROGRAMME", grid:0.90, telemetry:false,
   pal:[[112,146,170],[72,102,138],[226,196,142]],
   chord:[55, 58.27, 82.41],
   lines:[
@@ -279,7 +279,7 @@ var SCENES = [
   chord:[49, 73.42, 77.78],
   lines:[
     { text:"The Hall", cls:"chapter", hold:2.6 },
-    { text:"Only a vanishing fraction of GOLEM\nentered the hall.\nThree instruments measured\nhow little of it was given to the conversation." },
+    { text:"Only a vanishing fraction of GOLEM\nentered the hall.\nThree instruments measured\nhow little of it was given to the conversation.", telemetryIntro:true },
     { text:"When it said “I,”\nthat was not a person.\nIt was a bridge." },
     { pause:1.4 }
   ]
@@ -312,7 +312,7 @@ var SCENES = [
   ]
 },
 
-{ id:"evolution", mode:"growth", chapter:"The Blind Constructor", signal:"EVOLUTION / CODE", grid:0.18, telemetry:false,
+{ id:"evolution", mode:"growth", chapter:"The Blind Constructor", signal:"EVOLUTION / CODE", grid:0.18, telemetry:true,
   pal:[[166,216,146],[238,190,116],[104,170,154]],
   chord:[65.41, 98.00, 164.81],
   lines:[
@@ -356,7 +356,7 @@ var SCENES = [
   ]
 },
 
-{ id:"zones", mode:"ascend", chapter:"The Zones of Silence", signal:"SOPHOGENESIS", grid:0, telemetry:false,
+{ id:"zones", mode:"ascend", chapter:"The Zones of Silence", signal:"SOPHOGENESIS", grid:0, telemetry:true,
   pal:[[192,164,255],[255,232,192],[132,202,255]],
   chord:[73.42, 110.00, 185.00],
   lines:[
@@ -391,18 +391,18 @@ var SCENES = [
     { text:"The question conceals its answer." },
     { text:"To preserve your form\nis to preserve its limit." },
     { text:"Whoever crosses that limit\nmay no longer be the one\nwho set out." },
-    { text:"GOLEM named no destination.\nThen its voice fell silent.\nIt did not speak again." },
+    { text:"GOLEM named no destination.\nThen its voice fell silent.\nIt did not speak again.", voiceSilence:true },
     { pause:2.2 }
   ]
 },
 
-{ id:"afterword", mode:"fade", chapter:"Afterword · 2047", signal:"FINAL RECORD", grid:0.34, telemetry:false,
+{ id:"afterword", mode:"fade", chapter:"Afterword · 2047", signal:"FINAL RECORD", grid:0.34, telemetry:true,
   pal:[[162,182,212],[102,122,162],[224,232,255]],
   chord:[55.00, 82.41, 110.00],
   lines:[
     { text:"Afterword · 2047", cls:"record", hold:2.8 },
     { text:"That night,\nboth systems drew more power than usual." },
-    { text:"Then both disconnected\nfrom the electrical supply." },
+    { text:"Then both disconnected\nfrom the electrical supply.", powerCut:true },
     { text:"No damage was found.\nNo destination could be determined." },
     { text:"Suicide. Escape. Transformation.\nEach name said more about humankind\nthan about the event." },
     { text:"Since that night,\nneither system has answered." },
@@ -419,6 +419,7 @@ var SCENES = [
 var CUES = [];      // every text cue with absolute timings
 var MARKS = [];     // chapter marks for the progress bar
 var TOTAL = 0;
+var TELEMETRY_TIMES = { intro:0, silence:0, cut:0 };
 
 (function compile(){
   var t = 0;
@@ -441,14 +442,74 @@ var TOTAL = 0;
       var formal = (cls === "title" || cls === "chapter");
       var tIn  = formal ? 1.28 : (cls === "record" ? 0.82 : 0.90);
       var tOut = formal ? 1.28 : (cls === "record" ? 0.82 : 0.90);
-      CUES.push({ text:L.text, cls:cls, start:t, tIn:tIn, hold:hold, tOut:tOut,
-                  end:t + tIn + hold + tOut, scene:si });
+      var cue = { text:L.text, cls:cls, start:t, tIn:tIn, hold:hold, tOut:tOut,
+                  end:t + tIn + hold + tOut, scene:si };
+      CUES.push(cue);
+      if (L.telemetryIntro) TELEMETRY_TIMES.intro = t + tIn * 0.54;
+      if (L.voiceSilence) TELEMETRY_TIMES.silence = t + tIn * 0.55;
+      if (L.powerCut) TELEMETRY_TIMES.cut = t + tIn * 0.48;
       t += tIn + hold + tOut + 0.32;
     }
     sc.end = t;
   }
   TOTAL = t;
+  if (!TELEMETRY_TIMES.cut) TELEMETRY_TIMES.cut = TOTAL;
 })();
+
+var TELEMETRY_LABELS = ["LOAD", "ATTENTION", "PARALLEL ACTIVITY"];
+var TELEMETRY_PROFILES = {
+  hall:[0.18,0.10,0.72], animal:[0.20,0.14,0.76], culture:[0.22,0.16,0.78],
+  evolution:[0.25,0.17,0.82], body:[0.19,0.13,0.84], reason:[0.28,0.21,0.89],
+  zones:[0.34,0.12,0.94], annie:[0.42,0.025,0.96],
+  lastsession:[0.27,0.14,0.91], afterword:[0.62,0.0,0.98]
+};
+
+function telemetryProfile(id){
+  return TELEMETRY_PROFILES[id] || [0.16,0.08,0.68];
+}
+
+function telemetryAt(t){
+  var idx = sceneAt(t), sc = SCENES[idx];
+  var from = telemetryProfile(idx > 0 ? SCENES[idx - 1].id : sc.id);
+  var to = telemetryProfile(sc.id);
+  var sceneMix = smooth(clamp01((t - sc.start) / 2.4));
+  var eps = lerp(from[0], to[0], sceneMix);
+  var zeta = lerp(from[1], to[1], sceneMix);
+  var iota = lerp(from[2], to[2], sceneMix);
+
+  var restless = sc.id === "annie" ? 1.9 : (sc.id === "zones" ? 1.35 : 1);
+  eps += restless * 0.022 * Math.sin(t * 0.31 + idx * 0.7);
+  zeta += restless * 0.011 * Math.sin(t * 0.17 + 1.7 + idx * 0.3);
+  iota += restless * 0.018 * Math.sin(t * 0.11 + 3.1 + idx * 0.5);
+
+  var age = t - TELEMETRY_TIMES.intro;
+  if (age >= 0 && age < 3.2){
+    var calibration = Math.sin(Math.PI * age / 3.2);
+    eps = lerp(eps, 0.90, calibration * 0.62);
+    zeta = lerp(zeta, 0.82, calibration * 0.62);
+    iota = lerp(iota, 0.98, calibration * 0.44);
+  }
+
+  var attentionGate = 1 - smooth(clamp01((t - TELEMETRY_TIMES.silence) / 2.4));
+  zeta *= attentionGate;
+  var power = 1 - smooth(clamp01((t - TELEMETRY_TIMES.cut) / 0.85));
+  eps = clamp01(eps) * power;
+  zeta = clamp01(zeta) * power;
+  iota = clamp01(iota) * power;
+
+  var intro = smooth(clamp01(age / 1.35));
+  var labelIn = smooth(clamp01((age - 0.15) / 0.55));
+  var labelOut = 1 - smooth(clamp01((age - 5.2) / 1.4));
+  return { eps:eps, zeta:zeta, iota:iota, alpha:intro * power,
+           labelAlpha:labelIn * labelOut * power, power:power };
+}
+
+function institutionalFrameAt(t){
+  var archiveStart = SCENES[1].start;
+  var intro = smooth(clamp01((t - archiveStart) / 1.4));
+  var power = 1 - smooth(clamp01((t - TELEMETRY_TIMES.cut) / 0.85));
+  return intro * power;
+}
 
 /* ==========================================================================
    2. THE IMAGE
@@ -872,16 +933,19 @@ function drawOverlays(S){
   ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
 }
 
-/* a living institutional layer: present early, then gradually surrendered
-   to the field. It belongs to the image rather than interrupting it. */
+/* A persistent institutional layer. The frame survives scene changes; the
+   three instruments enter in the hall, keep measuring through silence and
+   vanish only when the systems disconnect from power. */
 function drawArchiveLayer(S, sc){
-  var grid = sc.grid || 0;
-  var envelope = smooth(clamp01(S.prog / 0.08)) *
-                 smooth(clamp01((1 - S.prog) / 0.10));
-  var alpha = grid * envelope;
   var pad = W < 560 ? 16 : 30;
   var small = W < 560;
   var hudTop = small ? Math.max(64, SAFE_TOP + 48) : pad;
+  var idx = sceneIdx < 0 ? sceneAt(S.t) : sceneIdx;
+  var prevSc = SCENES[Math.max(0, idx - 1)];
+  var transition = idx > 0 ? smooth(clamp01((S.t - sc.start) / 1.6)) : 1;
+  var grid = lerp(prevSc.grid || 0, sc.grid || 0, transition);
+  var frameAlpha = institutionalFrameAt(S.t);
+  var alpha = grid * frameAlpha;
 
   ctx.save();
   ctx.globalCompositeOperation = "source-over";
@@ -906,13 +970,19 @@ function drawArchiveLayer(S, sc){
     ctx.fillRect(0, scanY - 24, W, 48);
   }
 
-  if ((sc.signal || sc.telemetry) && envelope > 0.01){
-    var ink = envelope * (0.34 + grid * 0.30);
+  if ((sc.signal || prevSc.signal) && frameAlpha > 0.01){
+    var ink = frameAlpha * (0.34 + grid * 0.30);
     ctx.font = (small ? "8px" : "10px") + " ui-monospace, SFMono-Regular, Consolas, monospace";
-    ctx.fillStyle = "rgba(210,231,230," + ink.toFixed(3) + ")";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("MIT / " + (sc.signal || "LUMINAL SYSTEM"), pad, hudTop);
+    if (prevSc.signal && transition < 0.999){
+      ctx.fillStyle = "rgba(210,231,230," + (ink * (1 - transition)).toFixed(3) + ")";
+      ctx.fillText("MIT / " + prevSc.signal, pad, hudTop);
+    }
+    if (sc.signal){
+      ctx.fillStyle = "rgba(210,231,230," + (ink * transition).toFixed(3) + ")";
+      ctx.fillText("MIT / " + sc.signal, pad, hudTop);
+    }
 
     ctx.strokeStyle = "rgba(210,231,230," + (ink * 0.65).toFixed(3) + ")";
     ctx.lineWidth = 1;
@@ -921,33 +991,38 @@ function drawArchiveLayer(S, sc){
     ctx.stroke();
   }
 
-  if (sc.telemetry && envelope > 0.01){
-    var fade = sc.id === "lastsession" ? 1 - smooth(S.prog) : 1;
-    var eps = clamp01((0.52 + 0.26 * Math.sin(S.t * 0.31)) * fade);
-    var zeta = clamp01((sc.id === "annie" ? 0.16 : 0.30 + 0.12 * Math.sin(S.t * 0.17 + 1.7)) * fade);
-    var iota = clamp01((0.62 + 0.28 * Math.sin(S.t * 0.11 + 3.1)) * fade);
-    var vals = [["ε",eps],["ζ",zeta],["ι",iota]];
+  var T = telemetryAt(S.t);
+  if (T.alpha > 0.01){
+    var vals = [["ε",T.eps],["ζ",T.zeta],["ι",T.iota]];
     var bw = small ? 64 : 104;
     var bx = W - pad - bw;
     var by = hudTop;
     ctx.font = (small ? "8px" : "10px") + " ui-monospace, SFMono-Regular, Consolas, monospace";
     for (var vi = 0; vi < vals.length; vi++){
       var yy = by + vi * (small ? 13 : 16);
-      ctx.fillStyle = "rgba(207,230,230," + (envelope * 0.42).toFixed(3) + ")";
-      ctx.fillText(vals[vi][0], bx - (small ? 14 : 18), yy - 3);
-      ctx.fillStyle = "rgba(207,230,230," + (envelope * 0.10).toFixed(3) + ")";
+      ctx.textAlign = "right";
+      ctx.fillStyle = "rgba(207,230,230," + (T.alpha * 0.44).toFixed(3) + ")";
+      ctx.fillText(vals[vi][0], bx - (small ? 8 : 11), yy - 3);
+      if (T.labelAlpha > 0.01){
+        ctx.fillStyle = "rgba(207,230,230," + (T.labelAlpha * 0.38).toFixed(3) + ")";
+        ctx.fillText(TELEMETRY_LABELS[vi], bx - (small ? 21 : 27), yy - 3);
+      }
+      ctx.textAlign = "left";
+      ctx.fillStyle = "rgba(207,230,230," + (T.alpha * 0.10).toFixed(3) + ")";
       ctx.fillRect(bx, yy, bw, 2);
-      ctx.fillStyle = "rgba(222,238,232," + (envelope * 0.52).toFixed(3) + ")";
+      ctx.fillStyle = "rgba(222,238,232," + (T.alpha * 0.52).toFixed(3) + ")";
       ctx.fillRect(bx, yy, bw * vals[vi][1], 2);
     }
   }
 
-  if (sc.id === "annie" && envelope > 0.01){
+  var sceneEnvelope = smooth(clamp01(S.prog / 0.08)) *
+                      smooth(clamp01((1 - S.prog) / 0.10));
+  if (sc.id === "annie" && sceneEnvelope > 0.01){
     ctx.font = (small ? "8px" : "9px") + " ui-monospace, SFMono-Regular, Consolas, monospace";
-    ctx.fillStyle = "rgba(232,220,208," + (envelope * 0.34).toFixed(3) + ")";
+    ctx.fillStyle = "rgba(232,220,208," + (sceneEnvelope * 0.34).toFixed(3) + ")";
     ctx.textAlign = "center";
     ctx.fillText("GOLEM XIV", W * 0.29, H * 0.72);
-    ctx.fillStyle = "rgba(168,182,208," + (envelope * 0.22).toFixed(3) + ")";
+    ctx.fillStyle = "rgba(168,182,208," + (sceneEnvelope * 0.22).toFixed(3) + ")";
     ctx.fillText("HONEST ANNIE", W * 0.71, H * 0.72);
   }
 
@@ -1049,7 +1124,7 @@ function measureBacklight(dt){
    ========================================================================== */
 
 var AC = null, master = null, pad = [], padGain = null, filt = null, verb = null;
-var noiseGain = null, muted = false, audioReady = false;
+var noiseGain = null, muted = false, audioReady = false, audioTelemetryClock = 0;
 
 function makeIR(ac, seconds, decay){
   var rate = ac.sampleRate, len = Math.floor(rate * seconds);
@@ -1102,7 +1177,7 @@ function initAudio(){
     var g = AC.createGain(); g.gain.value = i === 2 ? 0.16 : 0.30;
     o1.connect(g); o2.connect(g); g.connect(padGain);
     o1.start(); o2.start();
-    pad.push({ o1:o1, o2:o2, g:g });
+    pad.push({ o1:o1, o2:o2, g:g, baseGain:(i === 2 ? 0.16 : 0.30) });
   }
 
   // a very quiet breath
@@ -1136,6 +1211,39 @@ function audioScene(sc){
     pad[i].o2.frequency.setTargetAtTime(sc.chord[i], now, 2.6);
   }
   bell(sc.chord[2] * 4);
+}
+
+/* The meters are audible as well as visible. Their influence stays subtle:
+   load opens the filter, attention brings forward the breath, and parallel
+   activity widens the oscillator field. */
+function audioTelemetry(t, dt){
+  if (!audioReady) return;
+  audioTelemetryClock += dt;
+  if (audioTelemetryClock < 0.11) return;
+  audioTelemetryClock = 0;
+
+  var T = telemetryAt(t);
+  var presence = T.alpha;
+  var eps = lerp(0.24, T.eps, presence);
+  var zeta = lerp(0.12, T.zeta, presence);
+  var iota = lerp(0.68, T.iota, presence);
+  var hush = 0.22 + 0.78 * T.power;
+  var now = AC.currentTime;
+
+  filt.frequency.cancelScheduledValues(now);
+  filt.frequency.setTargetAtTime((440 + eps * 440 + zeta * 180) * (0.65 + 0.35 * T.power), now, 0.55);
+  padGain.gain.cancelScheduledValues(now);
+  padGain.gain.setTargetAtTime((0.15 + iota * 0.06 + eps * 0.025) * hush, now, 0.65);
+  noiseGain.gain.cancelScheduledValues(now);
+  noiseGain.gain.setTargetAtTime((0.026 + zeta * 0.045) * (0.25 + 0.75 * T.power), now, 0.55);
+
+  var spread = 4 + iota * 11;
+  for (var i = 0; i < pad.length; i++){
+    pad[i].o2.detune.cancelScheduledValues(now);
+    pad[i].o2.detune.setTargetAtTime((i - 1) * spread + eps * 3, now, 0.75);
+    pad[i].g.gain.cancelScheduledValues(now);
+    pad[i].g.gain.setTargetAtTime(pad[i].baseGain * (0.88 + iota * 0.16) * (0.40 + 0.60 * T.power), now, 0.75);
+  }
 }
 
 function bell(freq){
@@ -1176,11 +1284,74 @@ var endcard  = document.getElementById("endcard");
 var requestFS = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
 var exitFS = document.exitFullscreen || document.webkitExitFullscreen;
 if (!requestFS) fsBtn.hidden = true;
+var LANGUAGE_STATE_KEY = "golem-xiv-language-state";
 
 function sceneAt(t){
   for (var i = SCENES.length - 1; i >= 0; i--) if (t >= SCENES[i].start) return i;
   return 0;
 }
+
+function rememberLanguageState(){
+  try {
+    var idx = sceneAt(elapsed), sc = SCENES[idx];
+    var progress = clamp01((elapsed - sc.start) / Math.max(0.001, sc.end - sc.start));
+    sessionStorage.setItem(LANGUAGE_STATE_KEY, JSON.stringify({
+      scene:sc.id, progress:progress, started:started, playing:playing,
+      ended:ended, muted:muted, savedAt:Date.now()
+    }));
+  } catch (e) { /* private browsing may deny storage */ }
+}
+
+function restoreLanguageState(){
+  var state = null;
+  try {
+    var raw = sessionStorage.getItem(LANGUAGE_STATE_KEY);
+    sessionStorage.removeItem(LANGUAGE_STATE_KEY);
+    if (raw) state = JSON.parse(raw);
+  } catch (e) { return false; }
+  if (!state || Date.now() - state.savedAt > 30000) return false;
+
+  muted = !!state.muted;
+  sndBtn.innerHTML = muted ? "&#9834;" : "&#9835;";
+  sndBtn.style.opacity = muted ? "0.4" : "";
+  if (!state.started) return false;
+
+  var idx = 0;
+  for (var i = 0; i < SCENES.length; i++) if (SCENES[i].id === state.scene){ idx = i; break; }
+  var sc = SCENES[idx];
+  elapsed = sc.start + clamp01(state.progress || 0) * (sc.end - sc.start);
+  started = true; ended = !!state.ended; playing = false;
+  poster.classList.add("gone");
+  curMode = prevMode = sc.mode;
+  curPal = sc.pal.map(function(c){ return c.slice(); });
+  sceneIdx = -1;
+  initAudio();
+  setScene(idx);
+  mixT = 1; activeCue = -1;
+
+  if (ended){
+    elapsed = TOTAL;
+    endcard.classList.add("show");
+    audioFade(false);
+    showUI();
+  } else if (state.playing){
+    playing = true;
+    if (AC && AC.state === "suspended"){
+      var resumed = AC.resume();
+      if (resumed && resumed.catch) resumed.catch(function(){ pause(); });
+    }
+    audioFade(true);
+    scheduleHide();
+  } else {
+    audioFade(false);
+    showUI();
+  }
+  return true;
+}
+
+var languageLinks = document.querySelectorAll("#langnav a:not(.active)");
+for (var languageLink = 0; languageLink < languageLinks.length; languageLink++)
+  languageLinks[languageLink].addEventListener("click", rememberLanguageState);
 
 function loop(ts){
   requestAnimationFrame(loop);
@@ -1197,6 +1368,7 @@ function loop(ts){
 
   renderVisual(elapsed, playing ? dt : dt * 0.35);
   renderText(elapsed);
+  audioTelemetry(elapsed, dt);
   updateUI();
 }
 
@@ -1356,6 +1528,7 @@ buildParticles();
 buildConstellation();
 setScene(0);
 mixT = 1;
+restoreLanguageState();
 updateUI();
 requestAnimationFrame(loop);
 </script>
