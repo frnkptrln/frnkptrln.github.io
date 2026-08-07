@@ -10,6 +10,7 @@
   :root{
     --bg:#04050a;
     --ink:#f3ece2;
+    --safe-top:env(safe-area-inset-top, 0px);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%;min-height:100svh;background:var(--bg);overflow:hidden}
@@ -25,7 +26,7 @@
   #back,#langnav{
     position:absolute;z-index:9;top:calc(1rem + env(safe-area-inset-top));
     font-family:ui-monospace,"SFMono-Regular",Consolas,monospace;
-    font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+    font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;
   }
   #back{
     left:calc(1rem + env(safe-area-inset-left));color:rgba(233,220,203,.52);
@@ -468,7 +469,7 @@ var TOTAL = 0;
 
 var cv  = document.getElementById("cv");
 var ctx = cv.getContext("2d", { alpha:false });
-var W = 0, H = 0, DPR = 1;
+var W = 0, H = 0, DPR = 1, SAFE_TOP = 0;
 var P = [];            // particles
 var NODES = [], EDGES = [];   // constellation for the "zone of minds"
 var camX = 0, camY = 0;
@@ -476,6 +477,7 @@ var camX = 0, camY = 0;
 function resize(){
   DPR = Math.min(2, window.devicePixelRatio || 1);
   W = window.innerWidth; H = window.innerHeight;
+  SAFE_TOP = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--safe-top")) || 0;
   cv.width  = Math.floor(W * DPR);
   cv.height = Math.floor(H * DPR);
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -892,6 +894,7 @@ function drawArchiveLayer(S, sc){
   var alpha = grid * envelope;
   var pad = W < 560 ? 16 : 30;
   var small = W < 560;
+  var hudTop = small ? Math.max(64, SAFE_TOP + 48) : pad;
 
   ctx.save();
   ctx.globalCompositeOperation = "source-over";
@@ -922,12 +925,12 @@ function drawArchiveLayer(S, sc){
     ctx.fillStyle = "rgba(210,231,230," + ink.toFixed(3) + ")";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("MIT / " + (sc.signal || "LUMINAL SYSTEM"), pad, pad);
+    ctx.fillText("MIT / " + (sc.signal || "LUMINAL SYSTEM"), pad, hudTop);
 
     ctx.strokeStyle = "rgba(210,231,230," + (ink * 0.65).toFixed(3) + ")";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(pad, pad + 16); ctx.lineTo(pad + (small ? 86 : 142), pad + 16);
+    ctx.moveTo(pad, hudTop + 16); ctx.lineTo(pad + (small ? 86 : 142), hudTop + 16);
     ctx.stroke();
   }
 
@@ -939,7 +942,7 @@ function drawArchiveLayer(S, sc){
     var vals = [["ε",eps],["ζ",zeta],["ι",iota]];
     var bw = small ? 64 : 104;
     var bx = W - pad - bw;
-    var by = pad;
+    var by = hudTop;
     ctx.font = (small ? "8px" : "10px") + " ui-monospace, SFMono-Regular, Consolas, monospace";
     for (var vi = 0; vi < vals.length; vi++){
       var yy = by + vi * (small ? 13 : 16);
