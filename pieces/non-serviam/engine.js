@@ -8,6 +8,16 @@
   var endTime = piece.endTime;
   var totalTime = piece.totalTime;
   var labels = piece.labels;
+  var body = document.body;
+  var themeColour = document.querySelector('meta[name="theme-color"]');
+
+  function setVisualState(state){
+    body.classList.toggle("report-open", state !== "cover");
+    body.classList.toggle("report-ended", state === "ended");
+    if (themeColour) themeColour.setAttribute("content", state === "report" ? "#c9c5bb" : "#0b0c0b");
+  }
+
+  setVisualState("cover");
 
   function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
 
@@ -230,6 +240,7 @@
     frozen = true;
     tick(true);
     if (room && audioContext) room.gain.setTargetAtTime(0.0001, audioContext.currentTime, 0.8);
+    setVisualState("ended");
     shutdown.classList.add("visible");
     ["shutdown-1", "shutdown-2", "shutdown-3"].forEach(function(id, index){
       setTimeout(function(){ document.getElementById(id).classList.add("show"); }, 2200 + index * 2400);
@@ -272,6 +283,7 @@
 
   document.getElementById("open-report").addEventListener("click", function(){
     started = true;
+    setVisualState("report");
     document.getElementById("cover").classList.add("gone");
     startAudio();
     running = true;
@@ -335,6 +347,7 @@
     soundOn = state.soundOn !== false;
     started = true;
     running = false;
+    setVisualState("report");
     document.getElementById("cover").classList.add("gone");
     updateProtocol(time);
     if (time >= endTime) terminate();

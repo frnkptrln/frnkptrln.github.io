@@ -1,4 +1,7 @@
 :root {
+  --field: #0b0c0b;
+  --field-ink: #e9e7df;
+  --field-soft: #92958e;
   --paper: #c9c5bb;
   --ink: #16151a;
   --mid: #4a4750;
@@ -35,8 +38,9 @@ body {
 
 body {
   overflow: hidden;
-  background: var(--paper);
+  background: var(--field);
   color: var(--ink);
+  color-scheme: dark;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
   font-size: 15px;
   line-height: 1.62;
@@ -57,21 +61,45 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--mid);
+  color: var(--field-soft);
   font-size: 0.58rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  transition: color 0.18s linear;
 }
 
 #site-controls a {
   color: inherit;
   text-decoration: none;
+  transition: color 0.18s linear;
 }
 
 #site-controls a:hover,
 #site-controls a:focus-visible,
 #site-controls a.active {
+  color: var(--field-ink);
+}
+
+body.report-open:not(.report-ended) {
+  color-scheme: light;
+}
+
+body.report-open:not(.report-ended) #site-controls {
+  color: var(--mid);
+}
+
+body.report-open:not(.report-ended) #site-controls a:hover,
+body.report-open:not(.report-ended) #site-controls a:focus-visible,
+body.report-open:not(.report-ended) #site-controls a.active {
   color: var(--ink);
+}
+
+body.report-ended #site-controls {
+  transition-duration: 2.4s;
+}
+
+body.report-ended #site-controls a {
+  transition-duration: 2.4s;
 }
 
 #language-nav {
@@ -85,6 +113,7 @@ a {
   display: grid;
   width: min(100%, 1500px);
   margin: 0 auto;
+  background: var(--paper);
   padding: calc(2.35rem + var(--safe-top)) calc(clamp(1rem, 3.4vw, 3.4rem) + var(--safe-right)) 0 calc(clamp(1rem, 3.4vw, 3.4rem) + var(--safe-left));
   grid-template-rows: auto minmax(0, 1fr) auto;
 }
@@ -317,14 +346,14 @@ footer button:focus-visible {
   align-items: center;
   justify-content: center;
   padding: calc(3.2rem + var(--safe-top)) calc(2rem + var(--safe-right)) calc(2rem + var(--safe-bottom)) calc(2rem + var(--safe-left));
-  background: var(--paper);
   text-align: center;
 }
 
 #cover {
   z-index: 9;
   gap: 1.6rem;
-  transition: opacity 1s ease;
+  background: var(--field);
+  color: var(--field-ink);
 }
 
 #cover.gone {
@@ -333,7 +362,7 @@ footer button:focus-visible {
 }
 
 #cover .stamp {
-  color: var(--mid);
+  color: var(--field-soft);
   font-size: 0.64rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -348,7 +377,7 @@ footer button:focus-visible {
 
 #cover p {
   max-width: 32rem;
-  color: var(--mid);
+  color: var(--field-soft);
   font-size: 0.76rem;
   letter-spacing: 0.1em;
   line-height: 1.9;
@@ -361,9 +390,9 @@ footer button:focus-visible {
 #open-report {
   margin-top: 0.6rem;
   padding: 0.85rem 2.2rem;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--field-soft);
   background: none;
-  color: var(--ink);
+  color: var(--field-ink);
   cursor: pointer;
   font: inherit;
   font-size: 0.68rem;
@@ -373,13 +402,15 @@ footer button:focus-visible {
 
 #open-report:hover,
 #open-report:focus-visible {
-  background: var(--ink);
-  color: var(--paper);
+  border-color: var(--field-ink);
+  background: var(--field-ink);
+  color: var(--field);
 }
 
 #shutdown {
   z-index: 8;
   gap: 1.2rem;
+  background: var(--field);
   opacity: 0;
   pointer-events: none;
   transition: opacity 2.4s linear;
@@ -390,7 +421,7 @@ footer button:focus-visible {
 }
 
 #shutdown div {
-  color: var(--mid);
+  color: var(--field-soft);
   font-size: 0.8rem;
   letter-spacing: 0.24em;
   opacity: 0;
