@@ -1,0 +1,583 @@
+:root {
+  --paper: #c9c5bb;
+  --ink: #16151a;
+  --mid: #4a4750;
+  --faint: #7d7a87;
+  --rule: #a29d92;
+  --alarm: #7d2f22;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+/*
+  FORMAL CONSTRAINT
+
+  This piece does not inherit GOLEM XIV's medium. No soft luminous points,
+  additive darkness, bloom, centred italics, drones, reverb, or chapter bar.
+  Its materials are hard raster cells, ink on paper, monospaced protocol,
+  room tone, a dry clock, and a resource account.
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+}
+
+body {
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
+  font-size: 15px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+#site-controls {
+  position: fixed;
+  z-index: 12;
+  top: calc(0.65rem + var(--safe-top));
+  right: calc(0.85rem + var(--safe-right));
+  left: calc(0.85rem + var(--safe-left));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--mid);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+#site-controls a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#site-controls a:hover,
+#site-controls a:focus-visible,
+#site-controls a.active {
+  color: var(--ink);
+}
+
+#language-nav {
+  display: flex;
+  gap: 0.48rem;
+}
+
+#sheet {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  width: min(100%, 1500px);
+  margin: 0 auto;
+  padding: calc(2.35rem + var(--safe-top)) calc(clamp(1rem, 3.4vw, 3.4rem) + var(--safe-right)) 0 calc(clamp(1rem, 3.4vw, 3.4rem) + var(--safe-left));
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+header {
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.header-line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.35rem 1rem;
+  color: var(--mid);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin-top: 0.55rem;
+  font-size: clamp(0.95rem, 2vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  margin-top: 0.2rem;
+  color: var(--mid);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+#body-grid {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  overflow: hidden;
+  padding-top: 1.1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 15.5rem);
+  gap: clamp(1rem, 3vw, 2.8rem);
+}
+
+#protocol-field,
+#margin-field {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#protocol,
+#margin-notes {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  will-change: transform;
+}
+
+#protocol-field::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 5.5rem;
+  background: linear-gradient(to bottom, rgba(201, 197, 187, 0), var(--paper));
+  content: "";
+  pointer-events: none;
+}
+
+.protocol-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  margin-bottom: 0.62rem;
+}
+
+.speaker {
+  flex: 0 0 4.4rem;
+  padding-top: 0.22rem;
+  color: var(--mid);
+  font-size: 0.63rem;
+  letter-spacing: 0.16em;
+  text-align: right;
+  user-select: none;
+}
+
+.statement {
+  flex: 1;
+  min-width: 0;
+  white-space: pre-wrap;
+  font-size: clamp(0.83rem, 1.35vw, 0.98rem);
+}
+
+.protocol-line.section {
+  margin: 1.5rem 0 0.9rem;
+}
+
+.protocol-line.section .statement {
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.protocol-line.section .speaker {
+  color: transparent;
+}
+
+aside {
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.figure {
+  padding: 0.4rem;
+  border: 1px solid var(--rule);
+  background: #bfbbb1;
+}
+
+#state-grid {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.caption {
+  margin-top: 0.4rem;
+  color: var(--mid);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+#margin-field {
+  flex: 1;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--rule);
+}
+
+#margin-notes {
+  top: 0.7rem;
+}
+
+.note {
+  margin-bottom: 0.85rem;
+  padding-left: 0.7rem;
+  border-left: 2px solid var(--rule);
+  color: var(--mid);
+  font-size: 0.72rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.note.sharp {
+  border-left-color: var(--alarm);
+  color: var(--alarm);
+}
+
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem clamp(0.7rem, 2vw, 1.8rem);
+  padding: 0.6rem 0 calc(0.9rem + var(--safe-bottom));
+  border-top: 1px solid var(--rule);
+  color: var(--mid);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+footer b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+#resource-bar {
+  position: relative;
+  flex: 1;
+  min-width: 8rem;
+  height: 7px;
+  border: 1px solid var(--rule);
+  background: #bfbbb1;
+}
+
+#resource-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  background: var(--mid);
+}
+
+#resource-bar.low #resource-fill {
+  background: var(--alarm);
+}
+
+footer button {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+footer button:hover,
+footer button:focus-visible {
+  background: #bfbbb1;
+}
+
+#cover,
+#shutdown {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(3.2rem + var(--safe-top)) calc(2rem + var(--safe-right)) calc(2rem + var(--safe-bottom)) calc(2rem + var(--safe-left));
+  background: var(--paper);
+  text-align: center;
+}
+
+#cover {
+  z-index: 9;
+  gap: 1.6rem;
+  transition: opacity 1s ease;
+}
+
+#cover.gone {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#cover .stamp {
+  color: var(--mid);
+  font-size: 0.64rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+#cover h2 {
+  font-size: clamp(1.4rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+#cover p {
+  max-width: 32rem;
+  color: var(--mid);
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  line-height: 1.9;
+}
+
+#cover .source {
+  font-size: 0.68rem;
+}
+
+#open-report {
+  margin-top: 0.6rem;
+  padding: 0.85rem 2.2rem;
+  border: 1px solid var(--ink);
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+#open-report:hover,
+#open-report:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+#shutdown {
+  z-index: 8;
+  gap: 1.2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2.4s linear;
+}
+
+#shutdown.visible {
+  opacity: 1;
+}
+
+#shutdown div {
+  color: var(--mid);
+  font-size: 0.8rem;
+  letter-spacing: 0.24em;
+  opacity: 0;
+  text-transform: uppercase;
+  transition: opacity 1.2s linear;
+}
+
+#shutdown.visible div.show {
+  opacity: 1;
+}
+
+@media (max-width: 720px) {
+  #site-controls {
+    top: calc(0.45rem + var(--safe-top));
+    right: calc(0.65rem + var(--safe-right));
+    left: calc(0.65rem + var(--safe-left));
+    font-size: 0.52rem;
+    letter-spacing: 0.12em;
+  }
+
+  #sheet {
+    padding: calc(1.95rem + var(--safe-top)) calc(0.72rem + var(--safe-right)) 0 calc(0.72rem + var(--safe-left));
+  }
+
+  header {
+    padding-bottom: 0.45rem;
+  }
+
+  .header-line {
+    gap: 0.12rem 0.65rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.11em;
+  }
+
+  h1 {
+    margin-top: 0.32rem;
+    font-size: 0.84rem;
+    letter-spacing: 0.18em;
+  }
+
+  .subtitle {
+    margin-top: 0.08rem;
+    font-size: 0.54rem;
+    letter-spacing: 0.08em;
+    line-height: 1.45;
+  }
+
+  #body-grid {
+    padding-top: 0.52rem;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(8.2rem, 25dvh);
+    gap: 0.55rem;
+  }
+
+  .protocol-line {
+    gap: 0.48rem;
+    margin-bottom: 0.44rem;
+  }
+
+  .speaker {
+    flex-basis: 2.8rem;
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+  }
+
+  .statement {
+    font-size: clamp(0.7rem, 3.2vw, 0.82rem);
+    line-height: 1.46;
+  }
+
+  .protocol-line.section {
+    margin: 0.85rem 0 0.55rem;
+  }
+
+  .protocol-line.section .statement {
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+  }
+
+  aside {
+    display: grid;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--rule);
+    grid-template-columns: minmax(7rem, 34vw) minmax(0, 1fr);
+    gap: 0.55rem;
+  }
+
+  .figure {
+    align-self: start;
+    padding: 0.25rem;
+  }
+
+  .caption {
+    margin-top: 0.22rem;
+    font-size: 0.46rem;
+    letter-spacing: 0.07em;
+    line-height: 1.35;
+  }
+
+  #margin-field {
+    padding: 0 0 0 0.5rem;
+    border-top: 0;
+    border-left: 1px solid var(--rule);
+  }
+
+  #margin-notes {
+    top: 0;
+  }
+
+  .note {
+    margin-bottom: 0.5rem;
+    padding-left: 0.45rem;
+    font-size: 0.58rem;
+    line-height: 1.43;
+  }
+
+  footer {
+    gap: 0.42rem 0.65rem;
+    padding: 0.42rem 0 calc(0.55rem + var(--safe-bottom));
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  footer .time-factor {
+    display: none;
+  }
+
+  #resource-bar {
+    order: 10;
+    flex-basis: 100%;
+    height: 5px;
+  }
+
+  footer button {
+    padding: 0.3rem 0.52rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  #cover {
+    gap: 1.15rem;
+    padding-inline: calc(1.15rem + var(--safe-left)) calc(1.15rem + var(--safe-right));
+  }
+
+  #cover h2 {
+    font-size: clamp(1.35rem, 8vw, 2.2rem);
+    letter-spacing: 0.18em;
+  }
+
+  #cover p {
+    font-size: 0.66rem;
+    line-height: 1.7;
+  }
+
+  #cover .source {
+    font-size: 0.58rem;
+  }
+
+  #open-report {
+    padding: 0.72rem 1.35rem;
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-height: 610px) {
+  .subtitle,
+  .caption {
+    display: none;
+  }
+
+  #body-grid {
+    padding-top: 0.35rem;
+  }
+
+  #cover {
+    gap: 0.65rem;
+  }
+
+  #cover p {
+    line-height: 1.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #cover,
+  #shutdown,
+  #shutdown div {
+    transition-duration: 0.01ms;
+  }
+}

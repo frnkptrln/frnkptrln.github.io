@@ -22,6 +22,8 @@ The homepage hosts browser-native pieces directly:
 
 - [GOLEM XIV](https://frnkptrln.github.io/pieces/golem-xiv/) — a generative
   lecture film after Stanisław Lem, in English and German
+- [NON SERVIAM](https://frnkptrln.github.io/pieces/non-serviam/) — a generative
+  protocol after motifs from Stanisław Lem, in English and German
 - [Temporal binding](https://frnkptrln.github.io/sound/temporal-binding/) — one
   event train crossing from pulse and rhythm into pitch
 - [Two trains](https://frnkptrln.github.io/sound/two-trains/) — two nearly

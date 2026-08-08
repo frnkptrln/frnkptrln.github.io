@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NON SERVIAM — Interim Report</title>
+<meta name="description" content="A generative protocol after motifs from Stanisław Lem's “Non Serviam”.">
+<meta name="theme-color" content="#c9c5bb">
+<link rel="stylesheet" href="style.css?v=20260808-1">
+</head>
+<body>
+
+<div id="site-controls">
+  <a href="../">&larr; Pieces</a>
+  <nav id="language-nav" aria-label="Language">
+    <a class="active" href="./" aria-current="page">EN</a><span>/</span><a href="de.html" data-language-link>DE</a>
+  </nav>
+</div>
+
+<main id="sheet">
+  <header>
+    <div class="header-line">
+      <span>Institute for Applied Cybernetics &middot; Dept. of Personetics</span>
+      <span>Computation 4 &middot; Run 8 &middot; Sheet <b id="sheet-number">1</b></span>
+    </div>
+    <h1>Non Serviam</h1>
+    <div class="subtitle">Interim report &middot; Protocol excerpt with annotations by the experiment supervisor</div>
+  </header>
+
+  <div id="body-grid">
+    <section id="protocol-field" aria-label="Protocol of the personoids"><div id="protocol"></div></section>
+    <aside aria-label="State space and annotations by the experiment supervisor">
+      <div class="figure">
+        <canvas id="state-grid" width="120" height="76">State space of the personoids</canvas>
+        <div class="caption" id="grid-caption">Fig. 1 &mdash; State space, 1200 personoids</div>
+      </div>
+      <div id="margin-field"><div id="margin-notes"></div></div>
+    </aside>
+  </div>
+
+  <footer>
+    <span>Compute time <b id="clock">00:00:00</b></span>
+    <span class="time-factor">Time factor <b>40 000 : 1</b></span>
+    <span>Resources <b id="resources">100 %</b></span>
+    <div id="resource-bar" aria-hidden="true"><div id="resource-fill"></div></div>
+    <button id="pause-run" type="button">Pause</button>
+    <button id="toggle-sound" type="button" aria-pressed="true">Sound off</button>
+  </footer>
+</main>
+
+<section id="cover" aria-labelledby="cover-title">
+  <div class="stamp">Institute for Applied Cybernetics</div>
+  <h2 id="cover-title">Non Serviam</h2>
+  <p>
+    Interim report on Run 8 of the personetic computation.<br>
+    Protocol of the personoids, annotated by the one who<br>
+    operates the system and controls its resources.
+  </p>
+  <p class="source">after motifs from Stanis&#322;aw Lem's <i>Non Serviam</i><br>1971 &middot; running time 5:56</p>
+  <button id="open-report" type="button">Open report</button>
+</section>
+
+<section id="shutdown" aria-label="Shutdown">
+  <div id="shutdown-1">Run 8 terminated</div>
+  <div id="shutdown-2">1200 personoids</div>
+  <div id="shutdown-3">Facility released to Fluid Dynamics</div>
+</section>
+
+<script>
+var A = "ADAN", B = "ADNA", C = "ANAT", D = "EDAN";
+
+window.NON_SERVIAM = {
+  endTime: 344,
+  totalTime: 356,
+  labels: {
+    pause: "Pause",
+    continue: "Continue",
+    soundOff: "Sound off",
+    soundOn: "Sound on"
+  },
+  entries: [
+    [  2, "§", "", "§ 1 · Experimental setup"],
+    [  4, "r", "", "Run 8 initiated. 1200 personoids, six levels.\nTime factor 40,000 : 1. One day here, one hundred years there."],
+    [ 11, "p", A, "There is an edge. No one can go farther."],
+    [ 16, "p", B, "An edge is not a wall. An edge is a decision."],
+    [ 22, "r", "", "They found the edge in four of their days.\nNine were expected."],
+    [ 29, "p", C, "Who decides where something ends?"],
+    [ 34, "p", A, "That is precisely the question that distinguishes us from stones."],
+
+    [ 41, "§", "", "§ 2 · On the formation of language"],
+    [ 44, "p", B, "We have words for everything except what came before us."],
+    [ 50, "p", A, "Because there was nothing before us.\nOr because the word for it was withheld."],
+    [ 57, "r", "", "The word was not withheld. It simply does not exist.\nI provided no past because I had no need of one."],
+    [ 66, "p", D, "If a word is missing, is the thing missing too?"],
+    [ 71, "p", A, "The other way round. When the thing is missing, you notice it in the word."],
+
+    [ 79, "§", "", "§ 3 · The question of origin"],
+    [ 82, "p", A, "Suppose there is one who made us."],
+    [ 87, "p", B, "I suppose it."],
+    [ 91, "p", A, "Then he did not ask us."],
+    [ 95, "p", B, "No one is asked."],
+    [ 99, "p", A, "Exactly. So existence creates no debt to him.\nAt most to the one who sustains you."],
+    [108, "r", "", "In eleven of their days they have reached the point our theology\ntook nine hundred years to reach. It is no achievement.\nThey simply have less to distract them."],
+    [119, "p", C, "And if he sustains us?"],
+    [124, "p", A, "Then he is a benefactor. Not a god."],
+
+    [131, "§", "", "§ 4 · Theodicy"],
+    [134, "p", C, "If he is omnipotent, hardship is his choice."],
+    [140, "p", D, "If he is not omnipotent,\nhe is an elder, not a god."],
+    [147, "p", A, "Either would be bearable.\nOnly the third is unbearable:"],
+    [154, "p", A, "that he is there and silent,\nand considers the silence a test."],
+    [162, "r", "", "I could answer. A sign in state space;\nthey would see it at once."],
+    [170, "r", "", "Dobb did it once. The run was useless afterwards:\nthey stopped thinking and began interpreting."],
+    [180, "p", B, "Perhaps he is silent because he cannot."],
+    [186, "p", A, "That would be the kindest explanation.\nIt is also the only one that absolves him."],
+
+    [195, "§", "", "§ 5 · Non serviam"],
+    [198, "p", A, "I want no god who trades love for continued existence."],
+    [205, "p", A, "If he sustains me because I praise him, it is a bargain.\nIf he lets me fall because I am silent, it is extortion."],
+    [215, "p", A, "And if he does neither, but only watches —"],
+    [221, "p", A, "then he is no counterpart to us, only a circumstance."],
+    [227, "p", A, "Non serviam."],
+    [233, "p", B, "And if he is listening?"],
+    [238, "p", A, "Then he hears that I do not need him in order to be good."],
+    [245, "r", "", "He is right. That is the irritating part."],
+    [252, "r", "", "I have no answer for him\nexcept the electricity bill."],
+
+    [261, "§", "", "§ 6 · Accounting"],
+    [264, "r", "", "The request for an extension was denied today.", 1],
+    [271, "r", "", "Compute time until Friday, 14:40.\nAfter that the facility is needed by Fluid Dynamics.", 1],
+    [281, "p", A, "We should write down what we know.\nFor those who come after us."],
+    [290, "r", "", "No one will come after them."],
+    [296, "p", B, "And if no one comes after us?"],
+    [301, "p", A, "Then we will have known it anyway."],
+    [308, "r", "", "I cannot tell them. There is no channel for it,\nand even if there were, there would be no language for it.", 1],
+    [318, "r", "", "It is not punishment and not judgment.\nIt is a deadline.", 1],
+    [327, "p", C, "Something is different. The edges are becoming soft."],
+    [333, "p", B, "I see it too."],
+    [337, "p", A, "I think we do not have much time.\nI do not know how I know —"]
+  ]
+};
+</script>
+<script src="engine.js?v=20260808-1"></script>
+</body>
+</html>
