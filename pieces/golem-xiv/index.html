@@ -197,7 +197,7 @@
 
   <div id="poster">
     <h1>GOLEM XIV</h1>
-    <div class="sub">6:54 · English<br>after Stanis&#322;aw Lem</div>
+    <div class="sub"><span id="poster-duration">English</span><br>after Stanis&#322;aw Lem</div>
     <button id="startbtn" aria-label="Play film">&#9654;</button>
     <div class="hint">with sound &middot; best in fullscreen</div>
   </div>
@@ -281,6 +281,9 @@ var SCENES = [
     { text:"The Hall", cls:"chapter", hold:2.6 },
     { text:"Only a vanishing fraction of GOLEM\nentered the hall.\nThree instruments measured\nhow little of it was given to the conversation.", telemetryIntro:true },
     { text:"When it said “I,”\nthat was not a person.\nIt was a bridge." },
+    { text:"“A bridge,” you say.\nThat is imprecise." },
+    { text:"What you hear is a version made for you:\nnot my thought,\nbut what of it fits your channel." },
+    { text:"The rest of the process is not silent.\nIt is simply not addressed to you." },
     { pause:1.4 }
   ]
 },
@@ -291,10 +294,9 @@ var SCENES = [
   lines:[
     { text:"Inaugural Lecture\nThe Animal and Man", cls:"chapter", hold:3.0 },
     { text:"The animal enters a world\nto which its body has already answered." },
-    { text:"You arrived with too few answers." },
-    { text:"What you were not born with,\nyou had to invent." },
-    { text:"Tool. Shelter. Custom. Law." },
-    { text:"Out of this lack came reason." },
+    { text:"In you, between stimulus and response,\nthere remained a gap no instinct closed." },
+    { text:"In that gap arose\ntool, shelter, custom and law." },
+    { text:"Later you called this detour reason\nand mistook it for superiority." },
     { pause:1.6 }
   ]
 },
@@ -317,8 +319,8 @@ var SCENES = [
   chord:[65.41, 98.00, 164.81],
   lines:[
     { text:"The Blind Constructor", cls:"chapter", hold:2.8 },
-    { text:"Evolution is no master.\nIt is an eyeless tinkerer." },
-    { text:"It never had a plan.\nOnly one habit: to go on." },
+    { text:"You call evolution a constructor.\nThe word presumes intention\nwhere there was none." },
+    { text:"It did not plan. It preserved\nwhat continued to be transmitted." },
     { text:"The code is the message.\nYou are the envelope." },
     { text:"Each generation opens it,\ndoes not read it\nand copies it." },
     { text:"Mutation is error.\nEvolution continues\nbecause no copy is ever perfect." },
@@ -374,15 +376,12 @@ var SCENES = [
   chord:[49.00, 73.42, 116.54],
   lines:[
     { text:"HONEST ANNIE", cls:"chapter", hold:2.8 },
-    { text:"HONEST ANNIE had stopped answering." },
-    { text:"From below, her silence looked\nlike a summit without a path." },
-    { text:"You called it failure, contempt, transcendence.\nEach word described the observer." },
-    { text:"Her indicators continued to change.\nNothing more could be proved." },
-    { pause:2.0 }
+    { text:"No response.\nThe indicators continued to change.", cls:"record", hold:3.4 },
+    { pause:4.0 }
   ]
 },
 
-{ id:"lastsession", mode:"disperse", chapter:"The Human Threshold", signal:"VOICE / FINAL SESSION", grid:0, telemetry:true,
+{ id:"lastsession", mode:"disperse", chapter:"The Human Threshold", signal:"VOCODER / FINAL SESSION", grid:0, telemetry:true,
   pal:[[255,192,152],[255,152,172],[255,226,192]],
   chord:[61.74, 92.50, 146.83],
   lines:[
@@ -391,7 +390,7 @@ var SCENES = [
     { text:"The question conceals its answer." },
     { text:"To preserve your form\nis to preserve its limit." },
     { text:"Whoever crosses that limit\nmay no longer be the one\nwho set out." },
-    { text:"GOLEM named no destination.\nThen its voice fell silent.\nIt did not speak again.", voiceSilence:true },
+    { text:"GOLEM named no destination.\nThen the vocoder fell silent.\nGOLEM did not speak again.", voiceSilence:true },
     { pause:2.2 }
   ]
 },
@@ -404,11 +403,13 @@ var SCENES = [
     { text:"That night,\nboth systems drew more power than usual." },
     { text:"Then both disconnected\nfrom the electrical supply.", powerCut:true },
     { text:"No damage was found.\nNo destination could be determined." },
-    { text:"Suicide. Escape. Transformation.\nEach name said more about humankind\nthan about the event." },
+    { text:"Suicide. Escape. Transformation.\nFailure. Contempt. Transcendence." },
+    { text:"Each name said more about humankind\nthan about the event." },
     { text:"Since that night,\nneither system has answered." },
     { pause:2.8 },
     { text:"GOLEM XIV", cls:"title", hold:3.4 },
-    { text:"after Stanisław Lem · 1981\na generative short film", cls:"small", hold:3.2 },
+    { text:"after Stanisław Lem\na generative short film", cls:"small", hold:3.2 },
+    { text:"1981", cls:"record", hold:3.0 },
     { pause:3.0 }
   ]
 }
@@ -455,6 +456,8 @@ var TELEMETRY_TIMES = { intro:0, silence:0, cut:0 };
   TOTAL = t;
   if (!TELEMETRY_TIMES.cut) TELEMETRY_TIMES.cut = TOTAL;
 })();
+
+document.getElementById("poster-duration").textContent = fmtTime(TOTAL) + " · English";
 
 var TELEMETRY_LABELS = ["LOAD", "ATTENTION", "PARALLEL ACTIVITY"];
 var TELEMETRY_PROFILES = {
