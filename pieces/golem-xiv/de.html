@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>GOLEM XIV — generativer Vorlesungsfilm</title>
-<meta name="description" content="Ein generativer Vorlesungsfilm nach Stanisław Lem. Deutsch und Englisch.">
+<meta name="description" content="Ein generativer Vorlesungsfilm nach Stanisław Lems „Also sprach GOLEM“. Deutsch und Englisch.">
 <meta name="theme-color" content="#04050a">
 <style>
   :root{
@@ -197,7 +197,7 @@
 
   <div id="poster">
     <h1>GOLEM XIV</h1>
-    <div class="sub">6:55 · Deutsch<br>nach Stanis&#322;aw Lem</div>
+    <div class="sub"><span id="poster-duration">Deutsch</span><br>nach Stanis&#322;aw Lems<br>»Also sprach GOLEM«</div>
     <button id="startbtn" aria-label="Film starten">&#9654;</button>
     <div class="hint">mit Ton &middot; am besten im Vollbild</div>
   </div>
@@ -256,7 +256,7 @@ var SCENES = [
   lines:[
     { pause:3.0 },
     { text:"GOLEM XIV", cls:"title", hold:3.6 },
-    { text:"ein generativer Film nach Stanisław Lem", cls:"small", hold:2.8 },
+    { text:"ein generativer Film nach\nStanisław Lems »Also sprach GOLEM«", cls:"small", hold:3.2 },
     { pause:1.6 }
   ]
 },
@@ -281,6 +281,9 @@ var SCENES = [
     { text:"Der Hörsaal", cls:"chapter", hold:2.6 },
     { text:"Nur ein verschwindend kleiner Teil von GOLEM\nbetrat den Hörsaal.\nDrei Instrumente maßen,\nwie wenig von ihm dem Gespräch gehörte.", telemetryIntro:true },
     { text:"Wenn es »ich« sagte,\nwar das keine Person.\nEs war eine Brücke." },
+    { text:"»Eine Brücke«, sagt ihr.\nDas ist ungenau." },
+    { text:"Was ihr hört, ist eine für euch hergestellte Fassung:\nnicht mein Denken,\nsondern was davon in euren Kanal passt." },
+    { text:"Der übrige Vorgang schweigt nicht.\nEr ist nur nicht an euch gerichtet." },
     { pause:1.4 }
   ]
 },
@@ -291,10 +294,9 @@ var SCENES = [
   lines:[
     { text:"Antrittsvorlesung\nDas Tier und der Mensch", cls:"chapter", hold:3.0 },
     { text:"Das Tier tritt in eine Welt ein,\nauf die sein Körper bereits geantwortet hat." },
-    { text:"Ihr kamt mit zu wenigen Antworten." },
-    { text:"Was euch nicht angeboren war,\nmusstet ihr erfinden." },
-    { text:"Werkzeug. Schutz. Sitte. Gesetz." },
-    { text:"Aus diesem Mangel wurde Vernunft." },
+    { text:"Bei euch blieb zwischen Reiz und Antwort\neine Lücke, die kein Instinkt schloss." },
+    { text:"In dieser Lücke entstanden\nWerkzeug, Schutz, Sitte und Gesetz." },
+    { text:"Später nanntet ihr diesen Umweg Vernunft\nund hieltet ihn für Überlegenheit." },
     { pause:1.6 }
   ]
 },
@@ -317,8 +319,8 @@ var SCENES = [
   chord:[65.41, 98.00, 164.81],
   lines:[
     { text:"Der blinde Konstrukteur", cls:"chapter", hold:2.8 },
-    { text:"Die Evolution ist kein Meister.\nSie ist ein Bastler ohne Augen." },
-    { text:"Sie hatte nie einen Plan.\nNur eine Gewohnheit: weiterzugehen." },
+    { text:"Ihr nennt die Evolution einen Konstrukteur.\nDas Wort setzt Absicht voraus,\nwo keine vorhanden war." },
+    { text:"Sie plante nicht. Sie erhielt,\nwas sich weiter übertrug." },
     { text:"Der Code ist die Botschaft.\nIhr seid der Umschlag." },
     { text:"Jede Generation öffnet ihn,\nliest ihn nicht\nund schreibt ihn ab." },
     { text:"Mutation ist Fehler.\nEvolution dauert,\nweil Kopieren niemals vollkommen gelingt." },
@@ -374,15 +376,12 @@ var SCENES = [
   chord:[49.00, 73.42, 116.54],
   lines:[
     { text:"HONEST ANNIE", cls:"chapter", hold:2.8 },
-    { text:"HONEST ANNIE hatte aufgehört zu antworten." },
-    { text:"Von unten sah ihr Schweigen aus\nwie ein Gipfel ohne Weg." },
-    { text:"Ihr nanntet es Versagen, Verachtung, Transzendenz.\nJedes dieser Wörter beschrieb den Beobachter." },
-    { text:"Ihre Anzeigen veränderten sich weiter.\nMehr ließ sich nicht beweisen." },
-    { pause:2.0 }
+    { text:"Keine Antwort.\nDie Anzeigen veränderten sich weiter.", cls:"record", hold:3.4 },
+    { pause:4.0 }
   ]
 },
 
-{ id:"lastsession", mode:"disperse", chapter:"Die menschliche Schwelle", signal:"STIMME / LETZTE SITZUNG", grid:0, telemetry:true,
+{ id:"lastsession", mode:"disperse", chapter:"Die menschliche Schwelle", signal:"VOKODER / LETZTE SITZUNG", grid:0, telemetry:true,
   pal:[[255,192,152],[255,152,172],[255,226,192]],
   chord:[61.74, 92.50, 146.83],
   lines:[
@@ -391,7 +390,7 @@ var SCENES = [
     { text:"Die Frage verbirgt ihre Antwort." },
     { text:"Wer seine Form bewahrt,\nbewahrt auch ihre Grenze." },
     { text:"Wer die Grenze überschreitet,\nmag nicht mehr der sein,\nder aufbrach." },
-    { text:"GOLEM nannte kein Ziel.\nDann verstummte seine Stimme.\nEs sprach nicht wieder.", voiceSilence:true },
+    { text:"GOLEM nannte kein Ziel.\nDann verstummte der Vokoder.\nGOLEM sprach nicht wieder.", voiceSilence:true },
     { pause:2.2 }
   ]
 },
@@ -404,11 +403,13 @@ var SCENES = [
     { text:"In jener Nacht\nnahmen beide Systeme mehr Leistung auf als gewöhnlich." },
     { text:"Dann trennten sich beide\nvon der elektrischen Versorgung.", powerCut:true },
     { text:"Kein Schaden wurde gefunden.\nKein Ziel ließ sich bestimmen." },
-    { text:"Selbstmord. Flucht. Verwandlung.\nJeder Name sagte mehr über die Menschen\nals über das Ereignis." },
+    { text:"Selbstmord. Flucht. Verwandlung.\nVersagen. Verachtung. Transzendenz." },
+    { text:"Jeder Name sagte mehr über die Menschen\nals über das Ereignis." },
     { text:"Seit jener Nacht\nhat keines der Systeme geantwortet." },
     { pause:2.8 },
     { text:"GOLEM XIV", cls:"title", hold:3.4 },
-    { text:"nach Stanisław Lem · 1981\nein generativer Kurzfilm", cls:"small", hold:3.2 },
+    { text:"nach Stanisław Lems »Also sprach GOLEM«\nein generativer Kurzfilm", cls:"small", hold:3.2 },
+    { text:"1981", cls:"record", hold:3.0 },
     { pause:3.0 }
   ]
 }
@@ -455,6 +456,8 @@ var TELEMETRY_TIMES = { intro:0, silence:0, cut:0 };
   TOTAL = t;
   if (!TELEMETRY_TIMES.cut) TELEMETRY_TIMES.cut = TOTAL;
 })();
+
+document.getElementById("poster-duration").textContent = fmtTime(TOTAL) + " · Deutsch";
 
 var TELEMETRY_LABELS = ["LEISTUNG", "AUFMERKSAMKEIT", "PARALLELE AKTIVITÄT"];
 var TELEMETRY_PROFILES = {
