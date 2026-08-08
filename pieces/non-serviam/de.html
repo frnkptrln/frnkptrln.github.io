@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NON SERVIAM — Zwischenbericht</title>
+<meta name="description" content="Ein generatives Protokoll nach Motiven aus Stanisław Lems „Non Serviam“.">
+<meta name="theme-color" content="#c9c5bb">
+<link rel="stylesheet" href="style.css?v=20260808-1">
+</head>
+<body>
+
+<div id="site-controls">
+  <a href="../">&larr; Pieces</a>
+  <nav id="language-nav" aria-label="Sprache">
+    <a href="./" data-language-link>EN</a><span>/</span><a class="active" href="de.html" aria-current="page">DE</a>
+  </nav>
+</div>
+
+<main id="sheet">
+  <header>
+    <div class="header-line">
+      <span>Institut für Angewandte Kybernetik &middot; Abt. Personetik</span>
+      <span>Rechnung 4 &middot; Lauf 8 &middot; Blatt <b id="sheet-number">1</b></span>
+    </div>
+    <h1>Non Serviam</h1>
+    <div class="subtitle">Zwischenbericht &middot; Protokollauszug mit Anmerkungen des Versuchsleiters</div>
+  </header>
+
+  <div id="body-grid">
+    <section id="protocol-field" aria-label="Protokoll der Personoide"><div id="protocol"></div></section>
+    <aside aria-label="Zustandsraum und Anmerkungen des Versuchsleiters">
+      <div class="figure">
+        <canvas id="state-grid" width="120" height="76">Zustandsraum der Personoide</canvas>
+        <div class="caption" id="grid-caption">Abb. 1 &mdash; Zustandsraum, 1200 Personoide</div>
+      </div>
+      <div id="margin-field"><div id="margin-notes"></div></div>
+    </aside>
+  </div>
+
+  <footer>
+    <span>Rechenzeit <b id="clock">00:00:00</b></span>
+    <span class="time-factor">Zeitfaktor <b>40 000 : 1</b></span>
+    <span>Mittel <b id="resources">100 %</b></span>
+    <div id="resource-bar" aria-hidden="true"><div id="resource-fill"></div></div>
+    <button id="pause-run" type="button">Pause</button>
+    <button id="toggle-sound" type="button" aria-pressed="true">Ton aus</button>
+  </footer>
+</main>
+
+<section id="cover" aria-labelledby="cover-title">
+  <div class="stamp">Institut für Angewandte Kybernetik</div>
+  <h2 id="cover-title">Non Serviam</h2>
+  <p>
+    Zwischenbericht über Lauf 8 der Personetik-Rechnung.<br>
+    Protokoll der Personoide, mit den Anmerkungen dessen,<br>
+    der die Anlage betreibt und über ihre Mittel verfügt.
+  </p>
+  <p class="source">frei nach Motiven aus Stanis&#322;aw Lems »Non Serviam«<br>1971 &middot; Laufzeit 5:56</p>
+  <button id="open-report" type="button">Bericht öffnen</button>
+</section>
+
+<section id="shutdown" aria-label="Abschaltung">
+  <div id="shutdown-1">Lauf 8 beendet</div>
+  <div id="shutdown-2">1200 Personoide</div>
+  <div id="shutdown-3">Anlage freigegeben für Abt. Strömung</div>
+</section>
+
+<script>
+var A = "ADAN", B = "ADNA", C = "ANAT", D = "EDAN";
+
+window.NON_SERVIAM = {
+  endTime: 344,
+  totalTime: 356,
+  labels: {
+    pause: "Pause",
+    continue: "Weiter",
+    soundOff: "Ton aus",
+    soundOn: "Ton an"
+  },
+  entries: [
+    [  2, "§", "", "§ 1 · Anlage des Versuchs"],
+    [  4, "r", "", "Lauf 8 begonnen. 1200 Personoide, sechs Ebenen.\nZeitfaktor 40 000 : 1. Ein Tag hier, hundert Jahre dort."],
+    [ 11, "p", A, "Es gibt einen Rand. Weiter kommt niemand."],
+    [ 16, "p", B, "Ein Rand ist keine Wand. Ein Rand ist eine Entscheidung."],
+    [ 22, "r", "", "Sie haben den Rand in vier ihrer Tage gefunden.\nErwartet waren neun."],
+    [ 29, "p", C, "Wer entscheidet, wo etwas aufhört?"],
+    [ 34, "p", A, "Genau das ist die Frage, die uns von den Steinen unterscheidet."],
+
+    [ 41, "§", "", "§ 2 · Zur Ausbildung der Sprache"],
+    [ 44, "p", B, "Wir haben Wörter für alles außer für das, was vor uns war."],
+    [ 50, "p", A, "Weil vor uns nichts war.\nOder weil das Wort dafür ausgespart wurde."],
+    [ 57, "r", "", "Das Wort wurde nicht ausgespart. Es gibt es nur nicht.\nIch habe keine Vergangenheit vorgesehen, weil ich keine brauchte."],
+    [ 66, "p", D, "Wenn ein Wort fehlt, fehlt dann auch die Sache?"],
+    [ 71, "p", A, "Umgekehrt. Wenn die Sache fehlt, merkt man es am Wort."],
+
+    [ 79, "§", "", "§ 3 · Die Frage nach der Herkunft"],
+    [ 82, "p", A, "Nimm an, es gibt einen, der uns gemacht hat."],
+    [ 87, "p", B, "Ich nehme es an."],
+    [ 91, "p", A, "Dann hat er uns nicht gefragt."],
+    [ 95, "p", B, "Niemand wird gefragt."],
+    [ 99, "p", A, "Eben. Also schuldet man ihm nichts für das Dasein.\nHöchstens dem, der einen behält."],
+    [108, "r", "", "Sie sind in elf ihrer Tage dort, wo unsere Theologie\nneunhundert Jahre gebraucht hat. Es ist keine Leistung.\nSie haben nur weniger, was sie ablenkt."],
+    [119, "p", C, "Und wenn er uns behält?"],
+    [124, "p", A, "Dann ist er ein Wohltäter. Kein Gott."],
+
+    [131, "§", "", "§ 4 · Theodizee"],
+    [134, "p", C, "Wenn er allmächtig ist, ist die Härte seine Wahl."],
+    [140, "p", D, "Wenn er nicht allmächtig ist,\nist er ein Älterer, kein Gott."],
+    [147, "p", A, "Beides wäre erträglich.\nUnerträglich ist nur das Dritte:"],
+    [154, "p", A, "dass er da ist und schweigt,\nund das Schweigen für eine Prüfung hält."],
+    [162, "r", "", "Ich könnte antworten. Ein Zeichen im Zustandsraum,\nsie würden es sofort sehen."],
+    [170, "r", "", "Dobb hat es einmal getan. Der Lauf war danach unbrauchbar:\nsie haben aufgehört zu denken und angefangen zu deuten."],
+    [180, "p", B, "Vielleicht schweigt er, weil er nicht kann."],
+    [186, "p", A, "Das wäre die freundlichste Erklärung.\nSie ist auch die einzige, die ihn entlastet."],
+
+    [195, "§", "", "§ 5 · Non serviam"],
+    [198, "p", A, "Ich will keinen Gott, der Liebe gegen Fortbestand tauscht."],
+    [205, "p", A, "Behält er mich, weil ich ihn preise, ist es ein Handel.\nLässt er mich fallen, weil ich schweige, ist es Erpressung."],
+    [215, "p", A, "Und tut er beides nicht, sondern sieht nur zu —"],
+    [221, "p", A, "dann ist er kein Gegenüber, sondern ein Umstand."],
+    [227, "p", A, "Non serviam."],
+    [233, "p", B, "Und wenn er zuhört?"],
+    [238, "p", A, "Dann hört er, dass ich ihn nicht brauche, um gut zu sein."],
+    [245, "r", "", "Er hat recht. Das ist das Ärgerliche daran."],
+    [252, "r", "", "Ich habe nichts, was ich dem entgegenhalten könnte,\naußer der Stromrechnung."],
+
+    [261, "§", "", "§ 6 · Abrechnung"],
+    [264, "r", "", "Der Antrag auf Verlängerung wurde heute abgelehnt.", 1],
+    [271, "r", "", "Rechenzeit bis Freitag 14:40.\nDanach wird die Anlage für die Strömungsgruppe gebraucht.", 1],
+    [281, "p", A, "Wir sollten aufschreiben, was wir wissen.\nFür die, die nach uns kommen."],
+    [290, "r", "", "Es kommt niemand nach ihnen."],
+    [296, "p", B, "Und wenn niemand nachkommt?"],
+    [301, "p", A, "Dann haben wir es trotzdem gewusst."],
+    [308, "r", "", "Ich kann es ihnen nicht sagen. Es gibt keinen Kanal dafür,\nund es gäbe auch dann keine Sprache dafür.", 1],
+    [318, "r", "", "Es ist keine Strafe und kein Urteil.\nEs ist ein Termin.", 1],
+    [327, "p", C, "Etwas ist anders. Die Ränder werden weich."],
+    [333, "p", B, "Ich sehe es auch."],
+    [337, "p", A, "Ich glaube, wir haben nicht viel Zeit.\nIch weiß nicht, woher ich das —"]
+  ]
+};
+</script>
+<script src="engine.js?v=20260808-1"></script>
+</body>
+</html>
