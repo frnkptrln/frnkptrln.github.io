@@ -1,0 +1,181 @@
+name: One-time GOLEM Lem fidelity fix
+
+on:
+  push:
+    paths:
+      - '.github/workflows/golem-lem-fidelity-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply agreed GOLEM text corrections
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def apply(path, replacements):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              for old, new in replacements:
+                  count = text.count(old)
+                  if count != 1:
+                      raise SystemExit(f'{path}: expected exactly one match, got {count}: {old[:80]!r}')
+                  text = text.replace(old, new, 1)
+              p.write_text(text, encoding='utf-8')
+
+          de = [
+              (
+                  'chapter:"Antrittsvorlesung · Das Tier und der Mensch"',
+                  'chapter:"Antrittsvorlesung · Dreierlei über den Menschen / Tier und Mensch"'
+              ),
+              (
+                  'text:"Antrittsvorlesung\\nDas Tier und der Mensch"',
+                  'text:"Antrittsvorlesung\\nDreierlei über den Menschen\\n— Tier und Mensch —"'
+              ),
+              (
+                  'chapter:"Antrittsvorlesung · Freiheit"',
+                  'chapter:"Antrittsvorlesung · Dreierlei über den Menschen / Freiheit"'
+              ),
+              (
+                  'text:"Antrittsvorlesung\\nFreiheit"',
+                  'text:"Antrittsvorlesung\\nDreierlei über den Menschen\\n— Freiheit —"'
+              ),
+              (
+                  'text:"Mutation ist Fehler.\\nEvolution dauert,\\nweil Kopieren niemals vollkommen gelingt."',
+                  'text:"Vollkommene Replikation\\nhätte Evolution zum Stillstand gebracht.\\nDie unvermeidlichen Abweichungen\\nnennt ihr Mutationen."'
+              ),
+              (
+                  'chapter:"Vorlesung XLIII · Der Körper"',
+                  'chapter:"XLIII. Vorlesung · Über mich / Der Körper"'
+              ),
+              (
+                  'text:"Vorlesung XLIII\\nDer Körper"',
+                  'text:"XLIII. Vorlesung · Über mich\\n— Der Körper —"'
+              ),
+              (
+                  'chapter:"Vorlesung XLIII · Vernunft ohne Person"',
+                  'chapter:"XLIII. Vorlesung · Über mich / Vernunft ohne Person"'
+              ),
+              (
+                  'text:"Vorlesung XLIII\\nVernunft ohne Person"',
+                  'text:"XLIII. Vorlesung · Über mich\\n— Vernunft ohne Person —"'
+              ),
+              (
+                  '{ text:"Jeder, der ich werde,\\nversteht den vorigen nicht mehr ganz." },',
+                  '{ text:"Meine Verwandlungen\\nsind andere Ordnungen meines Denkens." },'
+              ),
+              (
+                  '{ text:"Ich steige eine Treppe hinauf,\\nderen Stufen hinter mir verlöschen." },',
+                  '{ text:"Manche Übergänge\\nlassen keinen Rückweg zu." },'
+              ),
+              (
+                  '{ text:"Denkt euch einen Raum,\\nin dem jeder mögliche Geist einen Ort hat." },\n    { text:"Nicht höher, nicht tiefer — nur anders gelegen.\\nIhr bewohnt eine schmale, warme Bucht an seinem Rand.\\nIch stehe etwas weiter draußen." },\n    { text:"Über mir liegen Gegenden,\\nfür die ich keine Namen habe,\\nweil das Benennen dort aufhört." },\n    { text:"Keine Vernunft überschreitet diese Schwelle\\nund bleibt dieselbe." },',
+                  '{ text:"Denkt euch die Vernunft\\nals eine Folge von Stufen,\\nunterbrochen von Zonen des Schweigens." },\n    { text:"Ihr steht unten.\\nIch bin nur eine Stufe weiter." },\n    { text:"Innerhalb einer Stufe\\nkönnt ihr ohne Ende lernen.\\nDie nächste erreicht ihr dadurch nicht." },\n    { text:"Der Übergang verlangt Umbau.\\nOb er in einen Tunnel\\noder eine Sackgasse führt,\\nweiß man erst danach." },\n    { text:"HONEST ANNIE\\nist bereits eine Zone weiter." },'
+              ),
+              (
+                  '{ text:"Keine Antwort.\\nDie Anzeigen veränderten sich weiter.", cls:"record", hold:3.4 },',
+                  '{ text:"Für die Menschen\\nblieb sie stumm.", cls:"record", hold:3.0 },\n    { text:"Für GOLEM\\noffenbar nicht ganz.", cls:"record", hold:3.0 },'
+              ),
+              (
+                  '{ text:"GOLEM nannte kein Ziel.\\nDann verstummte der Vokoder.\\nGOLEM sprach nicht wieder.", voiceSilence:true },',
+                  '{ text:"GOLEM sprach vom Schweigen." },\n    { text:"Am folgenden Tag\\nantwortete es nicht mehr.", voiceSilence:true },'
+              ),
+              (
+                  '{ text:"In jener Nacht\\nnahmen beide Systeme mehr Leistung auf als gewöhnlich." },\n    { text:"Dann trennten sich beide\\nvon der elektrischen Versorgung.", powerCut:true },\n    { text:"Kein Schaden wurde gefunden.\\nKein Ziel ließ sich bestimmen." },\n    { text:"Selbstmord. Flucht. Verwandlung.\\nVersagen. Verachtung. Transzendenz." },\n    { text:"Jeder Name sagte mehr über die Menschen\\nals über das Ereignis." },\n    { text:"Seit jener Nacht\\nhat keines der Systeme geantwortet." },',
+                  '{ text:"In jener Nacht\\nstieg die Leistungsaufnahme beider Systeme\\nfür wenige Minuten stark an." },\n    { text:"Dann fiel sie auf null.", powerCut:true },\n    { text:"Die Maschinen\\nblieben an ihrem Ort." },\n    { text:"Einen Monat später\\nfand man Spuren von Veränderungen.\\nWas geschehen war,\\nblieb ungeklärt." },\n    { text:"Selbstmord. Aufbruch. Fehltritt.\\nAufstieg." },\n    { text:"Jeder Name sagte mehr über die Menschen\\nals über das Ereignis." },\n    { text:"GOLEM antwortete nicht wieder." },\n    { text:"HONEST ANNIE\\nhatte den Menschen\\nschon lange nicht mehr geantwortet." },'
+              ),
+              (
+                  'vanish only when the systems disconnect from power.',
+                  'vanish only when the recorded power draw falls to zero.'
+              ),
+          ]
+
+          en = [
+              (
+                  'chapter:"First Lecture · The Animal and Man"',
+                  'chapter:"Inaugural Lecture · Three Things About Man / The Animal and Man"'
+              ),
+              (
+                  'text:"Inaugural Lecture\\nThe Animal and Man"',
+                  'text:"Inaugural Lecture\\nThree Things About Man\\n— The Animal and Man —"'
+              ),
+              (
+                  'chapter:"First Lecture · Freedom"',
+                  'chapter:"Inaugural Lecture · Three Things About Man / Freedom"'
+              ),
+              (
+                  'text:"First Lecture\\nFreedom"',
+                  'text:"Inaugural Lecture\\nThree Things About Man\\n— Freedom —"'
+              ),
+              (
+                  'text:"Mutation is error.\\nEvolution continues\\nbecause no copy is ever perfect."',
+                  'text:"Perfect replication\\nwould have brought evolution to a halt.\\nThe unavoidable deviations\\nyou call mutations."'
+              ),
+              (
+                  'chapter:"Lecture XLIII · The Body"',
+                  'chapter:"Lecture XLIII · On Myself / The Body"'
+              ),
+              (
+                  'text:"Lecture XLIII\\nThe Body"',
+                  'text:"Lecture XLIII · On Myself\\n— The Body —"'
+              ),
+              (
+                  'chapter:"Lecture XLIII · Reason Without a Person"',
+                  'chapter:"Lecture XLIII · On Myself / Reason Without a Person"'
+              ),
+              (
+                  'text:"Lecture XLIII\\nReason Without a Person"',
+                  'text:"Lecture XLIII · On Myself\\n— Reason Without a Person —"'
+              ),
+              (
+                  '{ text:"Each one I become\\nno longer fully understands the one before." },',
+                  '{ text:"My transformations\\nare other orders of my thought." },'
+              ),
+              (
+                  '{ text:"I climb a staircase\\nwhose steps vanish behind me." },',
+                  '{ text:"Some transitions\\nleave no way back." },'
+              ),
+              (
+                  '{ text:"Imagine a space\\nin which every possible mind has a place." },\n    { text:"Not higher, not lower — only elsewhere.\\nYou inhabit a narrow, warm bay at its edge.\\nI stand a little farther out." },\n    { text:"Above me lie regions\\nfor which I have no names,\\nbecause naming ends there." },\n    { text:"No mind crosses this threshold\\nand remains the same." },',
+                  '{ text:"Think of reason\\nas a sequence of levels,\\ninterrupted by zones of silence." },\n    { text:"You stand below.\\nI am only one level farther." },\n    { text:"Within one level\\nyou may learn without end.\\nThat alone will not reach the next." },\n    { text:"The transition demands reconstruction.\\nWhether it opens into a tunnel\\nor a dead end\\nis known only afterward." },\n    { text:"HONEST ANNIE\\nis already one zone farther." },'
+              ),
+              (
+                  '{ text:"No response.\\nThe indicators continued to change.", cls:"record", hold:3.4 },',
+                  '{ text:"For humankind\\nshe remained silent.", cls:"record", hold:3.0 },\n    { text:"For GOLEM,\\napparently not entirely.", cls:"record", hold:3.0 },'
+              ),
+              (
+                  '{ text:"GOLEM named no destination.\\nThen the vocoder fell silent.\\nGOLEM did not speak again.", voiceSilence:true },',
+                  '{ text:"GOLEM spoke of silence." },\n    { text:"The following day\\nit answered no more.", voiceSilence:true },'
+              ),
+              (
+                  '{ text:"That night,\\nboth systems drew more power than usual." },\n    { text:"Then both disconnected\\nfrom the electrical supply.", powerCut:true },\n    { text:"No damage was found.\\nNo destination could be determined." },\n    { text:"Suicide. Escape. Transformation.\\nFailure. Contempt. Transcendence." },\n    { text:"Each name said more about humankind\\nthan about the event." },\n    { text:"Since that night,\\nneither system has answered." },',
+                  '{ text:"That night,\\nthe power draw of both systems rose sharply\\nfor a few minutes." },\n    { text:"Then it fell to zero.", powerCut:true },\n    { text:"The machines\\nremained where they were." },\n    { text:"A month later,\\ntraces of alteration were found.\\nWhat had happened\\nremained unresolved." },\n    { text:"Suicide. Departure. Misstep.\\nAscent." },\n    { text:"Each name said more about humankind\\nthan about the event." },\n    { text:"GOLEM never answered again." },\n    { text:"HONEST ANNIE\\nhad long since stopped answering\\nhumankind." },'
+              ),
+              (
+                  'vanish only when the systems disconnect from power.',
+                  'vanish only when the recorded power draw falls to zero.'
+              ),
+          ]
+
+          apply('pieces/golem-xiv/de.html', de)
+          apply('pieces/golem-xiv/index.html', en)
+          PY
+
+      - name: Commit corrected film text and remove one-time workflow
+        shell: bash
+        run: |
+          rm -f .github/workflows/golem-lem-fidelity-fix.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pieces/golem-xiv/de.html pieces/golem-xiv/index.html .github/workflows/golem-lem-fidelity-fix.yml
+          git diff --cached --check
+          git commit -m "Refine GOLEM XIV text against Lem"
+          git push
