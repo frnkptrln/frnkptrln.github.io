@@ -400,14 +400,27 @@
     display: grid;
     min-height: clamp(27rem, 49vw, 39rem);
     overflow: hidden;
-    padding: clamp(1.4rem, 3vw, 2.5rem);
-    background: #c9c5bb;
-    color: #16151a;
+    padding: clamp(2rem, 5vw, 4.5rem);
+    background:
+        radial-gradient(circle at 50% 45%, rgba(222, 214, 198, 0.055), transparent 25rem),
+        #090a09;
     font-family: var(--font-mono);
+    grid-template-rows: minmax(0, 1fr);
+    place-items: stretch center;
+    text-decoration: none;
+}
+
+.report-sheet {
+    display: grid;
+    width: min(100%, 42rem);
+    padding: clamp(1.25rem, 2.8vw, 2.4rem);
+    border: 1px solid rgba(222, 214, 198, 0.22);
+    background: #c9c5bb;
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.42);
+    color: #16151a;
     grid-template-columns: minmax(0, 1fr) minmax(7rem, 0.34fr);
     grid-template-rows: auto auto 1px minmax(0, 1fr) auto;
     gap: 0.75rem 1.35rem;
-    text-decoration: none;
 }
 
 .report-code {
@@ -783,7 +796,11 @@
 
     .nonserviam-figure {
         min-height: 24rem;
-        padding: 1.25rem;
+        padding: 1.5rem;
+    }
+
+    .report-sheet {
+        padding: 1rem;
         grid-template-columns: minmax(0, 1fr) minmax(5.5rem, 0.38fr);
         gap: 0.65rem 0.9rem;
     }
