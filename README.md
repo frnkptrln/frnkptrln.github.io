@@ -60,15 +60,11 @@ Provider and privacy information live under `/legal/`.
 
 ## Publication checklist
 
-Before merging the legal/privacy pass, add a serviceable postal address to
-`legal/index.html`. The address is deliberately not guessed or derived from private
-context. Re-review this checklist whenever analytics, embeds, forms, external fonts or
-other third-party services are introduced.
+Re-review the legal/privacy setup whenever analytics, embeds, forms, external fonts,
+other third-party services, or the hosting setup change.
 
-`GOLEM XIV` and `NON SERVIAM` are original browser works in explicit artistic dialogue
-with Stanisław Lem's works. Their source relationship is intentionally visible in the
-pieces and their descriptions; no claim of endorsement or licensing by the Lem estate
-is made. They are not treated as a release blocker by this technical legal/privacy pass.
+The Lem-related pieces are intentionally presented as artistic works in explicit
+dialogue with Stanisław Lem and clearly identify that source relationship.
 
 ## Local preview
 
