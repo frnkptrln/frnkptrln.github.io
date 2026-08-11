@@ -65,9 +65,10 @@ Before merging the legal/privacy pass, add a serviceable postal address to
 context. Re-review this checklist whenever analytics, embeds, forms, external fonts or
 other third-party services are introduced.
 
-The Lem-derived pieces (`GOLEM XIV` and `NON SERVIAM`) remain a separate copyright and
-licensing review item; the technical privacy pass does not make a legal determination
-about those adaptations.
+`GOLEM XIV` and `NON SERVIAM` are original browser works in explicit artistic dialogue
+with Stanisław Lem's works. Their source relationship is intentionally visible in the
+pieces and their descriptions; no claim of endorsement or licensing by the Lem estate
+is made. They are not treated as a release blocker by this technical legal/privacy pass.
 
 ## Local preview
 
