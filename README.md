@@ -60,8 +60,9 @@ Provider and privacy information live under `/legal/`.
 
 ## Publication checklist
 
-Re-review the legal/privacy setup whenever analytics, embeds, forms, external fonts,
-other third-party services, or the hosting setup change.
+The provider and privacy baseline is complete for the current static setup. Re-review
+it whenever analytics, embeds, forms, external fonts, other third-party services, or
+the hosting setup change.
 
 The Lem-related pieces are intentionally presented as artistic works in explicit
 dialogue with Stanisław Lem and clearly identify that source relationship.
