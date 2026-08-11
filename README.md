@@ -45,6 +45,30 @@ than a conventional portfolio or activity feed.
 - minimal vanilla JavaScript
 - GitHub Pages
 
+## Privacy posture
+
+The site is intentionally static and data-minimal:
+
+- no analytics or advertising trackers
+- no embedded social-media or video iframes
+- no site-set tracking cookies or `localStorage`
+- no remote web-font requests; typography falls back to local/system fonts
+- ordinary outbound links only
+- hosting via GitHub Pages, whose infrastructure logs visitor IP addresses for security
+
+Provider and privacy information live under `/legal/`.
+
+## Publication checklist
+
+Before merging the legal/privacy pass, add a serviceable postal address to
+`legal/index.html`. The address is deliberately not guessed or derived from private
+context. Re-review this checklist whenever analytics, embeds, forms, external fonts or
+other third-party services are introduced.
+
+The Lem-derived pieces (`GOLEM XIV` and `NON SERVIAM`) remain a separate copyright and
+licensing review item; the technical privacy pass does not make a legal determination
+about those adaptations.
+
 ## Local preview
 
 ```bash
