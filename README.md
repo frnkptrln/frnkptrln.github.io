@@ -45,6 +45,28 @@ than a conventional portfolio or activity feed.
 - minimal vanilla JavaScript
 - GitHub Pages
 
+## Privacy posture
+
+The site is intentionally static and data-minimal:
+
+- no analytics or advertising trackers
+- no embedded social-media or video iframes
+- no site-set tracking cookies or `localStorage`
+- no remote web-font requests; typography falls back to local/system fonts
+- ordinary outbound links only
+- hosting via GitHub Pages, whose infrastructure logs visitor IP addresses for security
+
+Provider and privacy information live under `/legal/`.
+
+## Publication checklist
+
+The provider and privacy baseline is complete for the current static setup. Re-review
+it whenever analytics, embeds, forms, external fonts, other third-party services, or
+the hosting setup change.
+
+The Lem-related pieces are intentionally presented as artistic works in explicit
+dialogue with Stanisław Lem and clearly identify that source relationship.
+
 ## Local preview
 
 ```bash
