@@ -38,6 +38,20 @@ remains the open workshop in
 The site is personally signed, but work-first: a place to enter the projects rather
 than a conventional portfolio or activity feed.
 
+## Research reproducibility
+
+The Experiments door also links to two bounded artifacts from the August 2026
+Digital Minds Research Sprint:
+
+- [J-Lens × NSD RSA](https://github.com/frnkptrln/jlens-model-brain-rsa) —
+  a targeted model–brain representational-similarity experiment;
+- [Triage × Persona Measurement Audit](https://github.com/frnkptrln/triage-persona-measurement-audit) —
+  a multi-model audit of persona, wording, response format, option order, and
+  schema compatibility.
+
+These links point to reproducibility repositories. The papers themselves remain
+separate from the code repositories.
+
 ## Stack
 
 - semantic HTML
