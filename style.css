@@ -450,6 +450,7 @@ main,
     color: var(--fg-dim);
     font: inherit;
     opacity: 0.65;
+    text-align: right;
 }
 
 .site-footer {
