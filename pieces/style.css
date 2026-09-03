@@ -532,117 +532,132 @@
 .wil-player {
     position: relative;
     display: grid;
-    min-height: clamp(22rem, 40vw, 34rem);
+    min-height: clamp(27rem, 49vw, 39rem);
     overflow: hidden;
     border-right: 1px solid var(--line);
     background: #070807;
 }
 
 .wil-figure {
-    padding: clamp(1.5rem, 4vw, 3.5rem);
+    place-items: center;
     background:
-        linear-gradient(90deg, transparent 49.5%, rgba(222, 214, 198, 0.05) 50%, transparent 50.5%),
-        radial-gradient(circle at 50% 50%, rgba(222, 214, 198, 0.045), transparent 24rem),
-        #070807;
+        radial-gradient(ellipse at 50% 42%, rgba(222, 214, 198, 0.07), transparent 38%),
+        linear-gradient(180deg, #08090a, #060706 60%, #050605);
     color: var(--piece-bone);
     font-family: var(--font-mono);
-    grid-template-rows: minmax(0, 1fr) auto;
     text-decoration: none;
 }
 
-.wil-score {
-    display: grid;
-    width: min(100%, 38rem);
-    align-content: center;
-    justify-self: center;
-    grid-template-columns: 3.2rem minmax(0, 1fr) auto;
-    row-gap: clamp(0.8rem, 2vw, 1.3rem);
-    padding: clamp(1.25rem, 2.8vw, 2.2rem);
-    border: 1px solid var(--line-bright);
-    background: rgba(11, 12, 11, 0.86);
-}
-
-.wil-score > span {
-    display: contents;
-}
-
-.wil-code {
-    color: var(--fg-dim);
-    font-size: clamp(0.48rem, 0.8vw, 0.62rem);
-    letter-spacing: 0.13em;
-}
-
-.wil-score .wil-code,
-.wil-score .wil-rule {
-    display: block;
-    grid-column: 1 / -1;
-}
-
-.wil-score .wil-code {
-    margin-bottom: 0.4rem;
-}
-
-.wil-row i {
-    align-self: center;
-    color: var(--piece-bone);
-    font-size: clamp(0.62rem, 1vw, 0.74rem);
-    font-style: normal;
-    letter-spacing: 0.08em;
-}
-
-.wil-row em {
-    display: flex;
-    min-width: 0;
-    align-items: center;
-    gap: 0.75rem;
-    color: var(--fg-soft);
-    font-size: clamp(0.52rem, 0.9vw, 0.68rem);
-    font-style: normal;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-
-.wil-row em::after {
-    height: 1px;
-    flex: 1;
-    min-width: 1.5rem;
-    background: var(--line-bright);
+.wil-figure::before,
+.wil-figure::after {
+    position: absolute;
+    background: rgba(222, 214, 198, 0.07);
     content: "";
 }
 
-.wil-row b {
-    align-self: center;
-    padding-left: 0.75rem;
-    color: var(--fg-dim);
-    font-size: clamp(0.52rem, 0.9vw, 0.68rem);
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    font-variant-numeric: tabular-nums;
-}
-
-.wil-rule {
+.wil-figure::before {
+    top: 50%;
+    right: 0;
+    left: 0;
     height: 1px;
-    background: var(--line-bright);
 }
 
-.wil-last i,
-.wil-last b {
-    color: var(--warm);
+.wil-figure::after {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
 }
 
-.wil-last em {
-    color: var(--piece-bone);
+.wil-signal {
+    position: absolute;
+    z-index: 2;
+    top: 1.3rem;
+    left: 1.3rem;
+    color: rgba(222, 214, 198, 0.38);
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
 }
 
-.wil-last em::after {
-    background: rgba(228, 165, 118, 0.45);
+.wil-voice {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(46%, 21rem);
+    aspect-ratio: 1;
+    border: 1px solid;
+    border-radius: 50%;
+}
+
+.wil-voice-claude {
+    border-color: rgba(242, 176, 75, 0.55);
+    background: radial-gradient(circle, rgba(242, 176, 75, 0.14), rgba(242, 176, 75, 0.03) 70%, transparent 71%);
+    box-shadow: 0 0 4rem rgba(242, 176, 75, 0.08);
+    transform: translate(-72%, -50%);
+    animation: voice-a 18s ease-in-out infinite;
+}
+
+.wil-voice-sol {
+    border-color: rgba(143, 185, 204, 0.55);
+    background: radial-gradient(circle, rgba(143, 185, 204, 0.14), rgba(143, 185, 204, 0.03) 70%, transparent 71%);
+    box-shadow: 0 0 4rem rgba(143, 185, 204, 0.08);
+    transform: translate(-28%, -50%);
+    animation: voice-b 18s ease-in-out infinite;
+}
+
+.wil-mark {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    width: min(88%, 30rem);
+    justify-items: center;
+    gap: 1.4rem;
+}
+
+.wil-name {
+    color: #f3ece0;
+    font-size: clamp(1.05rem, 2.4vw, 1.9rem);
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-align: center;
+    text-indent: 0.3em;
+    text-shadow: 0 0 2rem rgba(0, 0, 0, 0.95);
+}
+
+.wil-strip {
+    display: flex;
+    width: 100%;
+    height: 5px;
+    gap: 3px;
+}
+
+.wil-strip i {
+    display: block;
+    height: 100%;
+    background: var(--piece-gold);
+}
+
+.wil-strip i:nth-child(1) { flex: 31; }
+.wil-strip i:nth-child(2) { flex: 39; background: var(--piece-blue); }
+.wil-strip i:nth-child(3) { flex: 72; }
+.wil-strip i:nth-child(4) { flex: 147; background: var(--piece-blue); }
+.wil-strip i:nth-child(5) { flex: 163; }
+
+.wil-strip i:nth-child(6) {
+    flex: 37;
+    border: 1px solid var(--warm);
+    background: transparent;
 }
 
 .wil-play {
+    position: absolute;
+    z-index: 2;
+    right: clamp(1.25rem, 3vw, 2.5rem);
+    bottom: clamp(1.25rem, 3vw, 2.5rem);
+    left: clamp(1.25rem, 3vw, 2.5rem);
     display: flex;
     align-items: baseline;
     gap: 0.9rem;
-    padding-top: clamp(1.25rem, 2.5vw, 2rem);
     color: var(--fg-soft);
     font-size: 0.66rem;
     letter-spacing: 0.06em;
@@ -904,6 +919,18 @@
     }
 }
 
+@keyframes voice-a {
+    50% {
+        transform: translate(-64%, -50%);
+    }
+}
+
+@keyframes voice-b {
+    50% {
+        transform: translate(-36%, -50%);
+    }
+}
+
 @media (max-width: 1000px) {
     .golem-piece {
         grid-template-columns: 1fr;
@@ -1035,13 +1062,17 @@
     }
 
     .wil-figure {
-        min-height: 20rem;
-        padding: 1.25rem;
+        min-height: 22rem;
     }
 
-    .wil-score {
-        padding: 1rem;
-        grid-template-columns: 2.4rem minmax(0, 1fr) auto;
+    .wil-voice {
+        width: 58%;
+    }
+
+    .wil-name {
+        font-size: clamp(0.9rem, 5vw, 1.2rem);
+        letter-spacing: 0.22em;
+        text-indent: 0.22em;
     }
 
     .wil-play {
@@ -1077,7 +1108,8 @@
         transform: none;
     }
 
-    .golem-orbit {
+    .golem-orbit,
+    .wil-voice {
         animation: none;
     }
 }
