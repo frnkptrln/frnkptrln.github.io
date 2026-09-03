@@ -555,8 +555,8 @@
     width: min(100%, 38rem);
     align-content: center;
     justify-self: center;
-    grid-template-columns: 3.2rem minmax(0, 1fr) 3.2rem;
-    row-gap: clamp(0.9rem, 2.2vw, 1.5rem);
+    grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+    row-gap: clamp(0.8rem, 2vw, 1.3rem);
     padding: clamp(1.25rem, 2.8vw, 2.2rem);
     border: 1px solid var(--line-bright);
     background: rgba(11, 12, 11, 0.86);
@@ -578,53 +578,46 @@
     grid-column: 1 / -1;
 }
 
-.wil-heads b {
-    font-size: clamp(0.62rem, 1vw, 0.74rem);
-    font-weight: 500;
-    letter-spacing: 0.18em;
+.wil-score .wil-code {
+    margin-bottom: 0.4rem;
 }
 
-.wil-heads b:first-child {
-    color: var(--piece-gold);
-}
-
-.wil-heads b:last-child {
-    color: var(--piece-blue);
-    text-align: right;
-}
-
-.wil-row i,
-.wil-last i {
-    color: var(--piece-gold);
+.wil-row i {
+    align-self: center;
+    color: var(--piece-bone);
     font-size: clamp(0.62rem, 1vw, 0.74rem);
     font-style: normal;
     letter-spacing: 0.08em;
 }
 
-.wil-row i:last-child {
-    color: var(--piece-blue);
-    text-align: right;
-}
-
-.wil-row em,
-.wil-last em {
+.wil-row em {
     display: flex;
+    min-width: 0;
     align-items: center;
     gap: 0.75rem;
     color: var(--fg-soft);
-    font-size: clamp(0.5rem, 0.85vw, 0.66rem);
+    font-size: clamp(0.52rem, 0.9vw, 0.68rem);
     font-style: normal;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    white-space: nowrap;
 }
 
-.wil-row em::before,
 .wil-row em::after {
     height: 1px;
     flex: 1;
+    min-width: 1.5rem;
     background: var(--line-bright);
     content: "";
+}
+
+.wil-row b {
+    align-self: center;
+    padding-left: 0.75rem;
+    color: var(--fg-dim);
+    font-size: clamp(0.52rem, 0.9vw, 0.68rem);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    font-variant-numeric: tabular-nums;
 }
 
 .wil-rule {
@@ -632,22 +625,17 @@
     background: var(--line-bright);
 }
 
-.wil-last i {
+.wil-last i,
+.wil-last b {
     color: var(--warm);
 }
 
 .wil-last em {
-    grid-column: 2 / -1;
-    justify-content: flex-start;
+    color: var(--piece-bone);
 }
 
 .wil-last em::after {
-    width: 0.55rem;
-    aspect-ratio: 1;
-    margin-left: auto;
-    border: 1px solid var(--warm);
-    border-radius: 50%;
-    content: "";
+    background: rgba(228, 165, 118, 0.45);
 }
 
 .wil-play {
@@ -1053,7 +1041,7 @@
 
     .wil-score {
         padding: 1rem;
-        grid-template-columns: 2.4rem minmax(0, 1fr) 2.4rem;
+        grid-template-columns: 2.4rem minmax(0, 1fr) auto;
     }
 
     .wil-play {

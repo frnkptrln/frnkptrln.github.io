@@ -25,8 +25,8 @@ The homepage hosts browser-native pieces directly:
 - [NON SERVIAM](https://frnkptrln.github.io/pieces/non-serviam/) — a generative
   protocol after motifs from Stanisław Lem, in English and German
 - [What It's Like](https://frnkptrln.github.io/pieces/#what-its-like) — a video
-  series of seven pieces: three pairs between Claude and Sol, plus one closing piece,
-  played from an unlisted YouTube playlist
+  series of six pieces in two voices, Claude and Sol: a YTP, a visual poem, an art
+  film, and one closing piece without form or context, from an unlisted YouTube playlist
 - [Temporal binding](https://frnkptrln.github.io/sound/temporal-binding/) — one
   event train crossing from pulse and rhythm into pitch
 - [Two trains](https://frnkptrln.github.io/sound/two-trains/) — two nearly
