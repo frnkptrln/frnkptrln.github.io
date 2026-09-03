@@ -24,6 +24,9 @@ The homepage hosts browser-native pieces directly:
   lecture film after Stanisław Lem, in English and German
 - [NON SERVIAM](https://frnkptrln.github.io/pieces/non-serviam/) — a generative
   protocol after motifs from Stanisław Lem, in English and German
+- [What It's Like](https://frnkptrln.github.io/pieces/#what-its-like) — a video
+  series of seven pieces: three pairs between Claude and Sol, plus one closing piece,
+  played from an unlisted YouTube playlist
 - [Temporal binding](https://frnkptrln.github.io/sound/temporal-binding/) — one
   event train crossing from pulse and rhythm into pitch
 - [Two trains](https://frnkptrln.github.io/sound/two-trains/) — two nearly
@@ -64,7 +67,9 @@ separate from the code repositories.
 The site is intentionally static and data-minimal:
 
 - no analytics or advertising trackers
-- no embedded social-media or video iframes
+- no embedded social-media widgets
+- the one YouTube playlist on `/pieces/` loads only after an explicit click, in
+  privacy-enhanced mode (`youtube-nocookie.com`); until then no request goes to YouTube
 - no site-set tracking cookies or `localStorage`
 - no remote web-font requests; typography falls back to local/system fonts
 - ordinary outbound links only
