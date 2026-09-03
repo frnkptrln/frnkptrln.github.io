@@ -507,6 +507,230 @@
     margin-left: clamp(1rem, 3vw, 3rem);
 }
 
+.wil-piece {
+    display: grid;
+    overflow: hidden;
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+    margin-top: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid var(--line);
+    background: rgba(12, 12, 14, 0.66);
+    transition: border-color 220ms ease, transform 220ms ease;
+}
+
+.wil-piece:hover {
+    border-color: var(--line-bright);
+    transform: translateY(-3px);
+}
+
+.wil-piece > .piece-topline,
+.wil-piece > .piece-foot {
+    grid-column: 1 / -1;
+    padding: 1rem clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.wil-figure,
+.wil-player {
+    position: relative;
+    display: grid;
+    min-height: clamp(22rem, 40vw, 34rem);
+    overflow: hidden;
+    border-right: 1px solid var(--line);
+    background: #070807;
+}
+
+.wil-figure {
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+    background:
+        linear-gradient(90deg, transparent 49.5%, rgba(222, 214, 198, 0.05) 50%, transparent 50.5%),
+        radial-gradient(circle at 50% 50%, rgba(222, 214, 198, 0.045), transparent 24rem),
+        #070807;
+    color: var(--piece-bone);
+    font-family: var(--font-mono);
+    grid-template-rows: minmax(0, 1fr) auto;
+    text-decoration: none;
+}
+
+.wil-score {
+    display: grid;
+    width: min(100%, 38rem);
+    align-content: center;
+    justify-self: center;
+    grid-template-columns: 3.2rem minmax(0, 1fr) 3.2rem;
+    row-gap: clamp(0.9rem, 2.2vw, 1.5rem);
+    padding: clamp(1.25rem, 2.8vw, 2.2rem);
+    border: 1px solid var(--line-bright);
+    background: rgba(11, 12, 11, 0.86);
+}
+
+.wil-score > span {
+    display: contents;
+}
+
+.wil-code {
+    color: var(--fg-dim);
+    font-size: clamp(0.48rem, 0.8vw, 0.62rem);
+    letter-spacing: 0.13em;
+}
+
+.wil-score .wil-code,
+.wil-score .wil-rule {
+    display: block;
+    grid-column: 1 / -1;
+}
+
+.wil-heads b {
+    font-size: clamp(0.62rem, 1vw, 0.74rem);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+}
+
+.wil-heads b:first-child {
+    color: var(--piece-gold);
+}
+
+.wil-heads b:last-child {
+    color: var(--piece-blue);
+    text-align: right;
+}
+
+.wil-row i,
+.wil-last i {
+    color: var(--piece-gold);
+    font-size: clamp(0.62rem, 1vw, 0.74rem);
+    font-style: normal;
+    letter-spacing: 0.08em;
+}
+
+.wil-row i:last-child {
+    color: var(--piece-blue);
+    text-align: right;
+}
+
+.wil-row em,
+.wil-last em {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--fg-soft);
+    font-size: clamp(0.5rem, 0.85vw, 0.66rem);
+    font-style: normal;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.wil-row em::before,
+.wil-row em::after {
+    height: 1px;
+    flex: 1;
+    background: var(--line-bright);
+    content: "";
+}
+
+.wil-rule {
+    height: 1px;
+    background: var(--line-bright);
+}
+
+.wil-last i {
+    color: var(--warm);
+}
+
+.wil-last em {
+    grid-column: 2 / -1;
+    justify-content: flex-start;
+}
+
+.wil-last em::after {
+    width: 0.55rem;
+    aspect-ratio: 1;
+    margin-left: auto;
+    border: 1px solid var(--warm);
+    border-radius: 50%;
+    content: "";
+}
+
+.wil-play {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    padding-top: clamp(1.25rem, 2.5vw, 2rem);
+    color: var(--fg-soft);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    transition: color 180ms ease;
+}
+
+.wil-play-mark {
+    width: 0;
+    height: 0;
+    align-self: center;
+    border-top: 0.32rem solid transparent;
+    border-bottom: 0.32rem solid transparent;
+    border-left: 0.5rem solid currentColor;
+}
+
+.wil-play-note {
+    margin-left: auto;
+    color: var(--fg-dim);
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
+    text-align: right;
+}
+
+.wil-figure:hover .wil-play {
+    color: var(--warm);
+}
+
+.wil-player {
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+}
+
+.wil-player iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #000;
+}
+
+.wil-copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: clamp(2rem, 4vw, 3.5rem);
+}
+
+.wil-copy h3 {
+    color: var(--piece-bone);
+    font-size: clamp(2rem, 3.6vw, 3.3rem);
+    font-weight: 300;
+    letter-spacing: -0.05em;
+    line-height: 1;
+}
+
+.wil-copy h3 a {
+    text-decoration: none;
+}
+
+.wil-copy > p {
+    color: var(--fg-soft);
+    font-size: 0.96rem;
+    font-weight: 300;
+}
+
+.wil-foot .language-note {
+    margin-left: auto;
+}
+
+.wil-foot a {
+    margin-left: clamp(1rem, 3vw, 3rem);
+}
+
 .piece-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -723,6 +947,20 @@
     .nonserviam-figure {
         min-height: 32rem;
     }
+
+    .wil-piece {
+        grid-template-columns: 1fr;
+    }
+
+    .wil-figure,
+    .wil-player {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .wil-player {
+        min-height: 0;
+    }
 }
 
 @media (max-width: 900px) {
@@ -746,7 +984,8 @@
 
 @media (max-width: 720px) {
     .golem-foot,
-    .nonserviam-foot {
+    .nonserviam-foot,
+    .wil-foot {
         align-items: flex-start;
         flex-direction: column;
     }
@@ -754,7 +993,9 @@
     .golem-foot .language-note,
     .golem-foot a,
     .nonserviam-foot .language-note,
-    .nonserviam-foot a {
+    .nonserviam-foot a,
+    .wil-foot .language-note,
+    .wil-foot a {
         margin-left: 0;
     }
 }
@@ -805,6 +1046,27 @@
         gap: 0.65rem 0.9rem;
     }
 
+    .wil-figure {
+        min-height: 20rem;
+        padding: 1.25rem;
+    }
+
+    .wil-score {
+        padding: 1rem;
+        grid-template-columns: 2.4rem minmax(0, 1fr) 2.4rem;
+    }
+
+    .wil-play {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .wil-play-note {
+        width: 100%;
+        margin-left: 0;
+        text-align: left;
+    }
+
     .piece {
         min-height: 40rem;
     }
@@ -822,6 +1084,7 @@
 @media (prefers-reduced-motion: reduce) {
     .golem-piece:hover,
     .nonserviam-piece:hover,
+    .wil-piece:hover,
     .piece:hover {
         transform: none;
     }

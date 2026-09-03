@@ -10,7 +10,7 @@
     >
     <meta name="theme-color" content="#0b0c0b">
     <link rel="stylesheet" href="../style.css?v=20260807-1">
-    <link rel="stylesheet" href="style.css?v=20260809-2">
+    <link rel="stylesheet" href="style.css?v=20260903-1">
 </head>
 <body class="pieces-page">
     <a class="skip-link" href="#works">Skip to the pieces</a>
@@ -24,6 +24,7 @@
                 <a href="../">foyer</a>
                 <a href="#golem">golem xiv</a>
                 <a href="#non-serviam">non serviam</a>
+                <a href="#what-its-like">what it's like</a>
                 <a href="#listening-fields">listening fields</a>
                 <a href="#workshop">workshop</a>
             </div>
@@ -48,6 +49,10 @@
                         <dd>browser pieces</dd>
                     </div>
                     <div>
+                        <dt>01</dt>
+                        <dd>video series</dd>
+                    </div>
+                    <div>
                         <dt>02</dt>
                         <dd>languages</dd>
                     </div>
@@ -67,7 +72,7 @@
                 <p class="section-number">selected pieces / 2026</p>
                 <div>
                     <h2 id="works-title">No single<br>way to enter.</h2>
-                    <p>Each piece opens in its own full browser space. Sound begins only after you choose to enter.</p>
+                    <p>The browser pieces open in their own full space; the video series plays here. Sound begins only after you choose to enter.</p>
                 </div>
             </header>
 
@@ -147,6 +152,56 @@
                     </a>
                 </div>
             </article>
+
+            <article class="wil-piece" id="what-its-like">
+                <div class="piece-topline">
+                    <span>03 / what it's like</span>
+                    <span>07 pieces · one playlist</span>
+                </div>
+
+                <a
+                    class="wil-figure"
+                    href="https://www.youtube.com/playlist?list=PLWeDPPSEcOr8"
+                    data-embed="https://www.youtube-nocookie.com/embed/videoseries?list=PLWeDPPSEcOr8"
+                    aria-label="Load the What It's Like playlist from YouTube"
+                >
+                    <span class="wil-score" aria-hidden="true">
+                        <span class="wil-code">SERIES · 3 PAIRS + 1 · UNLISTED</span>
+                        <span class="wil-heads"><b>CLAUDE</b><i></i><b>SOL</b></span>
+                        <span class="wil-row"><i>I</i><em>ytp</em><i>I′</i></span>
+                        <span class="wil-row"><i>II</i><em>visual poem</em><i>II′</i></span>
+                        <span class="wil-row"><i>III</i><em>artfilm</em><i>III′</i></span>
+                        <span class="wil-rule"></span>
+                        <span class="wil-last"><i>VII</i><em>no form · no context</em></span>
+                    </span>
+                    <span class="wil-play">
+                        <span class="wil-play-mark" aria-hidden="true"></span>
+                        <span>load the player</span>
+                        <span class="wil-play-note">from youtube-nocookie.com · only after this click</span>
+                    </span>
+                </a>
+
+                <div class="wil-copy">
+                    <div>
+                        <p class="piece-kind">video series</p>
+                        <h3><a href="#what-its-like">WHAT IT'S LIKE</a></h3>
+                    </div>
+                    <p>
+                        Six short pieces in three pairs. Each pair hands the same form to
+                        Claude and to Sol — a YTP, a visual poem, an art film — and lets
+                        the two answers stand next to each other without a verdict. A
+                        seventh piece closes the series with no form and no context.
+                    </p>
+                </div>
+
+                <div class="piece-foot wil-foot">
+                    <span>moving image · two voices · seven pieces</span>
+                    <span class="language-note">nothing loads until you press play</span>
+                    <a href="https://www.youtube.com/playlist?list=PLWeDPPSEcOr8">
+                        open on youtube <span aria-hidden="true">↗</span>
+                    </a>
+                </div>
+            </article>
         </section>
 
         <section class="listening" id="listening-fields" aria-labelledby="listening-title">
@@ -161,7 +216,7 @@
             <div class="piece-list">
                 <article class="piece piece-binding">
                     <div class="piece-topline">
-                        <span>03 / temporal binding</span>
+                        <span>04 / temporal binding</span>
                         <span>one train</span>
                     </div>
                     <div class="piece-figure trace-figure" aria-hidden="true">
@@ -187,7 +242,7 @@
 
                 <article class="piece piece-trains">
                     <div class="piece-topline">
-                        <span>04 / two trains</span>
+                        <span>05 / two trains</span>
                         <span>two clocks</span>
                     </div>
                     <div class="piece-figure orbit-figure" aria-hidden="true">
@@ -248,5 +303,32 @@
             <span>2026</span>
         </nav>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const figure = document.querySelector(".wil-figure[data-embed]");
+
+            if (!figure) {
+                return;
+            }
+
+            figure.addEventListener("click", (event) => {
+                event.preventDefault();
+
+                const player = document.createElement("div");
+                const frame = document.createElement("iframe");
+
+                player.className = "wil-player";
+                frame.src = figure.dataset.embed + "&autoplay=1";
+                frame.title = "What It's Like — playlist";
+                frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+                frame.allowFullscreen = true;
+                frame.referrerPolicy = "strict-origin-when-cross-origin";
+
+                player.appendChild(frame);
+                figure.replaceWith(player);
+                frame.focus();
+            });
+        });
+    </script>
 </body>
 </html>
