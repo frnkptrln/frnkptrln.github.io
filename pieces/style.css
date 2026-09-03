@@ -645,7 +645,7 @@
 
 .wil-strip i:nth-child(6) {
     flex: 37;
-    border: 1px solid var(--warm);
+    border: 1px solid var(--piece-blue);
     background: transparent;
 }
 

@@ -136,10 +136,8 @@
     border-top: 1px solid var(--line-bright);
 }
 
-.wil-list-last .wil-list-num,
-.wil-list-last .wil-list-time,
 .wil-list-last .wil-list-kind {
-    color: var(--warm);
+    color: var(--piece-blue);
 }
 
 .wil-note {
