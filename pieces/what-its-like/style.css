@@ -70,12 +70,12 @@
     border-right: 0;
 }
 
-.wil-figure-stage {
-    grid-template-rows: minmax(0, 1fr) auto;
+.wil-figure-stage .wil-voice {
+    width: min(34%, 24rem);
 }
 
-.wil-figure-stage .wil-score {
-    width: min(100%, 44rem);
+.wil-figure-stage .wil-mark {
+    width: min(70%, 34rem);
 }
 
 .wil-stage-foot a {
@@ -198,6 +198,14 @@
     .wil-figure-stage {
         aspect-ratio: auto;
         min-height: 22rem;
+    }
+
+    .wil-figure-stage .wil-voice {
+        width: 58%;
+    }
+
+    .wil-figure-stage .wil-mark {
+        width: min(88%, 30rem);
     }
 
     .wil-note {
