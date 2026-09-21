@@ -446,6 +446,10 @@ main,
     color: var(--fg-dim);
 }
 
+.experiment-list a:hover {
+    color: var(--door-accent);
+}
+
 .experiment-list small {
     color: var(--fg-dim);
     font: inherit;
