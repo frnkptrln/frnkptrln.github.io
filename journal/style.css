@@ -16,6 +16,24 @@
     flex-shrink: 0;
 }
 
+.journal-language-switch {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    color: var(--fg);
+    white-space: nowrap;
+}
+
+.journal-language-switch > [aria-hidden="true"] {
+    color: var(--fg-dim);
+}
+
+.journal-language-switch a,
+.entry-meta a {
+    color: var(--blue);
+    text-underline-offset: 0.2em;
+}
+
 .journal-hero {
     padding: clamp(4rem, 9vw, 8rem) 0 clamp(3.5rem, 7vw, 6rem);
 }
