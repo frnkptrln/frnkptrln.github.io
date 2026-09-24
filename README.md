@@ -41,6 +41,8 @@ remains the open workshop in
 The site is personally signed, but work-first: a place to enter the projects rather
 than a conventional portfolio or activity feed.
 
+Signature: `¯\_(ツ)_/¯`
+
 ## Stack
 
 - semantic HTML

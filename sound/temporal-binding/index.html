@@ -201,6 +201,7 @@
 
   function initAudio() {
     ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state !== "running" && ctx.resume) ctx.resume();
     grain = buildGrain();
     const hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 55;
     const lp = ctx.createBiquadFilter(); lp.type = "lowpass";  lp.frequency.value = 7200;
@@ -395,6 +396,12 @@
     setTimeout(() => returnLink.remove(), 900);
   }
   veil.addEventListener("click", begin);
+  function wake() {
+    if (ctx && ctx.state === "suspended" && ctx.resume) ctx.resume();
+  }
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) wake(); });
+  document.addEventListener("pointerdown", wake, { passive: true });
+  document.addEventListener("keydown", wake);
   resize();
   refresh();
   requestAnimationFrame(frame);
