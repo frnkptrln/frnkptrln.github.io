@@ -16,6 +16,12 @@ status or professional category:
 - **Pieces** — browser works across sound, moving image, text, and code
 - **Experiments** — strange tools and executable questions
 
+The **[Journal](https://frnkptrln.github.io/journal/)** adds dated notes and essays
+across research, technology, politics, art, and everyday life. It has its own
+index, article pages, source notes, and [RSS feed](https://frnkptrln.github.io/journal/feed.xml).
+The first essay is in German; each article declares its own language.
+See [journal/README.md](journal/README.md) for the editorial and maintenance workflow.
+
 ## Pieces
 
 The homepage hosts browser-native pieces directly:

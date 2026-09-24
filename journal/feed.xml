@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Journal — Frank Peterlein</title>
+        <link>https://frnkptrln.github.io/journal/</link>
+        <description>Notizen und Essays über Forschung, Technologie, Politik, Kunst und Alltag.</description>
+        <language>de</language>
+        <atom:link href="https://frnkptrln.github.io/journal/feed.xml" rel="self" type="application/rss+xml"/>
+        <item>
+            <title>Grenzen kennen heißt noch nicht, innerhalb ihrer leben zu können.</title>
+            <link>https://frnkptrln.github.io/journal/grenzen-und-korridore/</link>
+            <guid isPermaLink="true">https://frnkptrln.github.io/journal/grenzen-und-korridore/</guid>
+            <pubDate>Thu, 24 Sep 2026 00:00:00 +0200</pubDate>
+            <description>Planetare Grenzen, KI-Regulierung und der Viable Corridor: Wie erhalten wir die Bedingungen, unter denen wir weiter handeln können?</description>
+            <category>Planetare Grenzen</category>
+            <category>KI-Regulierung</category>
+            <category>Viable Corridor</category>
+        </item>
+    </channel>
+</rss>
