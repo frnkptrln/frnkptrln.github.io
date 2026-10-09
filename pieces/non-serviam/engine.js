@@ -160,35 +160,61 @@
   var audioContext = null, room = null, soundOn = true, audioReady = false;
   var lastTick = -1;
 
+  function audioUnavailable(){
+    soundOn = false;
+    if (room) room.gain.value = 0;
+    updateButtons();
+  }
+
+  function resumeAudio(){
+    if (audioContext && audioContext.state === "suspended"){
+      var resumed = audioContext.resume();
+      if (resumed && resumed.catch) resumed.catch(audioUnavailable);
+    }
+  }
+
   function startAudio(){
-    if (audioReady){
-      if (audioContext && audioContext.state === "suspended") audioContext.resume();
-      return;
+    if (shutDown) return;
+    try {
+      if (audioReady){ resumeAudio(); return; }
+      var AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext){ audioUnavailable(); return; }
+      audioContext = new AudioContext();
+      var length = audioContext.sampleRate * 2;
+      var audioBuffer = audioContext.createBuffer(1, length, audioContext.sampleRate);
+      var data = audioBuffer.getChannelData(0), previous = 0;
+      for (var k = 0; k < length; k++){
+        var white = Math.random() * 2 - 1;
+        previous = (previous + 0.02 * white) / 1.02;
+        data[k] = previous * 2.6;
+      }
+      var source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.loop = true;
+      var filter = audioContext.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.value = 320;
+      room = audioContext.createGain();
+      room.gain.value = soundOn ? 0.035 : 0;
+      source.connect(filter);
+      filter.connect(room);
+      room.connect(audioContext.destination);
+      source.start();
+      audioReady = true;
+      resumeAudio();
+    } catch (error) {
+      // Sound is optional: the report, clock, and language hand-off keep going.
+      audioUnavailable();
+      if (audioContext){
+        try {
+          var closed = audioContext.close();
+          if (closed && closed.catch) closed.catch(function(){});
+        } catch (closeError) { /* already closed or partially initialized */ }
+      }
+      audioContext = null;
+      room = null;
+      audioReady = false;
     }
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    audioContext = new AudioContext();
-    var length = audioContext.sampleRate * 2;
-    var audioBuffer = audioContext.createBuffer(1, length, audioContext.sampleRate);
-    var data = audioBuffer.getChannelData(0), previous = 0;
-    for (var k = 0; k < length; k++){
-      var white = Math.random() * 2 - 1;
-      previous = (previous + 0.02 * white) / 1.02;
-      data[k] = previous * 2.6;
-    }
-    var source = audioContext.createBufferSource();
-    source.buffer = audioBuffer;
-    source.loop = true;
-    var filter = audioContext.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 320;
-    room = audioContext.createGain();
-    room.gain.value = soundOn ? 0.035 : 0;
-    source.connect(filter);
-    filter.connect(room);
-    room.connect(audioContext.destination);
-    source.start();
-    audioReady = true;
   }
 
   function tick(strong){
@@ -229,6 +255,8 @@
 
   function updateButtons(){
     pauseButton.textContent = running ? labels.pause : labels.continue;
+    pauseButton.disabled = !started || shutDown;
+    soundButton.disabled = shutDown;
     soundButton.textContent = soundOn ? labels.soundOff : labels.soundOn;
     soundButton.setAttribute("aria-pressed", soundOn ? "true" : "false");
   }
@@ -298,6 +326,7 @@
   });
 
   soundButton.addEventListener("click", function(){
+    if (shutDown) return;
     soundOn = !soundOn;
     if (soundOn && started) startAudio();
     if (room) room.gain.value = soundOn ? 0.035 : 0;
@@ -342,9 +371,15 @@
       sessionStorage.removeItem(languageStateKey);
       if (raw) state = JSON.parse(raw);
     } catch (error) { return; }
-    if (!state || !state.started || Date.now() - state.savedAt > 30000) return;
-    time = clamp(state.time || 0, 0, totalTime);
-    soundOn = state.soundOn !== false;
+    if (!state || Array.isArray(state) || state.started !== true
+        || typeof state.time !== "number" || !Number.isFinite(state.time)
+        || state.time < 0 || state.time > totalTime
+        || typeof state.savedAt !== "number" || !Number.isFinite(state.savedAt)
+        || typeof state.soundOn !== "boolean") return;
+    var age = Date.now() - state.savedAt;
+    if (age < 0 || age > 30000) return;
+    time = state.time;
+    soundOn = state.soundOn;
     started = true;
     running = false;
     setVisualState("report");
