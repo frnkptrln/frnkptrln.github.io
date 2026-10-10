@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Journal — Frank Peterlein</title>
+        <link>https://frnkptrln.github.io/journal/</link>
+        <description>Notes and essays on research, technology, politics, art, and everyday life.</description>
+        <language>en</language>
+        <atom:link href="https://frnkptrln.github.io/journal/feed.xml" rel="self" type="application/rss+xml"/>
+        <item>
+            <title>Knowing the limits does not mean we can live within them.</title>
+            <link>https://frnkptrln.github.io/journal/grenzen-und-korridore/</link>
+            <guid isPermaLink="true">https://frnkptrln.github.io/journal/grenzen-und-korridore/</guid>
+            <pubDate>Thu, 24 Sep 2026 00:00:00 +0200</pubDate>
+            <description>Planetary boundaries, AI regulation, and the Viable Corridor: how do we preserve the conditions that allow us to keep acting?</description>
+            <category>Planetary boundaries</category>
+            <category>AI regulation</category>
+            <category>Viable Corridor</category>
+        </item>
+    </channel>
+</rss>
