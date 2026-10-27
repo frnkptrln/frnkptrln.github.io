@@ -82,3 +82,11 @@ python3 -m http.server 8080
 ```
 
 Then open `http://localhost:8080`.
+
+## License
+
+The site's code (its markup, scripts and stylesheets) is released under the MIT License (`LICENSE`).
+
+The pieces and the sound studies are released under CC BY-NC 4.0 (`LICENSES/CC-BY-NC-4.0.txt`) in whatever form they take, including the code that generates them, and so are the site's texts. The MIT License does not cover them. © 2026 Frank Peterlein.
+
+GOLEM XIV and NON SERVIAM are original works after Stanisław Lem. Lem's titles, names and motifs are referenced, not licensed.
