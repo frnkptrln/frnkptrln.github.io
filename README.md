@@ -34,8 +34,8 @@ The homepage hosts browser-native pieces directly:
   identical clocks turning drift into beating and interval
 
 The films of [Small Machines](https://frnkptrln.github.io/machines/) — *Allein und
-zusammen*, seven films and the single *Säureblumen*, plus a trailer — are shown on
-`/machines/` with their chapters and stills; the films themselves stay on YouTube and the
+zusammen*, seven films plus a trailer — are shown on `/machines/` with their chapters
+and stills; the films themselves stay on YouTube and the
 instruments, scores and film sources in
 [small-machines](https://github.com/frnkptrln/small-machines).
 
@@ -63,7 +63,7 @@ The site is intentionally static and data-minimal:
 
 - no analytics or advertising trackers
 - no embedded social-media widgets
-- the YouTube players — one playlist on `/pieces/what-its-like/`, nine videos on
+- the YouTube players — one playlist on `/pieces/what-its-like/`, eight videos on
   `/machines/` — load only after an explicit click, in privacy-enhanced mode
   (`youtube-nocookie.com`); until then no request goes to YouTube, and the film stills
   on `/machines/` are served from this site
