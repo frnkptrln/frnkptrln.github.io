@@ -341,6 +341,32 @@ main,
     grid-column: span 7;
 }
 
+.threshold-machines {
+    --door-accent: #f2b04b;
+    grid-column: 1 / -1;
+}
+
+@media (min-width: 821px) {
+    .threshold-machines {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.72fr);
+        column-gap: clamp(2rem, 5vw, 5rem);
+    }
+
+    .threshold-machines .threshold-topline {
+        grid-column: 1 / -1;
+    }
+
+    .threshold-machines .threshold-body {
+        padding-bottom: 0;
+    }
+
+    .threshold-machines .film-list {
+        align-self: end;
+        margin-top: clamp(2.25rem, 5vw, 4rem);
+    }
+}
+
 .threshold-topline {
     position: relative;
     z-index: 1;
@@ -426,14 +452,16 @@ main,
     color: var(--door-accent);
 }
 
-.experiment-list {
+.experiment-list,
+.film-list {
     display: grid;
     width: 100%;
     grid-template-columns: 1fr;
     gap: 0;
 }
 
-.experiment-list a {
+.experiment-list a,
+.film-list a {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -446,11 +474,13 @@ main,
     color: var(--fg-dim);
 }
 
-.experiment-list a:hover {
+.experiment-list a:hover,
+.film-list a:hover {
     color: var(--door-accent);
 }
 
-.experiment-list small {
+.experiment-list small,
+.film-list small {
     color: var(--fg-dim);
     font: inherit;
     opacity: 0.65;
@@ -484,7 +514,8 @@ main,
     .threshold-rooms,
     .threshold-pieces,
     .threshold-sound,
-    .threshold-experiments {
+    .threshold-experiments,
+    .threshold-machines {
         grid-column: 1 / -1;
     }
 

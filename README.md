@@ -15,6 +15,7 @@ status or professional category:
 - **Rooms** — `a-house-in-conversation` and related audiovisual work
 - **Pieces** — browser works across sound, moving image, text, and code
 - **Experiments** — strange tools and executable questions
+- **Machines** — Small Machines: browser instruments, records and the films computed from their scores
 
 ## Pieces
 
@@ -31,6 +32,12 @@ The homepage hosts browser-native pieces directly:
   event train crossing from pulse and rhythm into pitch
 - [Two trains](https://frnkptrln.github.io/sound/two-trains/) — two nearly
   identical clocks turning drift into beating and interval
+
+The films of [Small Machines](https://frnkptrln.github.io/machines/) — *Allein und
+zusammen*, seven films and the single *Säureblumen*, plus a trailer — are shown on
+`/machines/` with their chapters and stills; the films themselves stay on YouTube and the
+instruments, scores and film sources in
+[small-machines](https://github.com/frnkptrln/small-machines).
 
 The sound studies remain at their original URLs and are collected as **Listening
 Fields** inside [/pieces/](https://frnkptrln.github.io/pieces/). The old `/sound/`
@@ -56,9 +63,10 @@ The site is intentionally static and data-minimal:
 
 - no analytics or advertising trackers
 - no embedded social-media widgets
-- the one YouTube playlist, on `/pieces/what-its-like/`, loads only after an explicit
-  click, in privacy-enhanced mode (`youtube-nocookie.com`); until then no request goes
-  to YouTube
+- the YouTube players — one playlist on `/pieces/what-its-like/`, nine videos on
+  `/machines/` — load only after an explicit click, in privacy-enhanced mode
+  (`youtube-nocookie.com`); until then no request goes to YouTube, and the film stills
+  on `/machines/` are served from this site
 - no site-set tracking cookies or `localStorage`
 - no remote web-font requests; typography falls back to local/system fonts
 - ordinary outbound links only
