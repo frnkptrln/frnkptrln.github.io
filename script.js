@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "question -> system",
         "question -> room",
         "question -> piece",
+        "question -> machine",
         "¯\\_(ツ)_/¯"
     ];
 
