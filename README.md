@@ -11,7 +11,8 @@ The public foyer for work by Frank Peterlein, hosted at
 The homepage is organized by the forms a thought can take rather than by repository
 status or professional category:
 
-- **Thinking** — the `systems-and-intelligence` notebook and its unfinished questions
+- **Thinking** — the `systems-and-intelligence` notebook and its unfinished questions; the
+  published studies and papers are listed on [`/studies/`](https://frnkptrln.github.io/studies/)
 - **Rooms** — `a-house-in-conversation` and related audiovisual work
 - **Pieces** — browser works across sound, moving image, text, and code
 - **Experiments** — strange tools and executable questions
