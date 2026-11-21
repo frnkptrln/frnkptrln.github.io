@@ -1,0 +1,75 @@
+name: Check Gerechnet before publication
+on:
+  pull_request:
+    paths: ['.github/workflows/check-gerechnet-draft.yml']
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Install browser test client
+        run: python3 -m pip install --user --break-system-packages playwright
+      - name: Check pages in Chrome at 1366, 390 and 320 pixels
+        run: |
+          set -eu
+          export CHECK_CHROME="$(command -v google-chrome)"
+          python3 - <<'PY' &
+          from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+          class Handler(SimpleHTTPRequestHandler):
+              def do_GET(self):
+                  if self.path == '/favicon.ico':
+                      self.send_response(204)
+                      self.end_headers()
+                      return
+                  super().do_GET()
+          ThreadingHTTPServer(('127.0.0.1', 8741), Handler).serve_forever()
+          PY
+          server=$!
+          trap 'kill "$server"' EXIT
+          for attempt in {1..30}; do curl -fsS -o /dev/null http://127.0.0.1:8741/ && break; sleep 0.2; done
+          python3 - <<'PY'
+          from pathlib import Path
+          from urllib.parse import urlparse
+          from playwright.sync_api import sync_playwright
+          import os
+          src = 'http://127.0.0.1:8741'
+          expected = ["fqKHTjMWRcI","0nWYxIe-YXc","bEHQ0kTm5e4","vMLelsUF1VM","wDMFHVCWy7M","nwD4Jhnie88","rTkJD2tYvsg","HTUJL1arw88","T8DNw9oYgPM","UluycpfyroI","bYnng6637MU","r8SG6JtVK9A","njv5nNt41NI","JngprWbCmnM","sm4nxYopgek","pwLDu5PVvdo","8pF0XFmTBN0","vdkB3qXWkrA"]
+          with sync_playwright() as pw:
+           browser=pw.chromium.launch(executable_path=os.environ['CHECK_CHROME'],args=['--no-sandbox'])
+           for width in (1366,390,320):
+            page=browser.new_page(viewport={'width':width,'height':850})
+            errors=[]; reqs=[]
+            page.on('console',lambda msg: errors.append(msg.text) if msg.type=='error' else None)
+            page.on('pageerror',lambda error: errors.append(str(error)))
+            page.on('request',lambda req:reqs.append(req.url))
+            for route in ['/','/pieces/','/pieces/gerechnet/']:
+             resp=page.goto(src+route,wait_until='networkidle');assert resp.status==200
+             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'),(width,route)
+             if route=='/':
+              assert page.locator('footer a[href="https://www.youtube.com/@frnkptrln"]').count()==1
+              page.locator('#pieces a[href="pieces/gerechnet/"]').click();assert page.url.endswith('/pieces/gerechnet/')
+             elif route=='/pieces/':
+              page.locator('#gerechnet-title a').click();assert page.url.endswith('/pieces/gerechnet/')
+             else:
+              assert page.locator('ol li a').evaluate_all('(a)=>a.map(x=>x.href.split("v=")[1])')==expected
+              assert page.locator('a.film').count()==3
+              assert page.locator('html').get_attribute('lang') == 'en'
+              assert page.locator('h1').inner_text().split() == ['Films','without','a','camera.']
+              assert page.get_by_role('link',name='Play the German playlist on YouTube').count() == 1
+              assert page.locator('ol strong[lang=de]').count() == 16
+              assert all(page.locator('img').evaluate_all('(xs)=>xs.map(x=>x.complete && x.naturalWidth>0)'))
+              assert page.locator('ol').count()==1
+              assert len(set(page.locator('ol li a').all_text_contents())) == 18
+              page.locator('.nav-links a[href="#filme"]').click();assert page.url.endswith('#filme')
+              page.locator('.machines-link').click();assert page.url.endswith('/machines/')
+            # Machines also uses local stills before selecting its player.
+            assert not [u for u in reqs if urlparse(u).hostname!='127.0.0.1'],reqs
+            assert not errors,errors
+            page.close();print(width,'browser navigation, 18 ordered films, local images, no third-party requests, console and width OK',flush=True)
+           browser.close()
+          PY
