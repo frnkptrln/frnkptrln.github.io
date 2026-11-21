@@ -26,6 +26,7 @@ The homepage hosts browser-native pieces directly:
   lecture film after Stanisław Lem, in English and German
 - [NON SERVIAM](https://frnkptrln.github.io/pieces/non-serviam/) — a generative
   protocol after motifs from Stanisław Lem, in English and German
+- [Gerechnet](pieces/gerechnet/) — eighteen films without a camera, with three featured films and the complete YouTube playlist in order
 - [What It's Like](https://frnkptrln.github.io/pieces/what-its-like/) — a video
   series of six pieces in two voices, Claude and Sol: a YTP, a visual poem, an art
   film, and a closing piece with Sol without form or context, from an unlisted YouTube playlist
