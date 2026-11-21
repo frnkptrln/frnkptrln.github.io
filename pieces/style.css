@@ -127,6 +127,27 @@
     font-size: 0.9rem;
 }
 
+.gerechnet-feature {
+    margin-bottom: 0;
+}
+
+.gerechnet-poster {
+    display: block;
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+    border: 1px solid var(--line);
+}
+
+.gerechnet-poster:hover,
+.gerechnet-poster:focus-visible {
+    border-color: var(--piece-gold);
+}
+
+.gerechnet-poster img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
 .piece-topline,
 .piece-foot,
 .piece-kind,
