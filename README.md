@@ -6,7 +6,8 @@ The public foyer for work by Frank Peterlein, hosted at
 > Some thoughts become notes.  
 > Some become systems.  
 > Some become rooms.  
-> Some become pieces.
+> Some become pieces.  
+> Some become machines.
 
 The homepage is organized by the forms a thought can take rather than by repository
 status or professional category:
