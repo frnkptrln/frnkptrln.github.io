@@ -8,6 +8,10 @@
         name="description"
         content="Browser-native pieces in sound, moving image, text, and code by Frank Peterlein."
     >
+    <link rel="alternate" hreflang="en" href="./">
+    <link rel="alternate" hreflang="de" href="de.html">
+    <link rel="alternate" hreflang="x-default" href="./">
+    <script src="../locale.js" defer></script>
     <meta name="theme-color" content="#0b0c0b">
     <link rel="stylesheet" href="../style.css?v=20260921-1">
     <link rel="stylesheet" href="style.css?v=20261128-2">
@@ -29,6 +33,10 @@
                 <a href="gerechnet/">Gerechnet</a>
                 <a href="#what-its-like">what it's like</a>
                 <a href="#workshop">workshop</a>
+                <span class="language-switch">
+                    <a href="./" lang="en" hreflang="en" aria-label="English" data-language-switch aria-current="page">EN</a>
+                    <a href="de.html" lang="de" hreflang="de" aria-label="Deutsch" data-language-switch>DE</a>
+                </span>
             </div>
         </nav>
     </header>
@@ -174,7 +182,7 @@
                 </div>
 
                 <div class="piece-foot feldwesen-foot">
-                    <span>German controls · optional sound</span>
+                    <span>English / Deutsch · optional sound</span>
                     <a href="../feldwesen/">Enter the colony <span aria-hidden="true">→</span></a>
                     <a href="../feldwesen/film/">Watch the 20-second film <span aria-hidden="true">→</span></a>
                 </div>
@@ -191,7 +199,7 @@
             </header>
 
             <div class="piece-list">
-                <article class="piece piece-binding">
+                <article class="piece piece-binding" id="temporal-binding">
                     <div class="piece-topline">
                         <span>04 / temporal binding</span>
                         <span>one train</span>
@@ -217,7 +225,7 @@
                     </div>
                 </article>
 
-                <article class="piece piece-trains">
+                <article class="piece piece-trains" id="two-trains">
                     <div class="piece-topline">
                         <span>05 / two trains</span>
                         <span>two clocks</span>

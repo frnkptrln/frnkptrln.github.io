@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="alternate" hreflang="en" href="./">
+<link rel="alternate" hreflang="de" href="de.html">
 <title>GOLEM XIV — generative lecture film</title>
 <meta name="description" content="A generative lecture film after Stanisław Lem. English and German.">
 <meta name="theme-color" content="#04050a">
@@ -29,12 +31,13 @@
     font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;
   }
   #back{
-    left:calc(1rem + env(safe-area-inset-left));color:rgba(233,220,203,.52);
+    left:calc(1rem + env(safe-area-inset-left));color:#d1c6bc;
     text-decoration:none;transition:color .25s ease;
   }
+  #back,#langnav a{padding:.35rem .25rem;background:rgba(4,5,10,.82)}
   #back:hover,#back:focus-visible{color:#ffe9d2}
   #langnav{right:calc(1rem + env(safe-area-inset-right));display:flex;gap:.55rem;color:rgba(233,220,203,.28)}
-  #langnav a{color:rgba(233,220,203,.48);text-decoration:none;transition:color .25s ease}
+  #langnav a{color:#b4aaa2;text-decoration:none;transition:color .25s ease}
   #langnav a:hover,#langnav a:focus-visible,#langnav a.active{color:#ffe9d2}
 
   /* backlight ring, scrim and vignette are painted into the canvas, not
@@ -171,7 +174,7 @@
     #ui{gap:.45rem;padding-inline:calc(.55rem + env(safe-area-inset-left)) calc(.55rem + env(safe-area-inset-right))}
     #ui button{padding:.35rem}
     #time{font-size:.62rem;letter-spacing:.06em}
-    #back,#langnav{font-size:.55rem;letter-spacing:.12em}
+    #back,#langnav{font-size:.65rem;letter-spacing:.1em}
   }
 
   @media (prefers-reduced-motion:reduce){
@@ -181,9 +184,9 @@
 </head>
 <body>
 <div id="film">
-  <a id="back" href="../" aria-label="Back to Pieces">&larr; pieces</a>
+  <a id="back" href="../#golem" aria-label="Back to Pieces">&larr; Back to Pieces</a>
   <nav id="langnav" aria-label="Language">
-    <a class="active" href="./" aria-current="page">EN</a><span>/</span><a href="de.html">DE</a>
+    <a class="active" href="./" aria-current="page" lang="en" hreflang="en" aria-label="English">EN</a><span>/</span><a href="de.html" lang="de" hreflang="de" aria-label="Deutsch">DE</a>
   </nav>
   <canvas id="cv"></canvas>
   <div id="glow"></div>

@@ -12,8 +12,13 @@
     <link rel="stylesheet" href="../../style.css?v=20260807-1">
     <link rel="stylesheet" href="../style.css?v=20260921-1">
     <link rel="stylesheet" href="style.css?v=20260903-3">
+    <link rel="alternate" hreflang="en" href="./">
+    <link rel="alternate" hreflang="de" href="de.html">
+    <link rel="alternate" hreflang="x-default" href="./">
+    <script defer src="../../locale.js"></script>
+    <script defer src="../../gallery-language.js"></script>
 </head>
-<body class="pieces-page wil-page">
+<body data-playing-note="playing from youtube-nocookie.com" class="pieces-page wil-page">
     <a class="skip-link" href="#stage">Skip to the player</a>
 
     <header class="site-header">
@@ -23,16 +28,17 @@
             </a>
             <div class="nav-links">
                 <a href="../../">foyer</a>
-                <a href="../">pieces</a>
+                <a href="../#what-its-like">← Pieces</a>
                 <a href="#index">index</a>
                 <a href="https://www.youtube.com/playlist?list=PLWeDPPSEcOr8">youtube <span aria-hidden="true">↗</span></a>
+                <span class="language-switch" role="group" aria-label="Language"><a data-language-switch lang="en" hreflang="en" aria-label="English" href="./" aria-current="page">EN</a> <a data-language-switch lang="de" hreflang="de" aria-label="Deutsch" href="de.html">DE</a></span>
             </div>
         </nav>
     </header>
 
     <main>
         <section class="wil-hero" aria-labelledby="wil-title">
-            <p class="eyebrow">05 / what it's like · video series · 2026</p>
+            <p class="eyebrow">07 / what it's like · video series · 2026</p>
             <h1 id="wil-title">WHAT IT'S LIKE</h1>
             <div class="wil-hero-copy">
                 <p>
@@ -142,7 +148,7 @@
             </ol>
         </section>
 
-        <section class="wil-note" aria-label="Privacy note">
+        <section class="wil-note" id="privacy-note" aria-label="Privacy note">
             <p class="section-number">source / privacy</p>
             <p>
                 The series is hosted on YouTube as an unlisted playlist. This page embeds the
@@ -159,7 +165,7 @@
             <span>pieces / what it's like</span>
         </div>
         <nav class="elsewhere" aria-label="Elsewhere">
-            <a href="../">Pieces</a>
+            <a href="../#what-its-like">← Pieces</a>
             <a href="../../">Foyer</a>
             <a href="https://github.com/frnkptrln" rel="me">GitHub</a>
             <a href="../../legal/">Legal &amp; privacy</a>
@@ -169,21 +175,17 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const figure = document.querySelector(".wil-figure[data-embed]");
-
-            if (!figure) {
-                return;
-            }
-
-            figure.addEventListener("click", (event) => {
+            document.addEventListener("click", (event) => {
+                const figure = event.target.closest(".wil-figure[data-embed]");
+                if (!figure) return;
                 event.preventDefault();
 
                 const player = document.createElement("div");
                 const frame = document.createElement("iframe");
 
                 player.className = "wil-player wil-player-stage";
-                frame.src = figure.dataset.embed + "&autoplay=1";
-                frame.title = "What It's Like — playlist";
+                frame.src = figure.dataset.embed + "&autoplay=1&hl=" + document.documentElement.lang;
+                frame.title = "What It's Like";
                 frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
                 frame.allowFullscreen = true;
                 frame.referrerPolicy = "strict-origin-when-cross-origin";
@@ -195,7 +197,7 @@
                 const note = document.querySelector(".wil-stage-foot > span");
 
                 if (note) {
-                    note.textContent = "playing from youtube-nocookie.com";
+                    note.textContent = document.body.dataset.playingNote;
                 }
             });
         });

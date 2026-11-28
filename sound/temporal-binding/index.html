@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="alternate" hreflang="en" href="./">
+<link rel="alternate" hreflang="de" href="?lang=de">
 <title>temporal binding — one train, two readings</title>
 <meta name="description" content="An interactive Web Audio study of the threshold where separate events become rhythm, flutter, and pitch.">
 <meta name="theme-color" content="#0b0a0e">
@@ -112,26 +114,48 @@
   }
   #veil .veil-prompt{display:block; margin:0; font-size:11px; letter-spacing:.22em; color:var(--slate)}
   #veil.gone{opacity:0; pointer-events:none}
-  .return{
-    position:fixed; z-index:10; top:clamp(14px,2.4vh,26px); left:clamp(14px,3vw,40px);
-    color:var(--slate); font-size:10px; letter-spacing:.18em; text-decoration:none;
-    transition:color .25s, opacity .5s ease;
+  .study-nav{
+    position:fixed; z-index:10; left:clamp(14px,3vw,40px); right:clamp(14px,3vw,40px); top:env(safe-area-inset-top,0px);
+    display:flex; justify-content:space-between; align-items:center; min-height:40px;
+    font-size:11px; letter-spacing:.1em;
   }
-  .return:hover,.return:focus-visible{color:var(--bone)}
-  .return.gone{opacity:0; pointer-events:none}
-  #head .id{color:inherit; text-decoration:none; transition:color .25s}
-  #head .id:hover,#head .id:focus-visible{color:var(--bone)}
+  .study-nav a{display:inline-flex; align-items:center; min-height:32px; min-width:26px; color:var(--bone); text-decoration:none}
+  .study-nav a:focus-visible{outline:1px solid var(--seam); outline-offset:2px}
+  .study-nav a:hover,.study-nav a[aria-current]{color:var(--gold)}
+  .study-nav .languages{display:inline-flex; align-items:center; gap:.4rem}
+  #stage{padding-top:calc(42px + env(safe-area-inset-top,0px))}
+  html[lang=de] .row{grid-template-columns:6.4em minmax(0,1fr) 5em}
+  @media (max-width:520px){
+    #head{gap:.6rem; flex-wrap:wrap}
+    #foot{gap:8px}
+    #hint{display:none}
+    html[lang=de] .row{grid-template-columns:5.3em minmax(0,1fr) 4.7em}
+  }
+  @media (max-height:480px){
+    body{overflow:auto}
+    #stage{height:auto; min-height:100dvh; padding-top:4px}
+    .study-nav{position:sticky; top:0; width:100%; left:0; padding-inline:clamp(14px,3vw,40px); background:var(--void)}
+  }
   @media (max-width:520px){ .row{grid-template-columns:3.6em 1fr 4.2em; gap:10px} }
 </style>
 </head>
 <body>
 
-<div id="stage">
+<nav class="study-nav" aria-label="Study navigation">
+  <a class="return" href="../../pieces/#temporal-binding" data-de="← Zurück zu den Stücken">← Back to Pieces</a>
+  <span class="languages">
+    <a href="./" hreflang="en" lang="en" aria-label="English" aria-current="page">EN</a>
+    <span aria-hidden="true">/</span>
+    <a href="?lang=de" hreflang="de" lang="de" aria-label="Deutsch">DE</a>
+  </span>
+</nav>
+
+<div id="stage" inert>
   <div id="head">
-    <a class="id" href="../../pieces/#listening-fields" aria-label="Back to Pieces">temporal binding</a>
+    <span class="id">temporal binding</span>
     <span id="readout">
-      <span><span class="lbl">ioi</span> <b id="rIoi">—</b></span>
-      <span><span class="lbl">rate</span> <b id="rHz">—</b></span>
+      <span><span class="lbl" data-de="Abstand">ioi</span> <b id="rIoi">—</b></span>
+      <span><span class="lbl" data-de="Rate">rate</span> <b id="rHz">—</b></span>
       <span id="note">—</span>
     </span>
   </div>
@@ -142,32 +166,31 @@
 
   <div id="controls">
     <div class="row">
-      <label for="sRate">rate</label>
+      <label for="sRate" data-de="Rate">rate</label>
       <input id="sRate" type="range" min="0" max="1" step="0.0005" value="0.62">
       <output id="oRate">250 ms</output>
     </div>
     <div class="row">
-      <label for="sJit">drift</label>
+      <label for="sJit" data-de="Drift">drift</label>
       <input id="sJit" type="range" min="0" max="1" step="0.005" value="0">
       <output id="oJit">0 %</output>
     </div>
     <div class="row">
-      <label for="sLvl">level</label>
+      <label for="sLvl" data-de="Pegel">level</label>
       <input id="sLvl" type="range" min="0" max="1" step="0.005" value="0.55">
       <output id="oLvl">55 %</output>
     </div>
     <div id="foot">
-      <button id="bSweep" type="button">sweep</button>
-      <span id="hint">space — hold / release</span>
+      <button id="bSweep" type="button" aria-pressed="false" data-de="Durchlauf">sweep</button>
+      <span id="hint" data-de="Leertaste: Pause / weiter">space — hold / release</span>
       <button id="bRun" class="on" type="button">running</button>
     </div>
   </div>
 </div>
 
-<a class="return" href="../../pieces/#listening-fields">← pieces</a>
 <button id="veil" type="button" aria-label="Start temporal binding">
-  <span class="veil-title">the same events, twice</span>
-  <span class="veil-prompt">click to open the ear</span>
+  <span class="veil-title" data-de="dieselben Ereignisse, zweimal">the same events, twice</span>
+  <span class="veil-prompt" data-de="zum Hören starten">click to open the ear</span>
 </button>
 
 <script>
@@ -318,6 +341,7 @@
     return jit > 0.45 ? "continuous — and no pitch left" : "one tone";
   }
   function setPlate(txt, seam) {
+    if (german) txt = germanPlates[txt];
     if (txt === plateText) return;
     plateText = txt;
     plate.classList.add("fading");
@@ -343,7 +367,8 @@
     rHz.textContent = hz >= 100 ? hz.toFixed(0) + " hz" : hz.toFixed(1) + " hz";
     if (hz >= 22) {
       const semis = Math.round(12 * Math.log2(hz / 55));
-      noteEl.textContent = NAMES[((semis % 12) + 12) % 12] + Math.floor(semis / 12 + 1);
+      const name = NAMES[((semis % 12) + 12) % 12];
+      noteEl.textContent = (german && name === "b" ? "h" : name) + Math.floor(semis / 12 + 1);
       noteEl.classList.add("lit");
     } else {
       noteEl.textContent = "—";
@@ -359,16 +384,17 @@
   sJit .addEventListener("input", e => { state.jitter = +e.target.value; refresh(); });
   sLvl .addEventListener("input", e => { state.level  = +e.target.value; refresh(); });
 
-  function stopSweep() { state.sweeping = false; bSweep.classList.remove("on"); }
+  function stopSweep() { state.sweeping = false; bSweep.classList.remove("on"); bSweep.setAttribute("aria-pressed","false"); }
   bSweep.addEventListener("click", () => {
     state.sweeping = !state.sweeping;
     bSweep.classList.toggle("on", state.sweeping);
+    bSweep.setAttribute("aria-pressed",String(state.sweeping));
   });
   bRun.addEventListener("click", () => toggleRun());
   function toggleRun() {
     state.running = !state.running;
     bRun.classList.toggle("on", state.running);
-    bRun.textContent = state.running ? "running" : "held";
+    updateRunLabel();
   }
   window.addEventListener("keydown", e => {
     if (e.code === "Space" && !e.target.matches("input, button, a")) { e.preventDefault(); toggleRun(); }
@@ -386,14 +412,12 @@
 
   /* ---------------- start ---------------- */
   const veil = document.getElementById("veil");
-  const returnLink = document.querySelector(".return");
   function begin() {
     if (ctx) return;
     initAudio();
     veil.classList.add("gone");
-    returnLink.classList.add("gone");
+    document.getElementById("stage").inert = false;
     setTimeout(() => veil.remove(), 900);
-    setTimeout(() => returnLink.remove(), 900);
   }
   veil.addEventListener("click", begin);
   function wake() {
@@ -402,8 +426,61 @@
   document.addEventListener("visibilitychange", () => { if (!document.hidden) wake(); });
   document.addEventListener("pointerdown", wake, { passive: true });
   document.addEventListener("keydown", wake);
+  const germanPlates = {
+    "separate events": "einzelne Ereignisse",
+    "pulse": "Puls",
+    "rhythm": "Rhythmus",
+    "flutter": "Flattern",
+    "the seam, unravelling": "die Naht löst sich",
+    "you see rhythm. you hear pitch.": "Du siehst Rhythmus. Du hörst einen Ton.",
+    "continuous — and no pitch left": "ein Kontinuum ohne Tonhöhe",
+    "one tone": "ein Ton"
+  };
+  const labels = Array.from(document.querySelectorAll("[data-de]"), node => ({node, english: node.textContent}));
+  const languages = document.querySelectorAll(".languages a");
+  const englishTitle = document.title;
+  const description = document.querySelector('meta[name="description"]');
+  const englishDescription = description.content;
+  const entrance = document.getElementById("veil");
+  const entranceLabel = entrance.getAttribute("aria-label");
+  let german;
+
+  function updateRunLabel() {
+    bRun.textContent = german ? (state.running ? "läuft" : "pausiert") : (state.running ? "running" : "held");
+  }
+  function applyLanguage(requested = null) {
+    const url = new URL(location.href);
+    german = (requested || url.searchParams.get("lang")) === "de";
+    const lang = german ? "de" : "en";
+    document.documentElement.lang = lang;
+    document.title = german ? "Temporal binding – eine Folge, zwei Wahrnehmungen" : englishTitle;
+    description.content = german ? "Eine interaktive Hörstudie darüber, wie einzelne Impulse zu Rhythmus, Flattern und Tonhöhe werden." : englishDescription;
+    for (const {node, english} of labels) node.textContent = german ? node.dataset.de : english;
+    document.querySelector(".study-nav").setAttribute("aria-label", german ? "Navigation der Klangstudie" : "Study navigation");
+    document.querySelector(".return").href = german ? "../../pieces/de.html#temporal-binding" : "../../pieces/#temporal-binding";
+    entrance.setAttribute("aria-label", german ? "Temporal binding starten" : entranceLabel);
+    for (const link of languages) {
+      const target = new URL(url);
+      if (link.lang === "de") target.searchParams.set("lang", "de");
+      else target.searchParams.delete("lang");
+      link.href = target.href;
+      if (link.lang === lang) link.setAttribute("aria-current","page");
+      else link.removeAttribute("aria-current");
+    }
+    updateRunLabel();
+    refresh();
+  }
+  for (const link of languages) link.addEventListener("click", event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+    event.preventDefault();
+    try {
+      if (location.href !== link.href) history.pushState(null, "", link.href);
+    } catch { /* Some local-file contexts cannot update the address. */ }
+    applyLanguage(link.lang);
+  });
+  window.addEventListener("popstate", () => applyLanguage());
+  applyLanguage();
   resize();
-  refresh();
   requestAnimationFrame(frame);
 })();
 </script>
