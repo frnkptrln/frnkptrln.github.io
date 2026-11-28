@@ -21,10 +21,15 @@
         }
     }
     function visibleSection() {
-        if (location.hash || window.scrollY < 80) return location.hash;
+        if (window.scrollY < 80) return location.hash;
+        const target = location.hash && document.getElementById(location.hash.slice(1));
+        if (target) {
+            const box = target.getBoundingClientRect();
+            if (box.bottom > 0 && box.top < window.innerHeight * 0.7) return location.hash;
+        }
         const sections = [...document.querySelectorAll("main section[id], main article[id]")];
         const current = sections.filter(section => section.getBoundingClientRect().top <= 100).pop();
-        return current ? "#" + current.id : "";
+        return current ? "#" + current.id : location.hash;
     }
     window.addEventListener("hashchange", () => linkToSection(location.hash));
     for (const link of switches) {

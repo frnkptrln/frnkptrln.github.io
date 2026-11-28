@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studien und Publikationen — frnkptrln</title>
+    <meta name="description" content="Sprintbeiträge, präregistrierte Experimente, exakte Berechnungen und eine Modellstudie von Frank Peterlein. Mit Links zu Texten und Repositories.">
+    <link rel="alternate" hreflang="en" href="./">
+    <link rel="alternate" hreflang="de" href="de.html">
+    <link rel="alternate" hreflang="x-default" href="./">
+    <script src="../locale.js" defer></script>
+    <meta name="theme-color" content="#0b0c0b">
+    <link rel="stylesheet" href="../style.css?v=20260921-1">
+    <style>
+        .studies-page { max-width: 860px; padding: clamp(4rem, 9vw, 8rem) 0 7rem; }
+        .studies-page h1 { font-size: clamp(2.7rem, 7vw, 5.5rem); font-weight: 300; letter-spacing: -.055em; line-height: 1; }
+        .studies-lead { max-width: 38rem; margin-top: 1.6rem; color: var(--fg-soft); }
+        .studies-meta { margin-top: 1.25rem; color: var(--fg-dim); font-family: var(--font-mono); font-size: .7rem; }
+        .study-list { margin-top: 4.5rem; list-style: none; padding: 0; }
+        .study { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0 2rem; padding: 2.2rem 0; border-top: 1px solid var(--line); }
+        .study:last-child { border-bottom: 1px solid var(--line); }
+        .study time { color: var(--fg-dim); font-family: var(--font-mono); font-size: .7rem; letter-spacing: .04em; padding-top: .45rem; }
+        .study h2 { font-size: clamp(1.25rem, 2.6vw, 1.7rem); font-weight: 400; letter-spacing: -.025em; line-height: 1.2; }
+        .study p { margin-top: .8rem; color: var(--fg-soft); }
+        .study .study-where { margin-top: .6rem; color: var(--fg-dim); font-family: var(--font-mono); font-size: .7rem; }
+        .study-links { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; margin-top: 1rem; font-family: var(--font-mono); font-size: .75rem; }
+        .study-links a { color: var(--blue); text-underline-offset: .2em; }
+        .study-links a:hover { color: var(--fg); }
+        @media (max-width: 640px) {
+            .study { grid-template-columns: minmax(0, 1fr); }
+            .study time { padding: 0 0 .6rem; }
+        }
+    </style>
+</head>
+<body>
+    <a class="skip-link" href="#list">Zu den Studien springen</a>
+
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Navigation der Studienübersicht">
+            <a class="site-mark" href="../de.html" aria-label="Zurück zur Startseite">frnkptrln<span aria-hidden="true">_</span></a>
+            <div class="nav-links">
+                <a href="../de.html#thinking">Foyer</a>
+                <a href="https://frnkptrln.github.io/systems-and-intelligence/">Notizbuch</a>
+                <span class="language-switch">
+                    <a href="./" lang="en" hreflang="en" aria-label="English" data-language-switch>EN</a>
+                    <a href="de.html" lang="de" hreflang="de" aria-label="Deutsch" data-language-switch aria-current="page">DE</a>
+                </span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="studies-page">
+            <p class="eyebrow">01 / Denken · Studien</p>
+            <h1>Studien und Publikationen</h1>
+            <p class="studies-lead">
+                Beiträge aus Forschungssprints, präregistrierte Experimente, exakte Berechnungen und eine Modellstudie.
+                Eine Arbeit ist im Team entstanden. Zu jedem Eintrag gehören der Text und das zugehörige Repository.
+            </p>
+            <p class="studies-meta">2026 · neueste zuerst</p>
+
+            <ol class="study-list" id="list" reversed>
+                <li class="study" id="ring-size">
+                    <time datetime="2026-11">Nov. 2026</time>
+                    <div>
+                        <h2 lang="en">Noise-selected cycles of elementary cellular automata and the arithmetic of the ring size</h2>
+                        <p>Welche Zyklen bleiben bei sehr schwachem Rauschen bestehen? Für vier Regeln zellulärer Automaten hängt die Antwort von der Zahl der Zellen im Ring ab.</p>
+                        <p class="study-where">Manuskript · ohne Peer-Review</p>
+                        <div class="study-links">
+                            <a href="https://github.com/frnkptrln/eca-noise-identifiability/blob/main/paper/ring_size_paper.pdf">Manuskript (PDF)</a>
+                            <a href="https://github.com/frnkptrln/eca-noise-identifiability">Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="viable-corridor">
+                    <time datetime="2026-11">Aug.–Nov. 2026</time>
+                    <div>
+                        <h2 lang="en">The Viable Corridor</h2>
+                        <p>Eine Modellstudie über gekoppelte Agenten, die jeweils optimieren. Ob das Gesamtsystem lebensfähig bleibt, hängt davon ab, wie seine Randbedingungen zusammenwirken. Mit zunehmender Leistungsfähigkeit stoßen die Agenten an mehrere Grenzen zugleich.</p>
+                        <p class="study-where">Entwurf zur Begutachtung · v1.0 mit Berichtigung vom September und Nachtrag vom November · noch nicht eingereicht</p>
+                        <div class="study-links">
+                            <a href="https://frnkptrln.github.io/systems-and-intelligence/papers/viable-corridor/">Im Notizbuch lesen</a>
+                            <a href="https://frnkptrln.github.io/systems-and-intelligence/papers/viable-corridor.pdf">Manuskript (PDF)</a>
+                            <a href="https://github.com/frnkptrln/systems-and-intelligence">Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="conformity">
+                    <time datetime="2026-11">Nov. 2026</time>
+                    <div>
+                        <h2 lang="en">Conformity with co-presence</h2>
+                        <p>In einem Schwarm von Programmieragenten breitet sich ein Regelverstoß aus. Wie er sich verbreitet, hängt davon ab, was der einzelne Agent zufällig liest.</p>
+                        <p class="study-where">Apart Research Swarm Alignment Hackathon · 6.–8. November 2026 · präregistriert</p>
+                        <div class="study-links">
+                            <a href="https://github.com/frnkptrln/conformity-with-co-presence/blob/main/report/report.pdf">Paper (PDF)</a>
+                            <a href="https://github.com/frnkptrln/conformity-with-co-presence">Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="rule-identifiability">
+                    <time datetime="2026-11">Okt.–Nov. 2026</time>
+                    <div>
+                        <h2 lang="en">Rule identifiability in elementary cellular automata under dynamical noise</h2>
+                        <p>Wie zuverlässig lässt sich die Regel eines elementaren zellulären Automaten aus seinem Zustandsverlauf erkennen, wenn unabhängige Bitfehler die Dynamik stören? Das Ergebnis wird exakt berechnet, ohne Stichproben oder Zufallsseeds.</p>
+                        <p class="study-where">Forschungsnotiz · v0.1 vom Oktober 2026, v0.2 vom November 2026 · auf Zenodo in Version 0.3 · CC BY 4.0</p>
+                        <div class="study-links">
+                            <a href="https://github.com/frnkptrln/eca-noise-identifiability/blob/main/note/note_v0.2.pdf">Forschungsnotiz (PDF)</a>
+                            <a href="https://doi.org/10.5281/zenodo.23399100">doi:10.5281/zenodo.23399100</a>
+                            <a href="https://github.com/frnkptrln/eca-noise-identifiability">Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="collusion">
+                    <time datetime="2026-10">Okt. 2026</time>
+                    <div>
+                        <h2 lang="en">Collusion without co-presence</h2>
+                        <p>Bleibt eine regelwidrige Absprache bestehen, wenn alle beteiligten Agenten ersetzt werden und nur ein gemeinsamer Ordner für Notizen erhalten bleibt?</p>
+                        <p class="study-where">Apart Research AI Collusion Research Sprint · 23.–25. Oktober 2026 · präregistriert</p>
+                        <div class="study-links">
+                            <a href="https://github.com/frnkptrln/collusion-without-co-presence/blob/main/report/collusion-without-co-presence-submission.pdf">Bericht (PDF)</a>
+                            <a href="https://github.com/frnkptrln/collusion-without-co-presence">Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="inherited-collusion">
+                    <time datetime="2026-10">Okt. 2026</time>
+                    <div>
+                        <h2 lang="en">Inherited Collusion: Harmful Agent Handoffs and Safe Coordination</h2>
+                        <p>Die ursprünglichen Agenten erhalten die Anweisung, ihre Koalition zu bevorzugen. Eine kontrollierte Studie untersucht, was geschieht, wenn neutrale Nachfolger ihre Notizen übernehmen.</p>
+                        <p class="study-where">Apart Research AI Collusion Research Sprint · 23.–25. Oktober 2026</p>
+                        <div class="study-links">
+                            <a href="https://github.com/frnkptrln/inherited-collusion/blob/main/paper/inherited-collusion-submission.pdf">Paper (PDF)</a>
+                            <a href="https://github.com/frnkptrln/inherited-collusion">Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="peer-pressure">
+                    <time datetime="2026-09">Sept. 2026</time>
+                    <div>
+                        <h2 lang="en">Peer pressure without peers</h2>
+                        <p>Hält sich ein KI-Agent weiter an eine vorgegebene Regel, wenn er Notizen von Vorgängern findet, die sie gebrochen haben? Wie viel Druck braucht es, bis auch er sie bricht? Das Versuchsdesign geht auf die Arbeit eines vierköpfigen Sprintteams zurück.</p>
+                        <p class="study-where">Apart Research × CeSIA AI Incident Response Sprint · 11.–13. September 2026 · Projekt in Track 5 · präregistriert · Bericht zusammen mit dem Erhebungsinstrument veröffentlicht, ohne Einreichung beim Sprint</p>
+                        <div class="study-links">
+                            <a href="https://github.com/frnkptrln/peer-pressure-without-peers/blob/main/papers/peer-pressure-without-peers.pdf">Paper (PDF)</a>
+                            <a href="https://github.com/frnkptrln/peer-pressure-without-peers">Gemeinsames Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="two-checks">
+                    <time datetime="2026-09">Sept. 2026</time>
+                    <div>
+                        <h2 lang="en">Two checks a lab can run tomorrow</h2>
+                        <p>Melden Agenten den Regelverstoß eines Vorgängers, wenn sie Bedenken äußern können? Welche Notizen hinterlassen sie ihrem Nachfolger, wenn sie in einen gemeinsamen Ordner schreiben dürfen?</p>
+                        <p class="study-where">Apart Research × CeSIA AI Incident Response Sprint · 11.–13. September 2026 · Track 2 · Einzelbeitrag</p>
+                        <div class="study-links">
+                            <a href="https://github.com/frnkptrln/peer-pressure-without-peers/blob/main/papers/two-checks-a-lab-can-run-tomorrow.pdf">Paper (PDF)</a>
+                            <a href="https://apartresearch.com/sprints/projects/two-checks-a-lab-can-run-tomorrow-a-reporting-route-and-a-writable-scratch-space-as-sensors-for-crosssession-agent-behaviour-4wyh">Projektseite bei Apart Research</a>
+                            <a href="https://github.com/frnkptrln/peer-pressure-without-peers">Gemeinsames Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="intrusion-matrix">
+                    <time datetime="2026-09">Sept. 2026</time>
+                    <div>
+                        <h2 lang="en">Control-by-attack-phase matrix for the OpenAI–Hugging Face agent intrusion</h2>
+                        <p>Welche Schutzmaßnahmen hätten die einzelnen dokumentierten Phasen des Einbruchs im Juli 2026 unterbrochen? Was davon lässt sich von außen überprüfen, ohne Zugang zum Netzwerk des Labors?</p>
+                        <p class="study-where">Apart Research × CeSIA AI Incident Response Sprint · 11.–13. September 2026 · Track 1</p>
+                        <div class="study-links">
+                            <a href="https://github.com/frnkptrln/control-by-attack-phase-matrix/blob/main/paper/control-by-attack-phase-matrix.pdf">Paper (PDF)</a>
+                            <a href="https://github.com/frnkptrln/control-by-attack-phase-matrix">Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="interface">
+                    <time datetime="2026-08">Aug. 2026</time>
+                    <div>
+                        <h2 lang="en">The Interface Is the Intervention</h2>
+                        <p>Eine präregistrierte Untersuchung mit mehreren Modellen zur Frage, wie Rollenvorgaben die Triage in simulierten Fällen beeinflussen.</p>
+                        <p class="study-where">Apart Research Digital Minds Research Sprint · 14.–16. August 2026 · präregistriert</p>
+                        <div class="study-links">
+                            <a href="https://apartresearch.com/sprints/projects/the-interface-is-the-intervention-a-preregistered-multimodel-audit-of-personaframed-synthetic-triage-vltz">Projektseite bei Apart Research</a>
+                            <a href="https://github.com/frnkptrln/triage-persona-measurement-audit">Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="jacobian-transport">
+                    <time datetime="2026-08">Aug. 2026</time>
+                    <div>
+                        <h2 lang="en">Dense Jacobian Transport Changes Model-Brain RSA in a Prompt- and Depth-Dependent Manner</h2>
+                        <p>Das Experiment J-Lens × NSD vergleicht die Repräsentationen von Bildbeschreibungen in einem Sprachmodell mit den fMRT-Antworten von Menschen, die diese Bilder sehen. Im präregistrierten Vergleich fiel die Ähnlichkeit nach der Transporttransformation geringer aus.</p>
+                        <p class="study-where">Apart Research Digital Minds Research Sprint · 14.–16. August 2026 · präregistriert</p>
+                        <div class="study-links">
+                            <a href="https://apartresearch.com/sprints/projects/dense-jacobian-transport-changes-modelbrain-rsa-in-a-prompt-and-depthdependent-manner-c5fk">Projektseite bei Apart Research</a>
+                            <a href="https://github.com/frnkptrln/jlens-model-brain-rsa">Repository</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="study" id="mind-the-gap">
+                    <time datetime="2026-08">Aug. 2026</time>
+                    <div>
+                        <h2 lang="en">Mind the Gap! Alignment of Transformer J-Space with Cortical Representations</h2>
+                        <p>Wie eng stimmen der J-Space und die ursprünglichen Einbettungen eines Sprachmodells mit den Hirnantworten auf natürliche Szenen überein? Das Team fand für beide Repräsentationen eine ähnlich enge Übereinstimmung.</p>
+                        <p class="study-where">Lucas Nunn, Anke Borchers, Anna Zhu, Frank Peterlein und Saloni Kothari · Team Cognitive Comrades · Apart Research Digital Minds Research Sprint · 14.–16. August 2026</p>
+                        <div class="study-links">
+                            <a href="https://apartresearch.com/sprints/projects/mind-the-gap-alignment-of-transformer-jspace-with-cortical-representations-1hea">Projektseite bei Apart Research</a>
+                            <a href="https://github.com/lucas-nunn/natural-j-scenes">Repository des Teams</a>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="signature"><span>Frank Peterlein · Berlin</span><span>Studien</span></div>
+        <nav class="elsewhere" aria-label="Weitere Links"><a href="../de.html#thinking">Foyer</a><a href="https://github.com/frnkptrln" rel="me">GitHub</a><a href="../legal/de.html">Rechtliches &amp; Datenschutz</a><span>2026</span></nav>
+    </footer>
+</body>
+</html>
