@@ -12,8 +12,13 @@
     <link rel="stylesheet" href="../style.css?v=20261028-1">
     <link rel="stylesheet" href="../pieces/style.css?v=20260903-4">
     <link rel="stylesheet" href="style.css?v=20261028-1">
+    <link rel="alternate" hreflang="en" href="./">
+    <link rel="alternate" hreflang="de" href="de.html">
+    <link rel="alternate" hreflang="x-default" href="./">
+    <script defer src="../locale.js"></script>
+    <script defer src="../gallery-language.js"></script>
 </head>
-<body class="pieces-page machines-page">
+<body data-playing-note="playing from youtube-nocookie.com" class="pieces-page machines-page">
     <a class="skip-link" href="#playlist">Skip to the player</a>
 
     <header class="site-header">
@@ -22,11 +27,12 @@
                 frnkptrln<span aria-hidden="true">_</span>
             </a>
             <div class="nav-links">
-                <a href="../">foyer</a>
+                <a href="../#machines">← Foyer</a>
                 <a href="#playlist">playlist</a>
                 <a href="#films">films</a>
                 <a href="#workshop">workshop</a>
                 <a href="https://www.youtube.com/playlist?list=PLMs5wiXRdD2k">youtube <span aria-hidden="true">↗</span></a>
+                <span class="language-switch" role="group" aria-label="Language"><a data-language-switch lang="en" hreflang="en" aria-label="English" href="./" aria-current="page">EN</a> <a data-language-switch lang="de" hreflang="de" aria-label="Deutsch" href="de.html">DE</a></span>
             </div>
         </nav>
     </header>
@@ -69,7 +75,7 @@
                 class="stage-figure"
                 href="https://www.youtube.com/playlist?list=PLMs5wiXRdD2k"
                 data-playlist="PLMs5wiXRdD2k"
-                data-title="Allein und zusammen — playlist"
+                data-title="Allein und zusammen"
                 aria-label="Load the Allein und zusammen playlist from YouTube"
             >
                 <span class="stage-signal" aria-hidden="true">ALLEIN UND ZUSAMMEN / 2026</span>
@@ -397,7 +403,7 @@
             </nav>
         </section>
 
-        <section class="machines-note" aria-label="Privacy note">
+        <section class="machines-note" id="privacy-note" aria-label="Privacy note">
             <p class="section-number">source / privacy</p>
             <p>
                 The films are hosted on YouTube. This page embeds a player only after you press
@@ -414,7 +420,7 @@
             <span>machines / small machines</span>
         </div>
         <nav class="elsewhere" aria-label="Elsewhere">
-            <a href="../">Foyer</a>
+            <a href="../#machines">← Foyer</a>
             <a href="https://github.com/frnkptrln/small-machines" rel="me">GitHub</a>
             <a href="../legal/">Legal &amp; privacy</a>
             <span>2026</span>
@@ -445,36 +451,37 @@
                     player.appendChild(frame);
                     figure.replaceWith(player);
 
-                    const note = host.querySelector(".piece-foot > span");
+                    const noteContainer = player.closest(".machines-stage") || host;
+                    const note = noteContainer.querySelector(".piece-foot > span");
                     if (note) {
-                        note.textContent = "playing from youtube-nocookie.com";
+                        note.textContent = document.body.dataset.playingNote;
                     }
                 }
 
-                frame.src = host.dataset.playlist
+                const source = host.dataset.playlist
                     ? EMBED + "videoseries?list=" + encodeURIComponent(host.dataset.playlist) + "&autoplay=1"
                     : EMBED + encodeURIComponent(video) + "?autoplay=1&start=" + (start || 0);
+                frame.src = source + "&hl=" + document.documentElement.lang;
                 frame.focus();
             }
 
-            document.querySelectorAll(".film-figure, .stage-figure").forEach((figure) => {
-                figure.addEventListener("click", (event) => {
-                    event.preventDefault();
-                    mount(figure, 0);
-                });
-            });
-
-            document.querySelectorAll(".film-chapters a[data-start]").forEach((link) => {
-                link.addEventListener("click", (event) => {
-                    const host = link.closest(".film");
-                    const figure = host.querySelector(".film-figure") || host.querySelector(".film-player");
-                    if (!figure) {
-                        return;
+            document.addEventListener("click", (event) => {
+                const chapter = event.target.closest(".film-chapters a[data-start]");
+                if (chapter) {
+                    const host = chapter.closest(".film");
+                    const figure = host.querySelector(".film-figure, .film-player");
+                    if (figure) {
+                        event.preventDefault();
+                        mount(figure, Number(chapter.dataset.start));
+                        host.scrollIntoView({ block: "nearest" });
                     }
+                    return;
+                }
+                const poster = event.target.closest(".film-figure, .stage-figure");
+                if (poster) {
                     event.preventDefault();
-                    mount(figure, Number(link.dataset.start));
-                    host.scrollIntoView({ block: "nearest" });
-                });
+                    mount(poster, 0);
+                }
             });
         });
     </script>
