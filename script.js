@@ -11,7 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const phrases = [
+    const phrases = document.documentElement.lang === "de" ? [
+        "Frage -> Notiz",
+        "Frage -> System",
+        "Frage -> Raum",
+        "Frage -> Stück",
+        "Frage -> Maschine",
+        "¯\\_(ツ)_/¯"
+    ] : [
         "question -> note",
         "question -> system",
         "question -> room",

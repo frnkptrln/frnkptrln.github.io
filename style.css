@@ -136,6 +136,20 @@ main,
     transition: color 180ms ease;
 }
 
+.language-switch {
+    display: inline-flex;
+    flex: none;
+    align-items: baseline;
+    gap: 0.55em;
+    white-space: nowrap;
+}
+
+.language-switch a[aria-current="page"] {
+    color: var(--fg);
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+}
+
 .nav-links a:hover,
 .elsewhere a:hover {
     color: var(--fg);
