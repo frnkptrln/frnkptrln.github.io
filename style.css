@@ -7,7 +7,7 @@
     --bg-raised: #101210;
     --fg: #e9e7df;
     --fg-soft: #aaa9a2;
-    --fg-dim: #6f726c;
+    --fg-dim: #90938d;
     --line: #292c28;
     --line-bright: #3b4039;
     --green: #b7f36b;
@@ -497,7 +497,6 @@ main,
 .film-list small {
     color: var(--fg-dim);
     font: inherit;
-    opacity: 0.65;
     text-align: right;
 }
 
