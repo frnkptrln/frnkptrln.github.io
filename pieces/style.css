@@ -173,7 +173,8 @@
     color: var(--warm);
 }
 
-.golem-piece {
+.golem-piece,
+.feldwesen-piece {
     display: grid;
     overflow: hidden;
     grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
@@ -182,13 +183,16 @@
     transition: border-color 220ms ease, transform 220ms ease;
 }
 
-.golem-piece:hover {
+.golem-piece:hover,
+.feldwesen-piece:hover {
     border-color: var(--line-bright);
     transform: translateY(-3px);
 }
 
 .golem-piece > .piece-topline,
-.golem-piece > .piece-foot {
+.golem-piece > .piece-foot,
+.feldwesen-piece > .piece-topline,
+.feldwesen-piece > .piece-foot {
     grid-column: 1 / -1;
     padding: 1rem clamp(1.25rem, 2.5vw, 2rem);
 }
@@ -303,7 +307,8 @@
     letter-spacing: 0.14em;
 }
 
-.golem-copy {
+.golem-copy,
+.feldwesen-copy {
     display: flex;
     min-width: 0;
     flex-direction: column;
@@ -321,6 +326,7 @@
 }
 
 .golem-copy h3,
+.feldwesen-copy h3,
 .piece h3 {
     color: var(--piece-bone);
     font-size: clamp(2.1rem, 4vw, 3.7rem);
@@ -334,7 +340,8 @@
     text-decoration: none;
 }
 
-.golem-copy > p {
+.golem-copy > p,
+.feldwesen-copy > p {
     color: var(--fg-soft);
     font-size: 0.96rem;
     font-weight: 300;
@@ -365,6 +372,26 @@
 
 .golem-foot a {
     margin-left: clamp(1rem, 3vw, 3rem);
+}
+
+.feldwesen-piece {
+    margin-top: clamp(1.5rem, 4vw, 3rem);
+}
+
+.feldwesen-poster {
+    display: grid;
+    align-items: center;
+    background: #050911;
+}
+
+.feldwesen-poster img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.feldwesen-poster:focus-visible {
+    outline-offset: -4px;
 }
 
 .nonserviam-piece {
@@ -953,7 +980,8 @@
 }
 
 @media (max-width: 1000px) {
-    .golem-piece {
+    .golem-piece,
+    .feldwesen-piece {
         grid-template-columns: 1fr;
     }
 
@@ -1020,6 +1048,7 @@
 
 @media (max-width: 720px) {
     .golem-foot,
+    .feldwesen-foot,
     .nonserviam-foot,
     .wil-foot {
         align-items: flex-start;
@@ -1123,6 +1152,7 @@
 
 @media (prefers-reduced-motion: reduce) {
     .golem-piece:hover,
+    .feldwesen-piece:hover,
     .nonserviam-piece:hover,
     .wil-piece:hover,
     .piece:hover {
