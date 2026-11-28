@@ -127,25 +127,23 @@
     font-size: 0.9rem;
 }
 
-.gerechnet-feature {
-    margin-bottom: 0;
+.gerechnet-stills {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-content: center;
+    gap: 2px;
+    background: #080a0e;
 }
 
-.gerechnet-poster {
-    display: block;
-    margin-top: clamp(1.5rem, 3vw, 2.5rem);
-    border: 1px solid var(--line);
-}
-
-.gerechnet-poster:hover,
-.gerechnet-poster:focus-visible {
-    border-color: var(--piece-gold);
-}
-
-.gerechnet-poster img {
+.gerechnet-stills img {
     display: block;
     width: 100%;
     height: auto;
+}
+
+.gerechnet-stills img:first-child {
+    grid-row: span 2;
+    align-self: center;
 }
 
 .piece-topline,
@@ -174,7 +172,7 @@
 }
 
 .golem-piece,
-.feldwesen-piece {
+.poster-piece {
     display: grid;
     overflow: hidden;
     grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
@@ -184,15 +182,15 @@
 }
 
 .golem-piece:hover,
-.feldwesen-piece:hover {
+.poster-piece:hover {
     border-color: var(--line-bright);
     transform: translateY(-3px);
 }
 
 .golem-piece > .piece-topline,
 .golem-piece > .piece-foot,
-.feldwesen-piece > .piece-topline,
-.feldwesen-piece > .piece-foot {
+.poster-piece > .piece-topline,
+.poster-piece > .piece-foot {
     grid-column: 1 / -1;
     padding: 1rem clamp(1.25rem, 2.5vw, 2rem);
 }
@@ -308,7 +306,7 @@
 }
 
 .golem-copy,
-.feldwesen-copy {
+.poster-copy {
     display: flex;
     min-width: 0;
     flex-direction: column;
@@ -326,7 +324,7 @@
 }
 
 .golem-copy h3,
-.feldwesen-copy h3,
+.poster-copy :is(h2, h3),
 .piece h3 {
     color: var(--piece-bone);
     font-size: clamp(2.1rem, 4vw, 3.7rem);
@@ -341,7 +339,7 @@
 }
 
 .golem-copy > p,
-.feldwesen-copy > p {
+.poster-copy > p {
     color: var(--fg-soft);
     font-size: 0.96rem;
     font-weight: 300;
@@ -390,7 +388,8 @@
     height: auto;
 }
 
-.feldwesen-poster:focus-visible {
+.feldwesen-poster:focus-visible,
+.gerechnet-stills:focus-visible {
     outline-offset: -4px;
 }
 
@@ -981,7 +980,7 @@
 
 @media (max-width: 1000px) {
     .golem-piece,
-    .feldwesen-piece {
+    .poster-piece {
         grid-template-columns: 1fr;
     }
 
@@ -1152,7 +1151,7 @@
 
 @media (prefers-reduced-motion: reduce) {
     .golem-piece:hover,
-    .feldwesen-piece:hover,
+    .poster-piece:hover,
     .nonserviam-piece:hover,
     .wil-piece:hover,
     .piece:hover {
